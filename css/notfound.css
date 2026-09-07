@@ -1,0 +1,213 @@
+@font-face {
+  font-family: "Onest";
+  src: url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-bg: #181818;
+  --color-text: #f7f7f7;
+  --color-main: #ff9bfe;
+  --color-muted: #8f8f8f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Onest", system-ui, sans-serif;
+  font-weight: 300;
+  overflow-x: clip;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Экран ---------- */
+
+.nf {
+  flex: 1 0 auto;
+  min-height: 100vh;                 /* экран занимает весь первый скролл */
+  display: grid;
+  place-items: center;
+  padding: 80px 24px;
+}
+
+.nf__stage {
+  position: relative;                /* система координат для траектории */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nf__code {
+  display: flex;
+  align-items: center;
+  gap: 0.26em;                       /* просвет под бабочку между четвёрками */
+  font-weight: 900;                  /* Black */
+  font-size: clamp(110px, 23vw, 300px);
+  line-height: 1;
+  color: var(--color-main);
+  user-select: none;
+}
+
+/* Ноль уступает место бабочке */
+.nf__zero {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.nf__zero.is-out {
+  /* разгон как при падении: медленно трогается, дальше всё быстрее */
+  animation: nf-zero-out 1.05s cubic-bezier(0.38, 0, 0.82, 0.5) forwards;
+}
+
+@keyframes nf-zero-out {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+  72%  { opacity: 1; }
+  100% { transform: translate3d(72px, 118vh, 0) rotate(-150deg); opacity: 0; }
+}
+
+.nf__text {
+  margin-top: clamp(90px, 15vw, 190px);   /* бабочка стала крупной, ей нужен запас */
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.nf__btn {
+  position: relative;
+  z-index: 3;                        /* бабочка прячется за кнопкой */
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  min-width: 300px;
+  padding: 0 32px;
+  border-radius: 999px;
+  background: var(--color-main);
+  color: #09070a;
+  font-weight: 500;
+  font-size: 17px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.nf__btn:hover { transform: translateY(-2px); }
+.nf__btn:active { transform: scale(0.97); filter: brightness(0.88); }
+.nf__btn:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+.nf__btn-arrow { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* ---------- Бабочка ---------- */
+/* Сцена 867 × 985. Грудка = 50% / 61.83%. */
+
+.bf {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;                        /* ниже кнопки, выше цифр */
+  width: clamp(240px, 32vw, 360px);
+  aspect-ratio: 867 / 985;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bf.is-live { opacity: 1; }
+
+.bf__flight {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* Плоский слой: иначе повёрнутое крыло выезжает вперёд тела */
+.bf__tilt {
+  position: absolute;
+  inset: 0;
+  transform-style: flat;
+}
+
+.bf__wing-box {
+  position: absolute;
+  inset: 0;
+  perspective: 1000px;
+  perspective-origin: 50% 61.83%;
+}
+
+.bf__layer { position: absolute; will-change: transform; }
+
+.bf__body { left: 11.88%; top: -1.73%; width: 73.93%; }
+.bf__wing { width: 75.89%; top: 23.65%; }
+.bf__wing--left  { left: -6.23%; transform-origin: 74.13% 48.49%; }
+.bf__wing--right { left: 30.45%; transform-origin: 25.78% 48.49%; }
+
+/* ---------- Футер ---------- */
+
+.nf-footer {
+  flex-shrink: 0;
+  padding: 56px 40px 24px;
+}
+
+.nf-footer__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.nf-footer__title {
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
+  color: var(--color-main);
+}
+
+.nf-footer__socials { display: flex; gap: 20px; }
+
+.nf-footer__social {
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.nf-footer__social:hover { transform: translateY(-4px) scale(1.06); filter: brightness(1.12); }
+.nf-footer__social:active { transform: scale(0.96); filter: brightness(0.9); }
+.nf-footer__social:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+.nf-footer__social img { width: 100%; height: 100%; object-fit: cover; }
+
+.nf-footer__legal {
+  max-width: 1120px;
+  margin: 40px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .nf { padding: 48px 20px; }
+  .nf__text { font-size: 16px; }
+  .nf__btn { min-width: 240px; }
+  .nf-footer { padding: 40px 20px 20px; }
+  .nf-footer__title { font-size: 20px; }
+  .nf-footer__social { width: 52px; height: 52px; }
+}
+
+/* Тем, кто просил меньше движения, показываем сразу финальный кадр */
+@media (prefers-reduced-motion: reduce) {
+  .nf__zero.is-out { animation: none; opacity: 0; }
+  .nf__btn, .nf-footer__social { transition: none; }
+}

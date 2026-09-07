@@ -1,0 +1,262 @@
+@font-face {
+  font-family: "Onest";
+  src: url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --case-bg: #f5f5f5;
+  --case-ink: #1c1c1c;
+  --case-muted: #9a9a9a;
+  --color-bg: #181818;
+  --color-text: #f7f7f7;
+  /* --accent и --accent-rgb задаёт каждая страница */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--case-bg);
+  color: var(--case-ink);
+  font-family: "Onest", system-ui, sans-serif;
+  font-weight: 400;
+  overflow-x: clip;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+.accent { color: var(--accent); }
+
+/* ---------- Верхняя панель ---------- */
+
+.case-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 32px 56px 0;
+}
+
+.case-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px 0 rgba(var(--accent-rgb), 0.14),
+              inset 1px 1px 1px 0 rgba(255, 255, 255, 0.6),
+              inset -1px -1px 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.15s ease, background 0.2s ease, filter 0.15s ease;
+}
+
+.case-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(var(--accent-rgb), 0.3);
+}
+
+.case-btn:active { transform: scale(0.97); filter: brightness(0.92); }
+.case-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.case-btn__arrow { width: 22px; height: 22px; flex-shrink: 0; }
+
+/* ---------- Содержимое ---------- */
+
+.case-main {
+  flex: 1 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 56px 64px;
+  min-height: 600px;             /* с верхней панелью выходит ~700, как в макете */
+  display: grid;
+  align-content: center;
+}
+
+/* Потолок по высоте: иначе на широком экране картинка растёт во всю колонку */
+.case-media {
+  max-height: 500px;             /* высота фото из макета */
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.case-title {
+  font-weight: 700;
+  font-size: clamp(30px, 3.4vw, 50px);
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  max-width: 15ch;
+}
+
+.case-note {
+  margin-top: 24px;
+  font-weight: 500;
+  font-size: 16px;
+  max-width: 44ch;
+}
+
+.case-caption {
+  margin-top: 20px;
+  font-size: 17px;
+  color: var(--case-muted);
+}
+
+.case-body {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 40ch;
+}
+
+/* Раскладка 1: текст слева, картинка справа */
+.case-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  align-items: center;
+  gap: 40px;
+}
+
+.case-split--reverse { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); }
+.case-split--reverse .case-title,
+.case-split--reverse .case-caption { text-align: right; margin-left: auto; }
+
+/* Раскладка 2: три колонки (длинный экран, телефон, текст) */
+.case-trio {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 48px;
+}
+
+.case-trio .case-title { text-align: center; max-width: none; }
+.case-trio .case-caption { text-align: center; }
+
+/* Обрезанная сверху лента: длинный экран уходит за край карточки */
+.case-scroll-clip {
+  height: min(40vh, 340px);
+  overflow: hidden;
+  border-radius: 12px;
+  align-self: center;
+}
+
+.case-phone {
+  max-height: 500px;
+  width: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.18));
+}
+
+.case-before {
+  width: min(260px, 100%);
+  margin-top: 22px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(17, 42, 90, 0.18);
+}
+
+/* ---------- Футер ---------- */
+
+.case-footer {
+  flex-shrink: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: 44px 40px 20px;
+}
+
+.case-footer__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.case-footer__title {
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
+}
+
+.case-footer__socials { display: flex; gap: 20px; }
+
+.case-footer__social {
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.case-footer__social:hover { transform: translateY(-4px) scale(1.06); filter: brightness(1.12); }
+.case-footer__social:active { transform: scale(0.96); filter: brightness(0.9); }
+.case-footer__social:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+.case-footer__social img { width: 100%; height: 100%; object-fit: cover; }
+
+.case-footer__legal {
+  width: 100%;
+  max-width: 1120px;
+  margin: 28px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-weight: 300;
+  font-size: 12px;
+}
+
+/* ---------- Адаптив ---------- */
+
+@media (max-width: 900px) {
+  .case-top { padding: 20px 20px 0; }
+  .case-btn { height: 48px; padding: 0 20px; font-size: 15px; }
+  .case-main { padding: 24px 20px 48px; min-height: 0; }
+  .case-title { max-width: none; }
+  .case-media, .case-phone { max-height: 280px; width: auto; }
+
+  .case-split,
+  .case-split--reverse,
+  .case-trio {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    min-height: 0;
+  }
+
+  .case-split--reverse .case-title,
+  .case-split--reverse .case-caption,
+  .case-trio .case-title,
+  .case-trio .case-caption { text-align: left; margin-left: 0; }
+
+  /* На узком экране текст идёт первым, картинки после */
+  .case-split > .case-text,
+  .case-split--reverse > .case-text,
+  .case-trio > .case-text { order: -1; }
+
+  .case-footer { padding: 40px 20px 20px; }
+  .case-footer__title { font-size: 20px; }
+  .case-footer__social { width: 52px; height: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .case-btn, .case-footer__social { transition: none; }
+}

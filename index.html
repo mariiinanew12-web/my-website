@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дизайн, который решает задачи бизнеса</title>
+<link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <nav class="header__nav">
+    <ul class="header__nav-list">
+      <li><a href="#about" class="header__nav-link">Обо мне</a></li>
+      <li><a href="#services" class="header__nav-link">Услуги</a></li>
+      <li><a href="#process" class="header__nav-link">Этапы работы</a></li>
+      <li><a href="#portfolio" class="header__nav-link">Кейсы</a></li>
+    </ul>
+  </nav>
+
+  <button type="button" class="btn btn--glass header__menu-btn" id="menuOpen"
+          aria-expanded="false" aria-controls="mobileMenu">Меню</button>
+
+  <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="btn btn--glass header__cta">
+    <span class="header__cta-long">Заказать дизайн</span>
+    <span class="header__cta-short">Заказать</span>
+  </a>
+</header>
+
+<div class="menu" id="mobileMenu" hidden>
+  <div class="menu__panel" role="dialog" aria-modal="true" aria-label="Навигация">
+    <button type="button" class="menu__close" id="menuClose" aria-label="Закрыть меню">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <ul class="menu__list">
+      <li><a href="#about" class="menu__link">Обо мне</a></li>
+      <li><a href="#services" class="menu__link">Услуги</a></li>
+      <li><a href="#process" class="menu__link">Этапы работы</a></li>
+      <li><a href="#portfolio" class="menu__link">Кейсы</a></li>
+    </ul>
+  </div>
+</div>
+
+<main>
+
+  <section class="hero">
+    <div class="hero__content">
+      <h1 class="hero__title">
+        <span class="text-main">Дизайн</span>, который решает задачи <span class="text-main-2">бизнеса</span>
+      </h1>
+      <div class="hero__tags-row">
+        <ul class="hero__tags-list">
+          <li>MVP</li>
+          <li>UX/UI</li>
+          <li>Сайты</li>
+        </ul>
+        <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="btn btn--pink">Обсудить проект</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="about__content">
+      <div class="about__heading-wrapper">
+        <h2 class="about__heading"><span class="text-main">Почему</span> я?</h2>
+      </div>
+      <div class="about__cards-wrapper">
+        <div class="about__cards-row">
+          <div class="about__avatar-group">
+            <div class="about__avatar-bg">
+              <img src="assets/icons/about-avatar-bg.svg" alt="">
+            </div>
+            <div class="about__avatar-image">
+              <img src="assets/images/about-avatar.png" alt="Марина">
+            </div>
+            <div class="about__name-badge">Марина</div>
+          </div>
+          <div class="card card--about card--experience">
+            <p class="card__title"><strong>3 года</strong> в дизайне</p>
+            <p class="card__text">Разрабатывала лендинги для <strong>Сбера</strong></p>
+          </div>
+          <div class="card card--about card--approach">
+            <div class="card__title">
+              <p>Аналитика</p>
+              <p>и <strong>продуктовый подход</strong></p>
+            </div>
+            <p class="card__text">Смотрю на воронку и метрики, аудиторию и глубинные потребности</p>
+          </div>
+          <div class="card card--about card--projects">
+            <p class="card__number">40 +</p>
+            <p class="card__text">успешных проектов</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="services__content">
+      <div class="services__main">
+        <h2 class="section-title section-title--sm">Что вы получите?</h2>
+        <div class="services__tabs-wrapper">
+
+          <div class="services__group services__group--sites">
+            <p class="services__group-label">Сайты</p>
+            <div class="services__cards-row">
+              <div class="service-card">
+                <p class="service-card__title">Лендинги</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>7-10 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">Многостраничники</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>10 - 14 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">Корпоративные сайты</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>10 - 14 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">Интернет-магазины</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>14 - 28 дней</span>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="services__switch" id="funSwitch"
+                    role="switch" aria-checked="false" aria-label="Режим веселья">
+              <span class="services__switch-knob"></span>
+            </button>
+          </div>
+
+          <div class="services__group services__group--products">
+            <p class="services__group-label">Продукты</p>
+            <div class="services__cards-row">
+              <div class="service-card">
+                <p class="service-card__title">Web-сервисы</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>от 10 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">Личные кабинеты</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>от 15 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">MVP</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>от 20 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">Интерфейсы</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>от 20 дней</span>
+                </div>
+              </div>
+              <div class="service-card">
+                <p class="service-card__title">Дизайн-системы</p>
+                <div class="service-card__duration">
+                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
+                  <span>от 14 дней</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="cta-banner-wrap">
+        <div class="cta-banner">
+        <div class="cta-banner__text">
+          <p class="cta-banner__title">Макеты нужны еще вчера?</p>
+          <p class="cta-banner__subtitle">Не повод экономить на деталях</p>
+        </div>
+          <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="btn btn--dark">
+            Обсудить срочный проект
+            <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="custom-projects">
+    <div class="custom-projects__content">
+      <div class="custom-projects__main">
+        <h2 class="custom-projects__title">Нестандартный проект?</h2>
+
+        <div class="custom-projects__body">
+          <div class="bf" id="bf">
+            <div class="bf__flight">
+              <div class="bf__depart">
+                <div class="bf__tilt">
+                  <div class="bf__wing-box">
+                    <img class="bf__layer bf__wing bf__wing--left" src="assets/images/wing-left.webp" alt="" decoding="async">
+                  </div>
+                  <div class="bf__wing-box">
+                    <img class="bf__layer bf__wing bf__wing--right" src="assets/images/wing-right.webp" alt="" decoding="async">
+                  </div>
+                  <img class="bf__layer bf__body" src="assets/images/body.webp" alt="Стеклянная бабочка" decoding="async">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ul class="custom-projects__tags-list">
+            <li class="tag">Интерактивные сайты</li>
+            <li class="tag">Генеративная графика</li>
+            <li class="tag">Анимации</li>
+            <li class="tag">AI-продукты</li>
+          </ul>
+        </div>
+      </div>
+
+      <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="btn btn--pink btn--wide" id="ideaBtn">
+        Обсудить идею
+        <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section id="process" class="process">
+    <div class="process__content">
+      <h2 class="process__title">Этапы работы</h2>
+      <div class="process__steps-grid">
+        <div class="process__steps-row">
+          <div class="process__step">
+            <span class="process__step-num">01</span>
+            <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Погружаемся</p>
+              <div class="step-card__text">
+                <p><strong>Знакомимся</strong> с продуктом, бизнесом и задачей</p>
+                <p><strong>Обсуждаем</strong> цели, аудиторию</p>
+                <p>и <strong>ожидания от проекта</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">02</span>
+            <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Проводим первичный аудит</p>
+              <p class="step-card__text">За <strong>40–50 минут</strong> вместе разбираем текущий продукт: что уже работает, где есть проблемы и что можно улучшить</p>
+            </div>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">03</span>
+            <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Формируем концепцию</p>
+              <p class="step-card__text"><strong>Изучаю</strong> материалы и аналитику, <strong>формирую структуру</strong> и предлагаю <strong>3 варианта первого экрана</strong>. Фиксируем ТЗ и сроки</p>
+            </div>
+          </div>
+        </div>
+        <div class="process__steps-row process__steps-row--bottom">
+          <div class="process__steps-group">
+            <div class="process__step">
+              <span class="process__step-num">04</span>
+              <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+                <p class="step-card__title">Проектируем</p>
+                <p class="step-card__text"><strong>Создаю дизайн</strong> всего проекта по согласованной концепции. <strong>Все этапы</strong> и контрольные точки заранее <strong>фиксируются</strong></p>
+              </div>
+            </div>
+            <div class="process__step">
+              <span class="process__step-num">05</span>
+              <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+                <div class="step-card__title">
+                  <p>Передаю вам</p>
+                  <p>в разработку</p>
+                </div>
+                <div class="step-card__text">
+                  <p>Подготавливаю финальные макеты, состояния, адаптивы</p>
+                  <p>и необходимые материалы для разработчика</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num" aria-hidden="true" style="visibility:hidden">06</span>
+            <div class="step-card step-card--alt">
+                <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Или верстаю сама</p>
+              <p class="step-card__text">На Тильда, Webflow, WordPress, no-code</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="process__footer">
+        <span><strong class="text-main">Вам не нужно погружаться в каждую деталь процесса</strong> – я сама веду проект, соблюдаю согласованные этапы и держу вас в курсе процесса</span>
+        <span class="process__footer-note"><strong class="text-main">Правки</strong> вносятся по итогам каждого этапа</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="portfolio" class="portfolio">
+    <div class="portfolio__content">
+      <div class="portfolio__main">
+        <h2 class="section-title">Мои работы</h2>
+        <div class="portfolio__grid">
+
+          <a class="portfolio-card" href="case-sber.html">
+            <div class="portfolio-card__preview portfolio-card__preview--sber">
+              <img src="assets/images/portfolio-sber-bg.png" alt="" class="portfolio-card__bg">
+              <img src="assets/images/portfolio-sber-laptop.png" alt="Сбер, вид на ноутбуке" class="portfolio-card__device portfolio-card__device--laptop">
+              <img src="assets/images/portfolio-sber-phone.png" alt="Сбер, вид на телефоне" class="portfolio-card__device portfolio-card__device--phone">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Сбер</p>
+              <ul class="portfolio-card__tags">
+                <li>веб-дизайн</li>
+                <li>корпоративный сайт</li>
+              </ul>
+            </div>
+          </a>
+
+          <a class="portfolio-card" href="case-yandex.html">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/portfolio-yandex.png" alt="Яндекс" class="portfolio-card__full-image">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Яндекс</p>
+              <ul class="portfolio-card__tags">
+                <li>веб-дизайн</li>
+                <li>лендинг</li>
+              </ul>
+            </div>
+          </a>
+
+          <a class="portfolio-card" href="case-praktiki.html">
+            <div class="portfolio-card__preview portfolio-card__preview--praktiki">
+              <img src="assets/images/portfolio-praktiki-old.png" alt="Практики созидания, старая версия" class="portfolio-card__praktiki portfolio-card__praktiki--old">
+              <img src="assets/images/portfolio-praktiki-new.png" alt="Практики созидания, новая версия" class="portfolio-card__praktiki portfolio-card__praktiki--new">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Практики созидания</p>
+              <ul class="portfolio-card__tags">
+                <li>веб-дизайн</li>
+                <li>корпоративный сайт</li>
+                <li>редизайн</li>
+              </ul>
+            </div>
+          </a>
+
+          <a class="portfolio-card" href="case-aihub.html">
+            <div class="portfolio-card__preview portfolio-card__preview--aihub">
+              <img src="assets/images/portfolio-aihub-1.png" alt="AiHub, экран 1" class="portfolio-card__phone-screen portfolio-card__phone-screen--1">
+              <img src="assets/images/portfolio-aihub-2.png" alt="AiHub, экран 2" class="portfolio-card__phone-screen portfolio-card__phone-screen--2">
+              <img src="assets/images/portfolio-aihub-3.png" alt="AiHub, экран 3" class="portfolio-card__phone-screen portfolio-card__phone-screen--3">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">AiHub</p>
+              <ul class="portfolio-card__tags">
+                <li>MVP</li>
+                <li>UX/UI</li>
+                <li>продуктовые исследования</li>
+              </ul>
+            </div>
+          </a>
+
+        </div>
+      </div>
+      <a href="404.html" class="btn btn--outline btn--wide">
+        Смотреть все
+        <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="faq__content">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq__list">
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Сколько стоит сайт?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">От 50 000 ₽ – стоимость для простого лендинга в один экран, без анимаций и уникальной графики. Итоговая цена зависит от количества экранов, наличия анимаций и глубины проработки. Точную вилку под ваш проект называю после знакомства с проектом.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Что входит в макет?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Полный комплект для разработки: все состояния компонентов (hover, ошибка, пустой экран, 404), адаптивные версии под мобильные и десктоп, и понятные материалы для передачи верстальщику.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Вы делаете сайты с помощью ИИ?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Полноценные сайты нет. Я не считаю ИИ-генерацию самостоятельным решением для серьёзного проекта. А вот для усложнения (уникальных анимаций, нестандартных переходов, кастомного контента) можем использовать различные сервисы как инструмент.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Как проходит оплата?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Предоплата 50%, остаток – после сдачи проекта. Для больших проектов можно разбить на этапы: оплата после каждого согласованного этапа.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Что если вы не успеете в срок?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Закладываю запас времени при планировании, поэтому срывы случаются редко. Но если дедлайн всё же сорван по моей вине – даю скидку на проект в качестве извинения.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Сколько правок включено?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">2 правки на каждый этап.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">У меня нет ТЗ/текстов/контента</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">ТЗ и структуру мы формируем вместе на этапе первичного аудита – я задаю вопросы про бизнес, продукт и цели, и на основе этого предлагаю концепцию. Тексты и контент тоже не обязательно готовить заранее: могу подготовить структуру и заглушки под финальный текст, или помочь с текстом отдельно.</p>
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="footer" class="footer">
+  <div class="footer__content">
+    <div class="footer__cta-wrapper">
+      <p class="footer__title">Готовы обсудить проект?</p>
+      <div class="footer__social-links">
+        <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="footer__social-link" aria-label="Telegram"><img src="assets/images/social-1.png" alt="Telegram"></a>
+        <a href="https://www.threads.com/@mgmdvmrn" target="_blank" rel="noopener" class="footer__social-link" aria-label="Threads"><img src="assets/images/social-2.png" alt="Threads"></a>
+        <a href="https://mail.yandex.ru/compose?to=mamagomedova_2%40edu.hse.ru" target="_blank" rel="noopener" class="footer__social-link" aria-label="Написать письмо"><img src="assets/images/social-3.png" alt="Почта"></a>
+      </div>
+    </div>
+    <div class="footer__legal">
+      <p>©2026 Все права защищены.</p>
+      <p>Не является публичной офертой</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
