@@ -1134,6 +1134,26 @@ button {
   /* Свитча на мобильном нет */
   .services__switch { display: none; }
 
+  /* Услуги: ровная сетка в две колонки вместо ширины по тексту */
+  .services { padding: 24px 20px 80px; }
+  .services__content { gap: 56px; }
+  .services__cards-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .service-card {
+    width: 100%;
+    height: auto;
+    min-height: 118px;
+    padding: 16px;
+    gap: 14px;
+  }
+  .service-card__title { font-size: 16px; }
+  .service-card__duration { font-size: 12px; gap: 4px; }
+  .service-card__icon { width: 14px; height: 14px; }
+  .cta-banner { min-height: 0; padding: 28px 20px; gap: 24px; }
+
   /* Этапы: одна колонка, номера и карточки выровнены по общей линии */
   .process { padding: 40px 20px; }
   .process__steps-row,
