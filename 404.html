@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Если репозиторий называется НЕ username.github.io, замените на /имя-репозитория/ -->
-<base href="/">
 <title>404 – страница не найдена</title>
 <link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="stylesheet" href="css/notfound.css">
@@ -20,7 +18,7 @@
 
     <p class="nf__text">Извините, страница не найдена</p>
 
-    <a href="index.html#portfolio" data-goal="404_home" class="nf__btn" id="homeBtn">
+    <a href="index.html#portfolio" class="nf__btn" id="homeBtn">
       <svg class="nf__btn-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       На главную
     </a>
@@ -46,9 +44,9 @@
   <div class="nf-footer__inner">
     <p class="nf-footer__title">Но зато существуют эти</p>
     <div class="nf-footer__socials">
-      <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="social" class="nf-footer__social" aria-label="Telegram"><img src="assets/images/social-1.png" alt="Telegram"></a>
-      <a href="https://www.threads.com/@mgmdvmrn" target="_blank" rel="noopener" data-goal="social" class="nf-footer__social" aria-label="Threads"><img src="assets/images/social-2.png" alt="Threads"></a>
-      <a href="https://mail.yandex.ru/compose?to=mamagomedova_2%40edu.hse.ru" target="_blank" rel="noopener" data-goal="social" class="nf-footer__social" aria-label="Написать письмо"><img src="assets/images/social-3.png" alt="Почта"></a>
+      <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="nf-footer__social" aria-label="Telegram"><img src="assets/images/social-1.png" alt="Telegram"></a>
+      <a href="https://www.threads.com/@mgmdvmrn" target="_blank" rel="noopener" class="nf-footer__social" aria-label="Threads"><img src="assets/images/social-2.png" alt="Threads"></a>
+      <a href="https://mail.yandex.ru/compose?to=mamagomedova_2%40edu.hse.ru" target="_blank" rel="noopener" class="nf-footer__social" aria-label="Написать письмо"><img src="assets/images/social-3.png" alt="Почта"></a>
     </div>
   </div>
   <div class="nf-footer__legal">
@@ -58,6 +56,5 @@
 </footer>
 
 <script src="js/notfound.js"></script>
-<script src="js/analytics.js"></script>
 </body>
 </html>
