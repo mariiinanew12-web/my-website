@@ -333,16 +333,14 @@ button {
 
 .about__avatar-group {
   position: relative;
-  width: 219px;
-  height: 219px;
+  height: 265px;              /* вровень с карточками */
   flex-shrink: 0;
-  margin-left: 46px;
 }
 
 .about__avatar-bg {
   position: absolute;
-  top: -26px;
-  left: -20px;                 /* блюр сдвинут вправо, уходит за спину */
+  top: -30px;
+  left: -32px;                 /* блюр уходит за спину */
   width: 340px;
   height: 340px;
   z-index: 0;
@@ -350,17 +348,13 @@ button {
 
 .about__avatar-image {
   position: relative;
-  width: 219px;
-  height: 219px;
-  border-radius: 50%;
-  overflow: hidden;
+  height: 265px;
   z-index: 1;
 }
 
 .about__avatar-image img {
-  width: 100%;
+  width: auto;
   height: 100%;
-  object-fit: cover;
 }
 
 .card {
@@ -369,11 +363,10 @@ button {
   border-radius: var(--radius-card);
   width: 265px;
   height: 265px;
-  padding: 20px 40px;
-  display: grid;
-  grid-template-rows: 84px auto;   /* заголовки и тексты на одной высоте */
-  row-gap: 80px;
-  align-content: center;
+  padding: 40px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;     /* тексты стартуют на одной высоте */
   transition: transform 0.25s ease;
 }
 
@@ -383,24 +376,24 @@ button {
   transform: scale(1.04);
 }
 
-.card--about .card__title {
-  font-size: 22px;
-  align-self: start;
+.card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 16px;
+  line-height: 1.45;
 }
 
-.card--about .card__text {
-  font-size: 12px;
+.card__lead {
+  font-size: 22px;
+  line-height: 1.35;
 }
 
-.card__number {
-  font-weight: 700;
-  font-size: 22px;
-  align-self: start;
-}
+.card__muted { color: var(--color-muted); }
 
 .about__name-badge {
   position: absolute;
-  left: -46px;                 /* аватар сдвинут на 46px, бейдж встаёт к краю ряда */
+  left: 40px;                  /* бейдж лежит на нижнем левом углу фото */
   bottom: 0;
   white-space: nowrap;
   background: var(--glass-fill-pink);
@@ -471,11 +464,11 @@ button {
   border-radius: 12px;
   padding: 24px;
   flex: 0 0 auto;
-  height: 180px;
+  min-width: 145px;
+  height: 150px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 32px;
+  justify-content: center;
   transition: transform 0.25s ease;
 }
 
@@ -488,19 +481,7 @@ button {
   font-size: 20px;
 }
 
-.service-card__duration {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--color-muted);
-}
 
-.service-card__icon {
-  width: 18px;
-  height: 18px;
-  transform: rotate(90deg);
-}
 
 .services__switch {
   grid-area: switch;
@@ -520,6 +501,10 @@ button {
 }
 
 .services__switch:active { transform: scale(0.95); }
+
+/* второй свитч, под карточками — показывается только на мобильном */
+.services__switch-mobile { display: none; }
+.services__switch-mobile .services__switch { grid-area: auto; }
 
 .services__switch.is-on { background: var(--color-main); }
 .services__switch:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
@@ -780,6 +765,15 @@ button {
   gap: 20px;
 }
 
+.step-card__or {
+  margin: 6px 0;
+  color: var(--color-muted);
+}
+
+/* У пятой карточки текста больше остальных — даём ему больше места */
+.step-card--dense { gap: 20px; }
+.step-card--dense .step-card__text { font-size: 14px; line-height: 1.45; }
+
 /* Розовая линия обегает карточку по часовой стрелке */
 .step-card__outline {
   position: absolute;
@@ -872,9 +866,67 @@ button {
 }
 
 .portfolio-card:hover { transform: scale(1.03); }
+.portfolio-card--static { cursor: default; }
 .portfolio-card:active { transform: scale(0.99); }
-.portfolio-card:focus-visible { outline: 2px solid var(--color-main-2); outline-offset: 6px; border-radius: 20px; }
 
+/* Лицевая сторона и оборот живут в одной 3D-сцене и меняются переворотом */
+.portfolio-card__flip {
+  display: block;
+  width: 100%;
+  height: 288px;
+  padding: 0;
+  border: 0;
+  background: none;
+  perspective: 1400px;
+  cursor: pointer;
+}
+
+.portfolio-card__flip:focus-visible {
+  outline: 2px solid var(--color-main-2);
+  outline-offset: 6px;
+  border-radius: 20px;
+}
+
+.portfolio-card__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+.portfolio-card.is-flipped .portfolio-card__inner { transform: rotateY(180deg); }
+
+.portfolio-card__face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 20px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.portfolio-card__face--front { background: #fff; }
+
+.portfolio-card__face--front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.portfolio-card__face--back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 28px 32px;
+  text-align: left;
+}
+
+/* Карточка без переворота — обычная картинка */
 .portfolio-card__preview {
   position: relative;
   background: #fff;
@@ -883,71 +935,39 @@ button {
   overflow: hidden;
 }
 
-.portfolio-card__full-image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 105%;
-  max-width: none;
-}
-
-.portfolio-card__bg {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 130%;
-  max-width: none;
-}
-
-.portfolio-card__device {
-  position: absolute;
-}
-
-.portfolio-card__device--laptop {
-  width: 45%;
-  left: 8%;
-  top: 45%;
-}
-
-.portfolio-card__device--phone {
-  width: 13%;
-  left: 46%;
-  top: 46%;
-}
-
-.portfolio-card__preview--praktiki .portfolio-card__praktiki {
-  position: absolute;
-}
-
-.portfolio-card__praktiki--old {
-  width: 40%;
-  left: 6%;
-  top: 30%;
-  box-shadow: 0 0 10px 0 rgba(29, 49, 92, 0.25);
-}
-
-.portfolio-card__praktiki--new {
-  width: 55%;
-  left: 42%;
-  top: 15%;
-  box-shadow: 0 0 10.8px 0 rgba(199, 222, 117, 0.2);
-}
-
-.portfolio-card__preview--aihub {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.portfolio-card__phone-screen {
-  border-radius: 12px;
-  width: 30%;
-  height: auto;
+.portfolio-card__preview img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
+
+/* Цвета оборотов — по макету */
+.portfolio-card__preview--sber     { background: #2F5455; color: #F7F7F7; }
+.portfolio-card__preview--banya    { background: #5C0E07; color: #F7F7F7; }
+.portfolio-card__preview--praktiki { background: #CBDD82; color: #112A5A; }
+.portfolio-card__preview--melke    { background: #28292B; color: #F7F7F7; }
+.portfolio-card__preview--yoga     { background: #F6F0F1; color: #14453A; }
+
+.work-back__lead {
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.work-back__heading {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.work-back__list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.work-back__dim { opacity: 0.6; }
 
 .portfolio-card__info {
   display: flex;
@@ -1126,13 +1146,24 @@ button {
   .section-title--sm { font-size: 28px; }
   .process__title { font-size: 40px; }
   .portfolio__grid { grid-template-columns: 1fr; }
+  .portfolio-card__flip,
+  .portfolio-card__preview { height: 220px; }
+  .portfolio-card__face--back { padding: 20px 22px; gap: 14px; }
+  .work-back__lead { font-size: 16px; }
+  .work-back__heading { font-size: 15px; }
+  .work-back__list { font-size: 14px; margin-top: 6px; }
   .process__footer-note { align-self: center; text-align: center; }
   .faq-card { padding: 20px 24px; }
   .faq-card__question { font-size: 16px; }
   .faq-card__answer { font-size: 14px; }
 
   /* Свитча на мобильном нет */
-  .services__switch { display: none; }
+  .services__group--sites > .services__switch { display: none; }   /* десктопный прячем */
+  .services__switch-mobile {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
 
   /* Услуги: ровная сетка в две колонки вместо ширины по тексту */
   .services { padding: 24px 20px 80px; }
@@ -1144,14 +1175,12 @@ button {
   }
   .service-card {
     width: 100%;
+    min-width: 0;
     height: auto;
-    min-height: 118px;
+    min-height: 92px;
     padding: 16px;
-    gap: 14px;
   }
   .service-card__title { font-size: 16px; }
-  .service-card__duration { font-size: 12px; gap: 4px; }
-  .service-card__icon { width: 14px; height: 14px; }
   .cta-banner { min-height: 0; padding: 28px 20px; gap: 24px; }
 
   /* Этапы: одна колонка, номера и карточки выровнены по общей линии */
@@ -1179,7 +1208,7 @@ button {
     opacity: 1 !important;
   }
 
-  /* «Почему я»: аватар и «40 +» в одной строке, две карточки под ними */
+  /* «Почему я»: аватар и короткая карточка в одной строке, длинные под ними */
   .about { padding: 120px 20px 60px; }
   .about__cards-wrapper { position: relative; }
   .about__cards-row {
@@ -1190,32 +1219,31 @@ button {
   }
   .about__avatar-group {
     grid-area: 1 / 1;
-    margin-left: 0;
     width: 100%;
-    height: 148px;
+    height: 170px;
+    display: flex;
+    justify-content: center;
   }
-  .about__avatar-image { width: 148px; height: 148px; margin: 0 auto; }
-  .about__avatar-bg { top: -40px; left: 50%; width: 240px; height: 240px; transform: translateX(-40%); }
+  .about__avatar-image { height: 170px; }
+  .about__avatar-bg { top: -30px; left: 50%; width: 230px; height: 230px; transform: translateX(-55%); }
   .card--projects   { grid-area: 1 / 2; }
   .card--experience { grid-area: 2 / 1 / auto / -1; }
   .card--approach   { grid-area: 3 / 1 / auto / -1; }
 
   .card {
     width: 100%;
-    height: 148px;
+    height: auto;
+    min-height: 148px;
     padding: 20px;
-    grid-template-rows: auto auto;
-    row-gap: 20px;
-    align-content: center;
+    justify-content: center;
   }
-  .card--about .card__title { font-size: 18px; }
-  .card__number { font-size: 22px; }
-  .card--about .card__text { font-size: 14px; }
+  .card__list { font-size: 15px; }
+  .card__lead { font-size: 19px; }
 
   .about__name-badge {
     left: 50%;
-    bottom: 2px;
-    transform: translateX(-85%);
+    bottom: 0;
+    transform: translateX(-88%);
     font-size: 14px;
     padding: 8px 16px;
   }

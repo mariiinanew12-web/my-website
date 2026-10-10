@@ -39,7 +39,7 @@
   }
 
   /* ---------- Свитч: включение запускает салют из эмодзи ---------- */
-  var funSwitch = document.getElementById('funSwitch');
+  var funSwitches = document.querySelectorAll('.services__switch');
 
   function launchEmojis() {
     if (reduced) return;
@@ -92,13 +92,29 @@
     }
   }
 
-  if (funSwitch) {
-    funSwitch.addEventListener('click', function () {
-      var on = funSwitch.classList.toggle('is-on');
-      funSwitch.setAttribute('aria-checked', String(on));
-      if (on) launchEmojis();      // выключение проходит тихо
+  // Свитчей два — для десктопа и для мобильного. Состояние держим общее,
+  // чтобы они не разъезжались при повороте экрана.
+  var funOn = false;
+
+  funSwitches.forEach(function (sw) {
+    sw.addEventListener('click', function () {
+      funOn = !funOn;
+      funSwitches.forEach(function (el) {
+        el.classList.toggle('is-on', funOn);
+        el.setAttribute('aria-checked', String(funOn));
+      });
+      if (funOn) launchEmojis();      // выключение проходит тихо
     });
-  }
+  });
+
+  /* ---------- Карточки работ переворачиваются текстовой стороной ---------- */
+  document.querySelectorAll('.portfolio-card__flip').forEach(function (btn) {
+    var card = btn.closest('.portfolio-card');
+    btn.addEventListener('click', function () {
+      var open = card.classList.toggle('is-flipped');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
 
   /* ---------- Группы услуг разъезжаются перед срочной плашкой ---------- */
   var groupSites = document.querySelector('.services__group--sites');

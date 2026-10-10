@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Дизайн, который решает задачи бизнеса</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -72,24 +76,27 @@
               <img src="assets/icons/about-avatar-bg.svg" alt="">
             </div>
             <div class="about__avatar-image">
-              <img src="assets/images/about-avatar.png" alt="Марина">
+              <img src="assets/images/about-avatar.webp" alt="Марина">
             </div>
             <div class="about__name-badge">Марина</div>
           </div>
           <div class="card card--about card--experience">
-            <p class="card__title"><strong>3 года</strong> в дизайне</p>
-            <p class="card__text">Разрабатывала лендинги для <strong>Сбера</strong></p>
-          </div>
-          <div class="card card--about card--approach">
-            <div class="card__title">
-              <p>Аналитика</p>
-              <p>и <strong>продуктовый подход</strong></p>
+            <div class="card__list">
+              <p>5 лет в дизайне.</p>
+              <p>Сбер.</p>
+              <p>ВШЭ.</p>
+              <p>Маркетинг.</p>
+              <p>Бизнес аналитика.</p>
+              <p>Код. ИИ.</p>
             </div>
-            <p class="card__text">Смотрю на воронку и метрики, аудиторию и глубинные потребности</p>
           </div>
           <div class="card card--about card--projects">
-            <p class="card__number">40 +</p>
-            <p class="card__text">успешных проектов</p>
+            <p class="card__lead"><strong>– список регалий, но!</strong></p>
+          </div>
+          <div class="card card--about card--approach">
+            <p class="card__lead"><strong>Моя сильная сторона это –</strong><br>
+              <span class="card__muted">видение</span><br>
+              и <span class="card__muted">стратегическое мышление</span></p>
           </div>
         </div>
       </div>
@@ -106,32 +113,16 @@
             <p class="services__group-label">Сайты</p>
             <div class="services__cards-row">
               <div class="service-card">
+                <p class="service-card__title">Аудит</p>
+              </div>
+              <div class="service-card">
                 <p class="service-card__title">Лендинги</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>7-10 дней</span>
-                </div>
               </div>
               <div class="service-card">
                 <p class="service-card__title">Многостраничники</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>10 - 14 дней</span>
-                </div>
-              </div>
-              <div class="service-card">
-                <p class="service-card__title">Корпоративные сайты</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>10 - 14 дней</span>
-                </div>
               </div>
               <div class="service-card">
                 <p class="service-card__title">Интернет-магазины</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>14 - 28 дней</span>
-                </div>
               </div>
             </div>
             <button type="button" class="services__switch" id="funSwitch"
@@ -145,43 +136,27 @@
             <div class="services__cards-row">
               <div class="service-card">
                 <p class="service-card__title">Web-сервисы</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>от 10 дней</span>
-                </div>
               </div>
               <div class="service-card">
                 <p class="service-card__title">Личные кабинеты</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>от 15 дней</span>
-                </div>
-              </div>
-              <div class="service-card">
-                <p class="service-card__title">MVP</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>от 20 дней</span>
-                </div>
               </div>
               <div class="service-card">
                 <p class="service-card__title">Интерфейсы</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>от 20 дней</span>
-                </div>
               </div>
               <div class="service-card">
                 <p class="service-card__title">Дизайн-системы</p>
-                <div class="service-card__duration">
-                  <img src="assets/icons/arrow-duration.svg" alt="" class="service-card__icon">
-                  <span>от 14 дней</span>
-                </div>
               </div>
             </div>
           </div>
 
         </div>
+      </div>
+
+      <div class="services__switch-mobile">
+        <button type="button" class="services__switch" id="funSwitchMobile"
+                role="switch" aria-checked="false" aria-label="Режим веселья">
+          <span class="services__switch-knob"></span>
+        </button>
       </div>
 
       <div class="cta-banner-wrap">
@@ -246,7 +221,7 @@
             <span class="process__step-num">01</span>
             <div class="step-card">
               <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <p class="step-card__title">Погружаемся</p>
+              <p class="step-card__title">Знакомство и бриф</p>
               <div class="step-card__text">
                 <p><strong>Знакомимся</strong> с продуктом, бизнесом и задачей</p>
                 <p><strong>Обсуждаем</strong> цели, аудиторию</p>
@@ -258,16 +233,16 @@
             <span class="process__step-num">02</span>
             <div class="step-card">
               <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <p class="step-card__title">Проводим первичный аудит</p>
-              <p class="step-card__text">За <strong>40–50 минут</strong> вместе разбираем текущий продукт: что уже работает, где есть проблемы и что можно улучшить</p>
+              <p class="step-card__title">Анализ и структура</p>
+              <p class="step-card__text"><strong>Изучаю</strong> материалы и аналитику, <strong>формирую структуру</strong> сайта. Схему страниц. Тексты</p>
             </div>
           </div>
           <div class="process__step">
             <span class="process__step-num">03</span>
             <div class="step-card">
               <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <p class="step-card__title">Формируем концепцию</p>
-              <p class="step-card__text"><strong>Изучаю</strong> материалы и аналитику, <strong>формирую структуру</strong> и предлагаю <strong>3 варианта первого экрана</strong>. Фиксируем ТЗ и сроки</p>
+              <p class="step-card__title">Концепция</p>
+              <p class="step-card__text">Собираю референсы и мудборд, формируем дизайн-концепцию</p>
             </div>
           </div>
         </div>
@@ -277,21 +252,19 @@
               <span class="process__step-num">04</span>
               <div class="step-card">
               <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-                <p class="step-card__title">Проектируем</p>
-                <p class="step-card__text"><strong>Создаю дизайн</strong> всего проекта по согласованной концепции. <strong>Все этапы</strong> и контрольные точки заранее <strong>фиксируются</strong></p>
+                <p class="step-card__title">Дизайн</p>
+                <p class="step-card__text"><strong>Отрисовываю сайт</strong> по согласованной концепции</p>
               </div>
             </div>
             <div class="process__step">
               <span class="process__step-num">05</span>
-              <div class="step-card">
+              <div class="step-card step-card--dense">
               <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-                <div class="step-card__title">
-                  <p>Передаю вам</p>
-                  <p>в разработку</p>
-                </div>
+                <p class="step-card__title">Верстка</p>
                 <div class="step-card__text">
-                  <p>Подготавливаю финальные макеты, состояния, адаптивы</p>
-                  <p>и необходимые материалы для разработчика</p>
+                  <p>Подготавливаю финальные макеты, состояния, адаптивы и необходимые материалы <strong>для разработчика</strong></p>
+                  <p class="step-card__or">/</p>
+                  <p><strong>Верстаю сама</strong> (Tilda, свой хост)</p>
                 </div>
               </div>
             </div>
@@ -300,8 +273,8 @@
             <span class="process__step-num" aria-hidden="true" style="visibility:hidden">06</span>
             <div class="step-card step-card--alt">
                 <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <p class="step-card__title">Или верстаю сама</p>
-              <p class="step-card__text">На Тильда, Webflow, WordPress, no-code</p>
+              <p class="step-card__title">Сопровождение</p>
+              <p class="step-card__text">После запуска я на связи 2 недели. Исправляем, консультируем</p>
             </div>
           </div>
         </div>
@@ -319,67 +292,164 @@
         <h2 class="section-title">Мои работы</h2>
         <div class="portfolio__grid">
 
-          <a data-goal="case_open" class="portfolio-card" href="case-sber.html">
-            <div class="portfolio-card__preview portfolio-card__preview--sber">
-              <img src="assets/images/portfolio-sber-bg.png" alt="" class="portfolio-card__bg">
-              <img src="assets/images/portfolio-sber-laptop.png" alt="Сбер, вид на ноутбуке" class="portfolio-card__device portfolio-card__device--laptop">
-              <img src="assets/images/portfolio-sber-phone.png" alt="Сбер, вид на телефоне" class="portfolio-card__device portfolio-card__device--phone">
-            </div>
-            <div class="portfolio-card__info">
-              <p class="portfolio-card__name">Сбер</p>
-              <ul class="portfolio-card__tags">
-                <li>веб-дизайн</li>
-                <li>корпоративный сайт</li>
-              </ul>
-            </div>
-          </a>
+          <div class="portfolio-card">
+            <button type="button" class="portfolio-card__flip" data-goal="case_open" aria-expanded="false">
+              <span class="portfolio-card__inner">
+                <span class="portfolio-card__face portfolio-card__face--front">
+                  <img src="assets/images/work-sber.webp" alt="Сбер – портал учебно-исследовательского центра">
+                </span>
+                <span class="portfolio-card__face portfolio-card__face--back portfolio-card__preview--sber">
+                  <p class="work-back__lead"><strong>Задача</strong> упаковать внутренние образовательные продукты Сбера в понятные и вовлекающие лендинги</p>
+                </span>
+              </span>
+            </button>
+              <div class="portfolio-card__info">
+            <p class="portfolio-card__name">Сбер</p>
+            <ul class="portfolio-card__tags">
+              <li>финтех</li>
+              <li>корпоративный сайт</li>
+            </ul>
+          </div>
+          </div>
 
-          <a data-goal="case_open" class="portfolio-card" href="case-yandex.html">
-            <div class="portfolio-card__preview">
-              <img src="assets/images/portfolio-yandex.png" alt="Яндекс" class="portfolio-card__full-image">
-            </div>
-            <div class="portfolio-card__info">
-              <p class="portfolio-card__name">Яндекс</p>
-              <ul class="portfolio-card__tags">
-                <li>веб-дизайн</li>
-                <li>лендинг</li>
-              </ul>
-            </div>
-          </a>
+              <div class="portfolio-card">
+            <button type="button" class="portfolio-card__flip" data-goal="case_open" aria-expanded="false">
+              <span class="portfolio-card__inner">
+                <span class="portfolio-card__face portfolio-card__face--front">
+                  <img src="assets/images/work-banya.webp" alt="Русские бани – лендинг">
+                </span>
+                <span class="portfolio-card__face portfolio-card__face--back portfolio-card__preview--banya">
+                  <p class="work-back__heading">Задачи:</p>
+                  <ul class="work-back__list">
+                    <li>Информационный/имиджевый сайт</li>
+                    <li>Передать атмосферу русской бани <span class="work-back__dim">(не уходя в спа)</span></li>
+                    <li>Проработать структуру <span class="work-back__dim">(услуги/расписание/бронирование)</span></li>
+                  </ul>
+                  <p class="work-back__heading">Цель/метрики:</p>
+                  <ul class="work-back__list">
+                    <li>Повторные возвращения</li>
+                    <li>Разгрузка колл-центра</li>
+                    <li>Оптимизация через crm</li>
+                  </ul>
+                </span>
+              </span>
+            </button>
+              <div class="portfolio-card__info">
+            <p class="portfolio-card__name">Русские бани</p>
+            <ul class="portfolio-card__tags">
+              <li>Бьюти</li>
+              <li>лендинг</li>
+            </ul>
+          </div>
+          </div>
 
-          <a data-goal="case_open" class="portfolio-card" href="case-praktiki.html">
-            <div class="portfolio-card__preview portfolio-card__preview--praktiki">
-              <img src="assets/images/portfolio-praktiki-old.png" alt="Практики созидания, старая версия" class="portfolio-card__praktiki portfolio-card__praktiki--old">
-              <img src="assets/images/portfolio-praktiki-new.png" alt="Практики созидания, новая версия" class="portfolio-card__praktiki portfolio-card__praktiki--new">
-            </div>
-            <div class="portfolio-card__info">
-              <p class="portfolio-card__name">Практики созидания</p>
-              <ul class="portfolio-card__tags">
-                <li>веб-дизайн</li>
-                <li>корпоративный сайт</li>
-                <li>редизайн</li>
-              </ul>
-            </div>
-          </a>
+              <div class="portfolio-card">
+            <button type="button" class="portfolio-card__flip" data-goal="case_open" aria-expanded="false">
+              <span class="portfolio-card__inner">
+                <span class="portfolio-card__face portfolio-card__face--front">
+                  <img src="assets/images/work-praktiki.webp" alt="Практики созидания – редизайн сайта">
+                </span>
+                <span class="portfolio-card__face portfolio-card__face--back portfolio-card__preview--praktiki">
+                  <p class="work-back__heading">Задачи:</p>
+                  <ul class="work-back__list">
+                    <li>Перестроить пользовательский путь</li>
+                    <li>Перестроить структуру сайта</li>
+                    <li>Упаковать позиционирование</li>
+                  </ul>
+                  <p class="work-back__heading">Цель/метрики:</p>
+                  <ul class="work-back__list">
+                    <li>Регистрации на мероприятие</li>
+                    <li>Вовлечение молодой аудитории</li>
+                    <li>Восприятие проекта</li>
+                  </ul>
+                </span>
+              </span>
+            </button>
+              <div class="portfolio-card__info">
+            <p class="portfolio-card__name">Практики созидания</p>
+            <ul class="portfolio-card__tags">
+              <li>НКО, образование</li>
+              <li>корпоративный сайт</li>
+              <li>редизайн</li>
+            </ul>
+          </div>
+          </div>
 
-          <a data-goal="case_open" class="portfolio-card" href="case-aihub.html">
-            <div class="portfolio-card__preview portfolio-card__preview--aihub">
-              <img src="assets/images/portfolio-aihub-1.png" alt="AiHub, экран 1" class="portfolio-card__phone-screen portfolio-card__phone-screen--1">
-              <img src="assets/images/portfolio-aihub-2.png" alt="AiHub, экран 2" class="portfolio-card__phone-screen portfolio-card__phone-screen--2">
-              <img src="assets/images/portfolio-aihub-3.png" alt="AiHub, экран 3" class="portfolio-card__phone-screen portfolio-card__phone-screen--3">
+              <div class="portfolio-card">
+            <button type="button" class="portfolio-card__flip" data-goal="case_open" aria-expanded="false">
+              <span class="portfolio-card__inner">
+                <span class="portfolio-card__face portfolio-card__face--front">
+                  <img src="assets/images/work-melke.webp" alt="MELKE – лендинг оконных систем">
+                </span>
+                <span class="portfolio-card__face portfolio-card__face--back portfolio-card__preview--melke">
+                  <p class="work-back__heading">Задачи:</p>
+                  <ul class="work-back__list">
+                    <li>Дизайн посадочной страницы</li>
+                    <li>Пользовательский путь по воронке</li>
+                  </ul>
+                  <p class="work-back__heading">Цель/метрики:</p>
+                  <ul class="work-back__list">
+                    <li>Заявки на замер окон</li>
+                    <li>Реклама/seo/директ</li>
+                  </ul>
+                </span>
+              </span>
+            </button>
+              <div class="portfolio-card__info">
+            <p class="portfolio-card__name">MELKE</p>
+            <ul class="portfolio-card__tags">
+              <li>Мебель</li>
+              <li>Лендинг</li>
+            </ul>
+          </div>
+          </div>
+
+              <div class="portfolio-card">
+            <button type="button" class="portfolio-card__flip" data-goal="case_open" aria-expanded="false">
+              <span class="portfolio-card__inner">
+                <span class="portfolio-card__face portfolio-card__face--front">
+                  <img src="assets/images/work-yoga.webp" alt="Студия йоги – многостраничный сайт">
+                </span>
+                <span class="portfolio-card__face portfolio-card__face--back portfolio-card__preview--yoga">
+                  <p class="work-back__heading">Задачи:</p>
+                  <ul class="work-back__list">
+                    <li>Разработать с нуля сайт студии</li>
+                    <li>Разработать структуру</li>
+                    <li>Коммуникационная платформа, тексты</li>
+                  </ul>
+                  <p class="work-back__heading">Цель/метрики:</p>
+                  <ul class="work-back__list">
+                    <li>Запись на пробное занятие</li>
+                    <li>Продажа определенных абонементов</li>
+                  </ul>
+                </span>
+              </span>
+            </button>
+              <div class="portfolio-card__info">
+            <p class="portfolio-card__name">Студия йоги</p>
+            <ul class="portfolio-card__tags">
+              <li>Фитнесс/Велнес</li>
+              <li>Многостраничный сайт</li>
+            </ul>
+          </div>
+          </div>
+
+              <div class="portfolio-card portfolio-card--static">
+                <div class="portfolio-card__preview">
+              <img src="assets/images/work-artschool.webp" alt="Детская арт-школа – многостраничный сайт">
             </div>
-            <div class="portfolio-card__info">
-              <p class="portfolio-card__name">AiHub</p>
-              <ul class="portfolio-card__tags">
-                <li>MVP</li>
-                <li>UX/UI</li>
-                <li>продуктовые исследования</li>
-              </ul>
-            </div>
-          </a>
+              <div class="portfolio-card__info">
+            <p class="portfolio-card__name">MELKE</p>
+            <ul class="portfolio-card__tags">
+              <li>Творчество/Образование</li>
+              <li>Многостраничный сайт</li>
+            </ul>
+          </div>
+          </div>
 
         </div>
       </div>
+
       <a href="404.html" data-goal="portfolio_all" class="btn btn--outline btn--wide">
         Смотреть все
         <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -453,6 +523,7 @@
       <div class="footer__social-links">
         <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Telegram"><img src="assets/images/social-1.png" alt="Telegram"></a>
         <a href="https://www.threads.com/@mgmdvmrn" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Threads"><img src="assets/images/social-2.png" alt="Threads"></a>
+        <a href="https://www.instagram.com/mrnmgnvr" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Instagram"><img src="assets/images/social-4.png" alt="Instagram"></a>
         <a href="https://mail.yandex.ru/compose?to=mamagomedova_2%40edu.hse.ru" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Написать письмо"><img src="assets/images/social-3.png" alt="Почта"></a>
       </div>
     </div>
