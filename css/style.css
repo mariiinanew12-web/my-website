@@ -1071,12 +1071,12 @@ button {
   .services__switch-mobile {
     display: flex;
     justify-content: center;
-    margin-top: 8px;
+    margin-top: 40px;   /* воздух сверху остаётся, снизу плашка ближе */
   }
 
   /* Услуги: ровная сетка в две колонки вместо ширины по тексту */
   .services { padding: 24px 20px 80px; }
-  .services__content { gap: 56px; }
+  .services__content { gap: 24px; }
   .services__cards-row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

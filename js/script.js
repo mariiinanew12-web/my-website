@@ -182,8 +182,10 @@
   }
 
   /* ---------- Срочная плашка влетает слева (мобильный) ---------- */
-  if (banner) {
+  if (banner && bannerWrap) {
     if (!reduced && 'IntersectionObserver' in window) {
+      // Следим за обёрткой, а не за самой плашкой: плашка сдвинута за край
+      // экрана и наблюдатель никогда бы её не заметил.
       var bannerIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) {
@@ -192,7 +194,7 @@
           }
         });
       }, { threshold: 0.3 });
-      bannerIO.observe(banner);
+      bannerIO.observe(bannerWrap);
     } else {
       banner.classList.add('is-in');   // без наблюдателя плашка просто на месте
     }
