@@ -27,7 +27,7 @@ body {
   overflow-x: clip;
 }
 
-img { display: block; max-width: 100%; }
+img { display: block; max-width: 100%; height: auto; }   /* иначе атрибут height в разметке сплющивает кадр */
 a { color: inherit; text-decoration: none; }
 
 /* ---------- Экран ---------- */

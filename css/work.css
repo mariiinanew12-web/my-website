@@ -1,0 +1,244 @@
+@font-face {
+  font-family: "Onest";
+  src: url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --page-bg: #f7f7f7;
+  --ink: #1c1c1c;
+  --muted: #656565;
+  --color-bg: #181818;
+  --color-text: #f7f7f7;
+  /* --accent и --accent-rgb задаёт каждая страница кейса */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: "Onest", system-ui, sans-serif;
+  font-weight: 400;
+  overflow-x: clip;
+}
+
+img { display: block; max-width: 100%; height: auto; }   /* иначе атрибут height в разметке сплющивает кадр */
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* ---------- Шапка ---------- */
+
+.work-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 40px 40px 0;
+}
+
+.work-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px 0 rgba(var(--accent-rgb), 0.12),
+              inset 1px 1px 1px 0 rgba(255, 255, 255, 0.7),
+              inset -1px -1px 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.15s ease, background 0.2s ease, filter 0.15s ease;
+}
+
+.work-btn:hover { transform: translateY(-2px); background: rgba(var(--accent-rgb), 0.22); }
+.work-btn:active { transform: scale(0.97); filter: brightness(0.92); }
+.work-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.work-btn__arrow { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* ---------- Содержимое ---------- */
+/* Вертикальный ритм на трёх значениях: 20 внутри группы, 40 между
+   абзацами раздела, 80 между разделами. */
+
+.work {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.work__title {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.25;
+  color: var(--accent);
+  max-width: 24ch;
+}
+
+.work__section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.work__heading {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.work__text {
+  font-size: 20px;
+  line-height: 1.55;
+  max-width: 90ch;
+}
+
+.work__text + .work__text { margin-top: -20px; }  /* абзацы внутри раздела ближе */
+
+.work__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 90ch;
+}
+
+.work__list li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.work__list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 13px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.work strong { font-weight: 700; }
+
+/* Пояснения и примеры — тоном тише основного текста */
+.work__dim { color: var(--muted); }
+
+/* Картинки лежат на белых карточках, как в макете */
+.work__card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px;
+  overflow: hidden;
+}
+
+.work__card img { width: 100%; border-radius: 12px; }
+
+/* Колонки шириной по пропорции кадра: высоты совпадают, ничего не режется.
+   Пропорции передаёт --cols на самом ряду. */
+.work__pair {
+  display: grid;
+  grid-template-columns: var(--cols, repeat(2, minmax(0, 1fr)));
+  gap: 20px;
+  align-items: start;
+}
+
+.work__pair img { width: 100%; border-radius: 12px; }
+
+.work__trio {
+  display: grid;
+  grid-template-columns: var(--cols, repeat(3, minmax(0, 1fr)));
+  gap: 20px;
+  align-items: start;
+}
+
+.work__trio img { width: 100%; border-radius: 12px; }
+
+/* ---------- Футер ---------- */
+
+.work-footer {
+  flex-shrink: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: 80px 40px 20px;
+}
+
+.work-footer__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.work-footer__title { font-weight: 700; font-size: 24px; text-align: center; }
+
+.work-footer__socials { display: flex; gap: 20px; }
+
+.work-footer__social {
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.work-footer__social:hover { transform: translateY(-4px) scale(1.06); filter: brightness(1.12); }
+.work-footer__social:active { transform: scale(0.96); filter: brightness(0.9); }
+.work-footer__social:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+.work-footer__social img { width: 100%; height: 100%; object-fit: cover; }
+
+.work-footer__legal {
+  max-width: 1120px;
+  margin: 40px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-weight: 300;
+  font-size: 12px;
+}
+
+
+
+/* ---------- Адаптив ---------- */
+
+@media (max-width: 900px) {
+  .work-top { padding: 20px 20px 0; }
+  .work-btn { height: 46px; padding: 0 20px; font-size: 15px; }
+  .work { padding: 40px 20px; gap: 40px; }
+  .work__title { font-size: 28px; max-width: none; }
+  .work__heading { font-size: 18px; }
+  .work__text, .work__list li { font-size: 16px; }
+  .work__section { gap: 20px; }
+  .work__text + .work__text { margin-top: -4px; }
+  .work__list { gap: 12px; }
+  .work__card { padding: 16px; border-radius: 16px; }
+  .work__pair,
+  .work__trio { grid-template-columns: minmax(0, 1fr); --cols: minmax(0, 1fr); }
+  .work-footer { padding: 40px 20px 20px; }
+  .work-footer__title { font-size: 20px; }
+  .work-footer__social { width: 52px; height: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-btn, .work-footer__social { transition: none; }
+}

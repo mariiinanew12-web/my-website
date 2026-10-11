@@ -107,15 +107,6 @@
     });
   });
 
-  /* ---------- Карточки работ переворачиваются текстовой стороной ---------- */
-  document.querySelectorAll('.portfolio-card__flip').forEach(function (btn) {
-    var card = btn.closest('.portfolio-card');
-    btn.addEventListener('click', function () {
-      var open = card.classList.toggle('is-flipped');
-      btn.setAttribute('aria-expanded', String(open));
-    });
-  });
-
   /* ---------- Группы услуг разъезжаются перед срочной плашкой ---------- */
   var groupSites = document.querySelector('.services__group--sites');
   var groupProducts = document.querySelector('.services__group--products');
@@ -147,6 +138,64 @@
     groupSites.style.transform = 'translate3d(-' + (p * 115) + '%,0,0)';
     groupProducts.style.transform = 'translate3d(' + (p * 115) + '%,0,0)';
     groupSites.style.opacity = groupProducts.style.opacity = String(1 - p * 0.9);
+  }
+
+  /* ---------- Этапы работы на мобильном ---------- */
+  /* Карточки проявляются, когда их увидели, и больше не гаснут.
+     Номер горит зелёным, пока он рядом с центром экрана. */
+
+  var stepCards = document.querySelectorAll('.step-card');
+  var stepNums  = document.querySelectorAll('.process__step-num');
+
+  if (stepCards.length && !reduced && 'IntersectionObserver' in window) {
+    var cardsIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-seen');
+          cardsIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.35 });
+    stepCards.forEach(function (c) { cardsIO.observe(c); });
+  } else {
+    stepCards.forEach(function (c) { c.classList.add('is-seen'); });
+  }
+
+  var lastScrollY = -1;
+
+  function updateStepNumbers() {
+    if (!stepNums.length) return;
+    if (reduced || isDesktop.matches) {
+      stepNums.forEach(function (n) { n.classList.remove('is-active'); });
+      return;
+    }
+    if (window.scrollY === lastScrollY) return;   // пересчитываем только при скролле
+    lastScrollY = window.scrollY;
+
+    var mid = window.innerHeight / 2;
+    var band = window.innerHeight * 0.22;         // полоса «примерно по центру»
+    stepNums.forEach(function (n) {
+      var r = n.getBoundingClientRect();
+      var c = r.top + r.height / 2;
+      n.classList.toggle('is-active', Math.abs(c - mid) < band);
+    });
+  }
+
+  /* ---------- Срочная плашка влетает слева (мобильный) ---------- */
+  if (banner) {
+    if (!reduced && 'IntersectionObserver' in window) {
+      var bannerIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            banner.classList.add('is-in');
+            bannerIO.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      bannerIO.observe(banner);
+    } else {
+      banner.classList.add('is-in');   // без наблюдателя плашка просто на месте
+    }
   }
 
   /* ---------- Бабочка ---------- */
@@ -199,6 +248,7 @@
     if (dt > 0.05) dt = 0.05;
 
     updateServices();
+    updateStepNumbers();
 
     if (bfL) {
       var r = stage.getBoundingClientRect();
