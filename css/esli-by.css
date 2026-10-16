@@ -1,0 +1,463 @@
+@font-face {
+  font-family: "Onest";
+  src: url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/fonts/Onest-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Цвета сняты пипеткой с макета. Приглушённое состояние — это ровно
+   55% яркости от обычного, поэтому пары значений кратны друг другу. */
+:root {
+  --bg: #181818;
+
+  --pink: #f1a0f9;
+  --pink-dim: #845c88;
+  --white: #f7f7f7;
+  --white-dim: #878787;
+  --mint: #bbf8c8;
+  --mint-dim: #6a8870;
+
+  --ghost-text: #7d5a77;      /* кнопка «сделаю сам» спит, пока маму любят */
+  --ghost-line: #6a4e65;
+  --ghost-text-on: #e39cd6;
+  --ghost-line-on: #c98bbe;
+
+  --label: #636363;
+  --track: #8f8f8f;
+
+  --glass-fill: rgba(247, 247, 247, 0.2);
+  --glass-blur: 12px;
+  --glass-shadow: 0 2px 8px 0 rgba(79, 70, 229, 0.08);
+  --glass-edge: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.45),
+                inset -1px -1px 1px 0 rgba(255, 255, 255, 0.12);
+
+  --p: 0;   /* прогресс прокрутки заставки, 0 → 1; ставит скрипт */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { background: var(--bg); }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: "Onest", system-ui, sans-serif;
+  font-weight: 300;
+  overflow-x: clip;
+  touch-action: manipulation;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+.t-pink { color: var(--pink); }
+.t-white { color: var(--white); }
+.t-mint  { color: var(--mint); }
+
+/* ============ Шапка ============ */
+
+.header {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1120px, calc(100% - 80px));
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.header__nav {
+  background: var(--glass-fill);
+  border-radius: 999px;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow), var(--glass-edge);
+  padding: 4px;
+}
+
+.header__nav-list { display: flex; gap: 8px; }
+
+.header__nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--white);
+  transition: background 0.15s ease, color 0.4s ease;
+}
+
+.header__nav-link:hover { background: rgba(247, 247, 247, 0.15); }
+.header__nav-link:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
+.header__nav-link--back { color: var(--pink); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 18px;
+  white-space: nowrap;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.4s ease;
+}
+
+.btn--glass {
+  background: var(--glass-fill);
+  color: var(--white);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow), var(--glass-edge);
+}
+
+.btn:hover { transform: translateY(-2px); }
+.btn:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+.header__cta { flex-shrink: 0; }
+.header__cta-short { display: none; }
+.header__back-short { display: none; }
+
+/* ============ Экран-заставка ============ */
+
+.intro {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 120px 40px;
+  text-align: center;
+  z-index: 0;
+}
+
+.intro__inner {
+  max-width: 900px;
+  opacity: calc(1 - var(--p));
+  transform: translateY(calc(var(--p) * -48px));
+}
+
+.intro__kicker {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 24px;
+}
+
+.intro__title {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 60px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.intro__title span { color: var(--mint); }
+
+.intro__hint {
+  margin-top: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: var(--white-dim);
+  animation: hint-bob 1.9s ease-in-out infinite;
+}
+
+.intro__hint svg { width: 20px; height: 20px; }
+
+@keyframes hint-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(7px); }
+}
+
+/* ============ Сцена: наезжает на заставку при прокрутке ============ */
+
+.stage {
+  position: relative;
+  z-index: 1;
+  background: var(--bg);
+  border-radius: calc((1 - var(--p)) * 36px) calc((1 - var(--p)) * 36px) 0 0;
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.55);
+}
+
+/* ============ Герой ============ */
+
+.mhero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: 140px 40px 200px;
+  overflow: hidden;
+}
+
+.mhero__inner {
+  position: relative;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+/* Ширины хватает, чтобы «Закажи у меня сайт,» осталось одной строкой, как в макете */
+.mhero__content { position: relative; z-index: 2; max-width: 780px; }
+
+.mhero__title {
+  font-weight: 700;
+  font-size: clamp(30px, 4.6vw, 60px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.mhero__title span { transition: color 0.45s ease; }
+
+.mhero__actions {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.m-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 17px;
+  white-space: nowrap;
+  transition: transform 0.15s ease, background 0.45s ease, color 0.45s ease,
+              border-color 0.45s ease;
+}
+
+.m-btn:hover { transform: translateY(-2px); }
+.m-btn:active { transform: scale(0.97); }
+.m-btn:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+.m-btn--solid { background: var(--pink); color: #1a1119; }
+
+.m-btn--ghost {
+  background: transparent;
+  color: var(--ghost-text);
+  box-shadow: inset 0 0 0 1.5px var(--ghost-line);
+}
+
+/* ---------- Подпись и свитч ---------- */
+
+.mhero__confirm {
+  margin-top: 20px;
+  margin-left: 232px;   /* подпись начинается там же, где вторая кнопка */
+}
+
+.mhero__label {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--label);
+  transition: color 0.45s ease, font-weight 0.45s ease;
+}
+
+.m-switch {
+  margin-top: 8px;
+  width: 44px;
+  height: 22px;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--track);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.35s ease;
+}
+
+.m-switch__knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.32s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.m-switch:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+/* ---------- Картинки ---------- */
+
+.mhero__media {
+  position: absolute;
+  right: -40px;
+  bottom: -200px;
+  width: 46%;
+  pointer-events: none;
+}
+
+.mhero__img {
+  width: 100%;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.mhero__img--photo { opacity: 1; }
+
+.mhero__img--meme {
+  position: absolute;
+  right: 6%;
+  bottom: 42%;
+  width: 58%;
+  border-radius: 4px;
+  opacity: 0;
+  transform: scale(0.94);
+}
+
+/* ============ Переключённое состояние ============ */
+/* Любовь к маме выключили: сайт гаснет до 55% яркости, а путь
+   «сделаю сам» наоборот загорается. */
+
+.is-sad .header__nav-link { color: #696969; }
+.is-sad .header__nav-link--back { color: var(--pink-dim); }
+.is-sad .header__cta { color: #686868; }
+
+.is-sad .t-pink  { color: var(--pink-dim); }
+.is-sad .t-white { color: var(--white-dim); }
+.is-sad .t-mint  { color: var(--mint-dim); }
+
+/* плашка про печеньки не гаснет — она единственная говорит правду */
+.is-sad .cookie .t-pink { color: var(--pink); }
+.is-sad .cookie .t-mint { color: var(--mint); }
+
+.is-sad .m-btn--solid { background: var(--pink-dim); color: #221a22; }
+
+.is-sad .m-btn--ghost {
+  color: var(--ghost-text-on);
+  box-shadow: inset 0 0 0 1.5px var(--ghost-line-on);
+}
+
+.is-sad .mhero__label { color: var(--white); font-weight: 600; }
+.is-sad .m-switch { background: var(--pink); }
+.is-sad .m-switch__knob { transform: translateX(22px); }
+
+.is-sad .mhero__img--photo { opacity: 0; transform: scale(0.97); }
+.is-sad .mhero__img--meme  { opacity: 1; transform: scale(1); }
+
+/* ============ Плашка про печеньки ============ */
+
+.cookie {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(1120px, calc(100% - 80px));
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 28px;
+  border-radius: 20px;
+  background: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow), var(--glass-edge);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cookie.is-gone { opacity: 0; transform: translateX(-50%) translateY(16px); pointer-events: none; }
+
+.cookie__text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--white-dim);
+}
+
+.cookie__text b { font-weight: 600; color: var(--white); }
+.cookie__text b.t-mint { color: var(--mint); }
+
+.cookie__close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  /* фото заходит под плашку, поэтому крестику нужна своя подложка */
+  background: rgba(24, 24, 24, 0.35);
+  color: var(--white-dim);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.cookie__close svg { width: 18px; height: 18px; }
+.cookie__close:hover { color: var(--white); transform: rotate(90deg); }
+.cookie__close:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+
+/* ============ Планшет и телефон ============ */
+
+@media (max-width: 1000px) {
+  .mhero__content { max-width: 56%; }
+  .mhero__media { width: 50%; right: -24px; }
+}
+
+@media (max-width: 760px) {
+  .header { top: 16px; width: calc(100% - 32px); gap: 12px; }
+  .header__nav { display: none; }
+  .header__back-short { display: inline-flex; height: 46px; padding: 0 18px; font-size: 15px; }
+  .header__cta { height: 46px; padding: 0 18px; font-size: 15px; }
+  .header__cta-long { display: none; }
+  .header__cta-short { display: inline; }
+
+  .intro { padding: 100px 20px; }
+  .intro__hint { margin-top: 32px; }
+
+  .mhero {
+    padding: 110px 20px 240px;
+    align-items: flex-start;
+  }
+
+  .mhero__content { max-width: none; }
+  .mhero__actions { margin-top: 28px; gap: 12px; }
+  .m-btn { height: 48px; padding: 0 20px; font-size: 15px; }
+
+  .mhero__confirm { margin-left: 0; margin-top: 24px; }
+
+  .mhero__media {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: 32px;
+    min-height: 300px;
+  }
+
+  .mhero__img--photo { width: 86%; margin: 0 auto; }
+  .mhero__img--meme { right: auto; left: 50%; bottom: auto; top: 10%; width: 72%; transform: translateX(-50%) scale(0.94); }
+  .is-sad .mhero__img--meme { transform: translateX(-50%) scale(1); }
+
+  .cookie {
+    width: calc(100% - 32px);
+    bottom: 16px;
+    padding: 18px 18px;
+    gap: 12px;
+  }
+
+  .cookie__text { font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__hint { animation: none; }
+  .intro__inner, .stage, .mhero__img, .m-switch, .m-switch__knob,
+  .m-btn, .btn, .cookie, .cookie__close, .header__nav-link,
+  .mhero__title span, .mhero__label { transition: none; }
+  .intro__inner { opacity: 1; transform: none; }
+}

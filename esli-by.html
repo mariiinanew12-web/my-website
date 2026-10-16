@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Как бы выглядел мой сайт, если бы не общественное мнение</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="css/esli-by.css?v=20261016">
+</head>
+<body>
+
+<header class="header" id="mHeader">
+  <nav class="header__nav">
+    <ul class="header__nav-list">
+      <li><a href="index.html" class="header__nav-link header__nav-link--back">Вернуться назад</a></li>
+      <li><a href="index.html#about" class="header__nav-link">Обо мне</a></li>
+      <li><a href="index.html#services" class="header__nav-link">Услуги</a></li>
+      <li><a href="index.html#process" class="header__nav-link">Этапы работы</a></li>
+      <li><a href="index.html#portfolio" class="header__nav-link">Кейсы</a></li>
+    </ul>
+  </nav>
+
+  <a href="index.html" class="btn btn--glass header__back-short">Назад</a>
+
+  <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="header_cta" class="btn btn--glass header__cta">
+    <span class="header__cta-long">Заказать дизайн</span>
+    <span class="header__cta-short">Заказать</span>
+  </a>
+</header>
+
+<!-- ---------- Экран-заставка ---------- -->
+<section class="intro" id="intro">
+  <div class="intro__inner">
+    <p class="intro__kicker">Осторожно</p>
+    <h1 class="intro__title">Как бы выглядел мой сайт,<br>если бы не <span>общественное мнение</span></h1>
+    <p class="intro__hint" aria-hidden="true">
+      <span>листай вниз</span>
+      <svg viewBox="0 0 26 26" fill="none"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </p>
+  </div>
+</section>
+
+<!-- ---------- Единственный герой ---------- -->
+<main class="stage" id="stage">
+  <section class="mhero">
+    <div class="mhero__inner">
+
+      <div class="mhero__content">
+        <h2 class="mhero__title">
+          <span class="t-pink">Закажи у меня сайт,</span><br>
+          <span class="t-white">если любишь</span> <span class="t-mint">маму</span>
+        </h2>
+
+        <div class="mhero__actions">
+          <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="m-btn m-btn--solid">Заказать сайт</a>
+          <a href="https://claude.ai/code" target="_blank" rel="noopener" class="m-btn m-btn--ghost">Я сделаю сам в клод коде</a>
+        </div>
+
+        <div class="mhero__confirm">
+          <p class="mhero__label" id="mLabel">Я подтверждаю, что я не люблю маму</p>
+          <button type="button" class="m-switch" id="mSwitch" role="switch" aria-checked="false"
+                  aria-label="Я не люблю маму">
+            <span class="m-switch__knob"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mhero__media">
+        <img class="mhero__img mhero__img--photo" id="mPhoto"
+             src="assets/images/mama-photo.webp" alt="Марина с ноутбуком" width="1100" height="1071">
+        <img class="mhero__img mhero__img--meme" id="mMeme"
+             src="assets/images/mama-meme.webp" alt="Услышал тебя, родной" width="900" height="746">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Плашка про печеньки: единственное, что не меняется от свитча -->
+  <div class="cookie" id="mCookie">
+    <p class="cookie__text">
+      Сайт не использует <span class="t-pink">Cookie</span>, но он знает номер вашей мамы.<br>
+      Покидая сайт, вы автоматичекси <b>даете согласие</b> на то, что <b class="t-mint">я все расскажу вашей маме.</b>
+    </p>
+    <button type="button" class="cookie__close" id="mCookieClose" aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</main>
+
+<script src="js/esli-by.js?v=20261016"></script>
+<script src="js/analytics.js"></script>
+</body>
+</html>

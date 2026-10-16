@@ -1276,3 +1276,290 @@ button {
   .process__step-num { transition: none; }
   .cta-banner { transform: none; opacity: 1; animation: none; }
 }
+
+
+/* ============ Попапы услуг ============ */
+
+/* Карточка стала кнопкой — снимаем всё, что браузер дорисовывает сам.
+   Остальные её свойства заданы выше и не меняются. */
+.service-card {
+  font: inherit;
+  text-align: left;
+  border: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;   /* двойной тап по карточке не зумит страницу */
+}
+
+/* Палец показываем только там, где попапы действительно откроются:
+   класс ставит скрипт, увидев поддержку <dialog>. */
+.has-svcm .service-card { cursor: pointer; }
+.has-svcm .service-card:active { transform: scale(0.98); }
+.service-card:focus-visible { outline: 2px solid var(--color-main); outline-offset: 3px; }
+
+/* ---------- Окно ---------- */
+
+.svcm {
+  --ink: #181818;
+  --dim: #8f8f8f;
+  --line: rgba(24, 24, 24, 0.12);
+  --panel: #f7f7f7;
+  --w: 560px;
+
+  /* Окно растянуто во весь экран, а видимая карточка — .svcm__panel внутри.
+     Благодаря этому клик мимо карточки приходит на сам <dialog> и легко ловится. */
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 16px;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  color: var(--ink);
+}
+
+/* Только [open]: иначе закрытое окно перестанет прятаться */
+.svcm[open] { display: grid; place-items: center; }
+
+.svcm::backdrop {
+  background: rgba(8, 6, 10, 0.6);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.svcm.is-open::backdrop { opacity: 1; }
+
+.svcm__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--w), 100%);
+  max-height: 100%;
+  background: var(--panel);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.svcm.is-open .svcm__panel { opacity: 1; transform: none; }
+
+/* Прокручивается только текст: крестик и кнопка остаются на месте */
+.svcm__scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 40px;
+}
+
+/* Chrome делает прокручиваемую область фокусируемой, чтобы её можно было
+   листать с клавиатуры. Показываем, что она в фокусе. */
+.svcm__scroll:focus-visible { outline: 2px solid var(--ink); outline-offset: -4px; border-radius: 12px; }
+
+.svcm__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(24, 24, 24, 0.06);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.svcm__close svg { width: 18px; height: 18px; }
+.svcm__close:hover { background: rgba(24, 24, 24, 0.12); transform: rotate(90deg); }
+.svcm__close:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- Содержимое ---------- */
+
+.svcm__eyebrow {
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.svcm__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-right: 32px;   /* чтобы длинный заголовок не наехал на крестик */
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.svcm__bf { width: 38px; height: 38px; flex-shrink: 0; }
+
+.svcm__lead {
+  margin-top: 14px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.svcm__price {
+  margin-top: 16px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.svcm__price span,
+.svcm__tier-price span {
+  margin: 0 6px;
+  font-weight: 400;
+  color: var(--dim);
+}
+
+.svcm__tiers {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.svcm__tier-name { font-weight: 600; font-size: 17px; }
+.svcm__tier-desc { margin-top: 4px; font-size: 15px; line-height: 1.45; color: var(--dim); }
+.svcm__tier-price { margin-top: 6px; font-weight: 600; font-size: 16px; }
+
+.svcm__sub {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.svcm__list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.svcm__list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.svcm__list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.svcm__list--muted li { color: var(--dim); }
+.svcm__list--muted li::before { background: var(--dim); }
+
+.svcm__note {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--dim);
+}
+
+/* ---------- Кнопка снизу ---------- */
+
+.svcm__foot {
+  flex-shrink: 0;
+  padding: 20px 40px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.svcm__cta { width: 100%; }
+
+/* ---------- Зелёный вариант для продуктов ---------- */
+
+.svcm--green {
+  --panel: var(--color-main-2);
+  --line: rgba(24, 24, 24, 0.18);
+  --dim: #4a6b56;
+  --w: 440px;
+}
+
+.svcm--green .svcm__close { background: rgba(24, 24, 24, 0.08); }
+.svcm--green .svcm__close:hover { background: rgba(24, 24, 24, 0.16); }
+
+/* ---------- Мобильный ---------- */
+
+@media (max-width: 600px) {
+  .svcm { padding: 10px; }
+  .svcm__panel { border-radius: 16px; }
+  .svcm__scroll { padding: 28px 20px 24px; }
+  .svcm__foot { padding: 16px 20px; }
+  .svcm__title { font-size: 22px; gap: 10px; }
+  .svcm__bf { width: 32px; height: 32px; }
+  .svcm__lead { font-size: 16px; }
+  .svcm__close { top: 10px; right: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svcm__panel, .svcm::backdrop, .svcm__close, .service-card { transition: none; }
+  .svcm__panel { opacity: 1; transform: none; }
+  .svcm__close:hover { transform: none; }
+}
+
+
+/* ============ Бабочка-пасхалка под подвалом ============ */
+
+.egg {
+  display: block;
+  width: 44px;
+  margin: 0 auto;
+  padding: 28px 0 36px;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1), filter 0.25s ease;
+}
+
+.egg:hover { transform: scale(1.3); filter: drop-shadow(0 0 14px rgba(255, 155, 254, 0.55)); }
+.egg:active { transform: scale(1.12); }
+.egg:focus-visible { outline: 2px solid var(--color-main); outline-offset: 6px; border-radius: 8px; }
+
+.egg__bf {
+  width: 44px;
+  height: 44px;
+  animation: egg-float 6.5s ease-in-out infinite;
+}
+
+/* Долго висит почти неподвижно, потом коротко шарахается в сторону —
+   так понятнее, что она живая, чем от ровного покачивания. */
+@keyframes egg-float {
+  0%,  100% { transform: translate(0, 0) rotate(0deg); }
+  7%        { transform: translate(0, -6px) rotate(-5deg); }
+  15%       { transform: translate(0, 0) rotate(0deg); }
+  23%       { transform: translate(0, -5px) rotate(4deg); }
+  32%, 56%  { transform: translate(0, 0) rotate(0deg); }
+  62%       { transform: translate(-13px, -17px) rotate(-13deg); }
+  67%       { transform: translate(10px, -9px) rotate(10deg); }
+  72%       { transform: translate(-5px, -15px) rotate(-6deg); }
+  79%       { transform: translate(0, 0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .egg, .egg__bf { animation: none; transition: none; }
+  .egg:hover { transform: none; }
+}

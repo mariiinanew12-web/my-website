@@ -402,4 +402,107 @@
       io.observe(stage);
     }
   }
+
+  /* ---------- Попапы услуг ---------- */
+  /* Содержимое лежит в <template> в index.html. Здесь только показ и закрытие. */
+
+  var svcModal = document.getElementById('svcModal');
+  var svcBody  = document.getElementById('svcmBody');
+  var svcClose = document.getElementById('svcmClose');
+  var svcCards = document.querySelectorAll('.service-card[data-svc]');
+
+  if (svcModal && svcBody && svcCards.length && typeof svcModal.showModal === 'function') {
+    var svcScroll = svcModal.querySelector('.svcm__scroll');
+    var svcOpener = null;
+    var svcClosing = false;
+
+    // Палец на карточках появляется только теперь, когда попапы точно работают
+    document.documentElement.classList.add('has-svcm');
+
+    function svcOpen(card) {
+      var key = card.getAttribute('data-svc');
+      var tpl = document.getElementById('svc-' + key);
+      if (!tpl) return;
+
+      svcBody.innerHTML = '';
+      svcBody.appendChild(tpl.content.cloneNode(true));
+
+      // У продуктов заголовок берётся с самой карточки
+      var slot  = svcBody.querySelector('[data-title-slot]');
+      var title = card.getAttribute('data-title');
+      if (slot && title) slot.textContent = title;
+
+      svcModal.classList.toggle('svcm--green', key === 'product');
+
+      svcOpener = card;
+      svcLockPage(true);
+      svcModal.showModal();
+      if (svcScroll) svcScroll.scrollTop = 0;
+
+      if (reduced) {
+        svcModal.classList.add('is-open');
+      } else {
+        // два кадра: первый отдаём браузеру на отрисовку закрытого состояния
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { svcModal.classList.add('is-open'); });
+        });
+      }
+    }
+
+    function svcDone() {
+      if (!svcClosing) return;
+      svcClosing = false;
+      svcModal.close();
+      svcLockPage(false);
+      if (svcOpener) { svcOpener.focus(); svcOpener = null; }
+    }
+
+    function svcHide() {
+      if (!svcModal.open || svcClosing) return;
+      svcClosing = true;
+      svcModal.classList.remove('is-open');
+
+      if (reduced) { svcDone(); return; }
+
+      var panel = svcModal.querySelector('.svcm__panel');
+      function onEnd(e) {
+        if (e.target !== panel) return;   // переходы мелочей внутри не считаются
+        panel.removeEventListener('transitionend', onEnd);
+        svcDone();
+      }
+      panel.addEventListener('transitionend', onEnd);
+      setTimeout(svcDone, 400);              // страховка, если перехода не случилось
+    }
+
+    // Прокрутку страницы под окном выключаем, ширину полосы компенсируем,
+    // иначе на десктопе вёрстка дёргается вбок.
+    function svcLockPage(on) {
+      if (on) {
+        var sbw = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.overflow = 'hidden';
+        if (sbw > 0) document.body.style.paddingRight = sbw + 'px';
+      } else {
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+      }
+    }
+
+    svcCards.forEach(function (card) {
+      card.addEventListener('click', function () { svcOpen(card); });
+    });
+
+    if (svcClose) svcClose.addEventListener('click', svcHide);
+
+    svcModal.addEventListener('click', function (e) {
+      if (e.target === svcModal) { svcHide(); return; }   // клик мимо панели
+      if (e.target.closest('.svcm__cta')) svcHide();      // ушли в телеграм — окно убираем
+    });
+
+    // Esc закрывает штатно и мгновенно — перехватываем, чтобы доиграть анимацию
+    svcModal.addEventListener('cancel', function (e) {
+      e.preventDefault();
+      svcHide();
+    });
+  }
+
 })();
