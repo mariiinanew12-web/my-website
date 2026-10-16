@@ -52,6 +52,9 @@ body {
   font-weight: 300;
   line-height: normal;
   overflow-x: clip;
+  /* Двойной тап по любому месту страницы больше не зумит — это ловило
+     на тогле, когда им начинали играться. Пинч двумя пальцами работает. */
+  touch-action: manipulation;
 }
 
 img {
@@ -1383,19 +1386,10 @@ button {
 
 /* ---------- Содержимое ---------- */
 
-.svcm__eyebrow {
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-
 .svcm__title {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 12px;
   padding-right: 32px;   /* чтобы длинный заголовок не наехал на крестик */
   font-weight: 700;
   font-size: 28px;
@@ -1562,4 +1556,43 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .egg, .egg__bf { animation: none; transition: none; }
   .egg:hover { transform: none; }
+}
+
+
+/* ============ Шторка: «Почему я?» наезжает на первый экран ============ */
+/* Герой прилипает к верху, а .about едет поверх него. Прилипание ограничено
+   обёрткой .curtain, поэтому ниже по странице герой уже не держится. */
+
+.curtain { position: relative; }
+
+.curtain > .hero {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Раньше текст жался к низу — теперь шторка накрывала бы его сразу.
+     По центру он успевает пожить, пока «Почему я?» поднимается. */
+  align-items: center;
+}
+
+/* Текст героя уходит, пока шторка поднимается */
+.curtain > .hero .hero__content {
+  opacity: calc(1 - var(--curtain, 0));
+  transform: translateY(calc(var(--curtain, 0) * -40px));
+}
+
+.curtain > .about {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg);
+  /* скругление распрямляется, когда шторка дошла до верха */
+  border-radius: calc((1 - var(--curtain, 0)) * 36px) calc((1 - var(--curtain, 0)) * 36px) 0 0;
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain > .hero { position: static; min-height: 675px; }
+  .curtain > .hero .hero__content { opacity: 1; transform: none; }
+  .curtain > .about { border-radius: 0; box-shadow: none; }
 }

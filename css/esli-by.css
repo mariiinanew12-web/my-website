@@ -146,15 +146,6 @@ ul { list-style: none; }
   transform: translateY(calc(var(--p) * -48px));
 }
 
-.intro__kicker {
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--pink);
-  margin-bottom: 24px;
-}
-
 .intro__title {
   font-weight: 700;
   font-size: clamp(28px, 5vw, 60px);
@@ -164,22 +155,15 @@ ul { list-style: none; }
 
 .intro__title span { color: var(--mint); }
 
-.intro__hint {
-  margin-top: 48px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  color: var(--white-dim);
-  animation: hint-bob 1.9s ease-in-out infinite;
+/* Шапка на заставке не нужна — там только надпись на чёрном.
+   Проявляется ровно тогда, когда снизу поднимается герой. */
+.header {
+  opacity: var(--p);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
-.intro__hint svg { width: 20px; height: 20px; }
-
-@keyframes hint-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(7px); }
-}
+.header[data-live="1"] { pointer-events: auto; }
 
 /* ============ Сцена: наезжает на заставку при прокрутке ============ */
 
@@ -246,6 +230,10 @@ ul { list-style: none; }
 .m-btn:hover { transform: translateY(-2px); }
 .m-btn:active { transform: scale(0.97); }
 .m-btn:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+/* Погасшая кнопка не просто бледная — она действительно не нажимается */
+.m-btn[aria-disabled="true"] { pointer-events: none; cursor: default; }
+.m-btn[aria-disabled="true"]:hover { transform: none; }
 
 .m-btn--solid { background: var(--pink); color: #1a1119; }
 
@@ -315,9 +303,10 @@ ul { list-style: none; }
   right: 6%;
   bottom: 42%;
   width: 58%;
-  border-radius: 4px;
   opacity: 0;
   transform: scale(0.94);
+  /* как в макете: чёрный фон мема растворяется в фоне страницы */
+  mix-blend-mode: lighten;
 }
 
 /* ============ Переключённое состояние ============ */

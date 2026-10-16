@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=20261016">
+<link rel="stylesheet" href="css/style.css?v=20261016c">
 </head>
 <body>
 
@@ -47,6 +47,9 @@
 </div>
 
 <main>
+
+  <!-- Герой прилипает, «Почему я?» наезжает на него шторкой -->
+  <div class="curtain">
 
   <section class="hero">
     <div class="hero__content">
@@ -102,6 +105,8 @@
       </div>
     </div>
   </section>
+
+  </div><!-- /curtain -->
 
   <section id="services" class="services">
     <div class="services__content">
@@ -387,13 +392,6 @@
       <div class="faq__list">
         <button type="button" class="faq-card">
           <div class="faq-card__row">
-            <p class="faq-card__question">Сколько стоит сайт?</p>
-            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
-          </div>
-          <p class="faq-card__answer">От 50 000 ₽ – стоимость для простого лендинга в один экран, без анимаций и уникальной графики. Итоговая цена зависит от количества экранов, наличия анимаций и глубины проработки. Точную вилку под ваш проект называю после знакомства с проектом.</p>
-        </button>
-        <button type="button" class="faq-card">
-          <div class="faq-card__row">
             <p class="faq-card__question">Что входит в макет?</p>
             <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
           </div>
@@ -486,7 +484,6 @@
 </dialog>
 
 <template id="svc-audit">
-  <p class="svcm__eyebrow">Сайты</p>
   <h3 class="svcm__title" id="svcmTitle">
     <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
     <span>Аудит</span>
@@ -526,7 +523,6 @@
 </template>
 
 <template id="svc-landing">
-  <p class="svcm__eyebrow">Сайты</p>
   <h3 class="svcm__title" id="svcmTitle">
     <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
     <span>Лендинг</span>
@@ -555,11 +551,9 @@
     <li>Нужна ли вёрстка с моей стороны и на какой платформе</li>
   </ul>
 
-  <p class="svcm__note">Если фотографий нет, создам визуал в стилистике проекта с помощью нейросетей.</p>
 </template>
 
 <template id="svc-multipage">
-  <p class="svcm__eyebrow">Сайты</p>
   <h3 class="svcm__title" id="svcmTitle">
     <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
     <span>Многостраничный сайт</span>
@@ -589,11 +583,9 @@
     <li>Нужна ли вёрстка с моей стороны и на какой платформе</li>
   </ul>
 
-  <p class="svcm__note">Если фотографий нет, создам визуал в стилистике проекта с помощью нейросетей.</p>
 </template>
 
 <template id="svc-shop">
-  <p class="svcm__eyebrow">Сайты</p>
   <h3 class="svcm__title" id="svcmTitle">
     <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
     <span>Интернет-магазин</span>
@@ -623,11 +615,9 @@
     <li>Нужна ли вёрстка с моей стороны и на какой платформе</li>
   </ul>
 
-  <p class="svcm__note">Если фотографий нет, создам визуал в стилистике проекта с помощью нейросетей.</p>
 </template>
 
 <template id="svc-product">
-  <p class="svcm__eyebrow">Продукты</p>
   <h3 class="svcm__title" id="svcmTitle">
     <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
     <span data-title-slot>Продукты</span>
@@ -635,7 +625,7 @@
   <p class="svcm__lead">Такие проекты не укладываются в прайс. Объём, сроки и стоимость обсуждаем индивидуально – под конкретную задачу и то, что уже есть на руках.</p>
 </template>
 
-<script src="js/script.js?v=20261016"></script>
+<script src="js/script.js?v=20261016c"></script>
 <script src="js/analytics.js"></script>
 </body>
 </html>

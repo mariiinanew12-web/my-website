@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/esli-by.css?v=20261016">
+<link rel="stylesheet" href="css/esli-by.css?v=20261016c">
 </head>
 <body>
 
@@ -36,12 +36,7 @@
 <!-- ---------- Экран-заставка ---------- -->
 <section class="intro" id="intro">
   <div class="intro__inner">
-    <p class="intro__kicker">Осторожно</p>
     <h1 class="intro__title">Как бы выглядел мой сайт,<br>если бы не <span>общественное мнение</span></h1>
-    <p class="intro__hint" aria-hidden="true">
-      <span>листай вниз</span>
-      <svg viewBox="0 0 26 26" fill="none"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </p>
   </div>
 </section>
 
@@ -56,9 +51,12 @@
           <span class="t-white">если любишь</span> <span class="t-mint">маму</span>
         </h2>
 
+        <!-- Кликается всегда ровно одна: какую выбрал свитч, та и живая -->
         <div class="mhero__actions">
-          <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="m-btn m-btn--solid">Заказать сайт</a>
-          <a href="https://claude.ai/code" target="_blank" rel="noopener" class="m-btn m-btn--ghost">Я сделаю сам в клод коде</a>
+          <a href="https://t.me/qualcunodai" target="_blank" rel="noopener"
+             class="m-btn m-btn--solid" id="mBtnOrder">Заказать сайт</a>
+          <a href="https://claude.ai/code" target="_blank" rel="noopener"
+             class="m-btn m-btn--ghost" id="mBtnClaude" aria-disabled="true" tabindex="-1">Я сделаю сам в клод коде</a>
         </div>
 
         <div class="mhero__confirm">
@@ -92,7 +90,7 @@
   </div>
 </main>
 
-<script src="js/esli-by.js?v=20261016"></script>
+<script src="js/esli-by.js?v=20261016c"></script>
 <script src="js/analytics.js"></script>
 </body>
 </html>

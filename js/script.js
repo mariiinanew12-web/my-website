@@ -244,6 +244,23 @@
     burstEnd = phase + (3 + Math.floor(Math.random() * 4) + (extra || 0)) * Math.PI * 2;
   }
 
+  /* ---------- Шторка «Почему я?» ---------- */
+  /* Само наползание делает CSS (sticky + z-index). Отсюда идёт только
+     прогресс 0→1, чтобы текст героя погас, а скругление распрямилось. */
+
+  var curtain = document.querySelector('.curtain');
+  var lastCurtain = -1;
+
+  function updateCurtain() {
+    if (!curtain || reduced) return;
+    var h = window.innerHeight || 1;
+    var c = clamp(-curtain.getBoundingClientRect().top / h, 0, 1);
+    c = Math.round(c * 1000) / 1000;
+    if (c === lastCurtain) return;        // лишний раз стиль не трогаем
+    lastCurtain = c;
+    document.documentElement.style.setProperty('--curtain', c);
+  }
+
   function frame(now) {
     var dt = (now - last) / 1000;
     last = now;
@@ -251,6 +268,7 @@
 
     updateServices();
     updateStepNumbers();
+    updateCurtain();
 
     if (bfL) {
       var r = stage.getBoundingClientRect();
