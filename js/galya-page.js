@@ -100,6 +100,13 @@ const mskDate  = () => { const p = mskParts(); return p.year + '-' + p.month + '
 
 const isNight = () => { const h = mskHour(); return h >= 23 || h < 8; };
 
+/* Ночью Галя спит, но разбуженная честно отрабатывает обещанные пять минут:
+   всё это время с ней можно играть, как днём. Потом снова засыпает. */
+const AWAKE_FOR = 5 * 60 * 1000;
+let awakeUntil = 0;
+
+const asleep = () => isNight() && Date.now() >= awakeUntil;
+
 /* Телефон: пальцем не наведёшь, так что часть фокусов Гали недоступна */
 const onPhone = () => window.matchMedia
   && (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 760px)').matches);
@@ -230,7 +237,7 @@ function galyaOptions() {
 }
 
 function baseState() {
-  if (isNight()) return 'sleep';
+  if (asleep()) return 'sleep';
   // новичка голодом не встречаем
   if (!isFirstVisit && Date.now() - S.lastFed > SIX_HOURS) return 'hungry';
   return 'idle';
@@ -255,13 +262,13 @@ function applyState() {
 function updateStatus() {
   const cups = S.cupsDate === mskDate() ? S.cupsToday : 0;
   const cupsText = cups > 3 ? 'Кофе сегодня: перебор' : 'Кофе сегодня: ' + cups + ' из 3';
-  statusEl.textContent = isNight()
+  statusEl.textContent = asleep()
     ? 'У Гали ' + mskClock() + ', она спит · Визитов: ' + S.visits + ' · ' + cupsText
     : 'У Гали ' + mskClock() + ' · Визитов: ' + S.visits + ' · ' + cupsText;
 }
 
 function updateButtons() {
-  const night = isNight();
+  const night = asleep();
   btnPet.textContent = night ? 'Разбудить' : 'Погладить';
 
   const cups = S.cupsDate === mskDate() ? S.cupsToday : 0;
@@ -283,7 +290,7 @@ let clicks = [], tickledUntil = 0;
 
 function petHer(part) {
   idleKick();
-  if (isNight()) { wakeHer(); return; }
+  if (asleep()) { wakeHer(); return; }
 
   if (galya) galya.react('happy', 1400);
   S.pets += 1; save();
@@ -342,20 +349,23 @@ function wakeHer(line) {
   setTimeout(function () { say(line || pick(LINES.woken), line ? 4600 : undefined); }, 420);
 }
 
-/* Третье нажатие «Разбудить» за визит: соглашается, но выставляет счёт. */
+/* Каждое третье нажатие «Разбудить»: соглашается поиграть, но выставляет счёт.
+   До этого она просто бурчит и спит дальше — иначе сделка ничего не стоит. */
 let wakePresses = 0;
 
 function wakeFromButton() {
   wakePresses++;
-  if (wakePresses !== 3) { wakeHer(); return; }
+  if (wakePresses % 3 !== 0) { wakeHer(); return; }
 
-  wakeHer(LINES.bamble);
   const n = sameDayCups() + 1;          // бамбл записан на тебя — кофе +1
   S.cupsToday = n;
   S.lastFed = Date.now();
   save();
-  updateStatus();
-  updateButtons();
+
+  awakeUntil = Date.now() + AWAKE_FOR;  // «Ладно. У тебя 5 минут.»
+  wakeHer(LINES.bamble);
+  applyState();                         // заодно обновит кнопки и статус
+  scheduleSpark(true);                  // чтобы искра не ждала полминуты впустую
 }
 
 /* ---------- кофе ---------- */
@@ -367,7 +377,7 @@ function sameDayCups() {
 
 function pourCoffee() {
   idleKick();
-  if (isNight()) { say(pick(LINES.woken)); return; }
+  if (asleep()) { say(pick(LINES.woken)); return; }
 
   const n = sameDayCups() + 1;
 
@@ -427,7 +437,7 @@ function idleKick() {
 function chatter() {
   if (chatSaid >= 6) return;          // не больше шести реплик за визит
 
-  if (isNight()) {
+  if (asleep()) {
     chatSaid += 1;
     say(pick(LINES.sleep));
     chatTimer = setTimeout(chatter, 30000);
@@ -596,16 +606,17 @@ function moveSpark() {
 }
 
 function showSpark() {
-  if (!sparkEl || upset || isNight() || document.hidden || !galya) { scheduleSpark(); return; }
+  if (!sparkEl || upset || asleep() || document.hidden || !galya) { scheduleSpark(); return; }
   sparkEl.hidden = false;
   moveSpark();
   sparkHop = setInterval(moveSpark, 700);
   sparkEnd = setTimeout(function () { sparkHide(false); }, 4200);   // не поймал — улетела
 }
 
-function scheduleSpark() {
+function scheduleSpark(soon) {
   clearTimeout(sparkTimer);
-  sparkTimer = setTimeout(showSpark, 30000 + Math.random() * 40000);
+  // первую искру показываем быстро, иначе кажется, что игры нет вовсе
+  sparkTimer = setTimeout(showSpark, soon ? 9000 + Math.random() * 6000 : 30000 + Math.random() * 40000);
 }
 
 if (sparkEl) {
@@ -689,7 +700,7 @@ if (tuneBtn && tunePane) {
     // бессмысленно: на время тюнинга будим её принудительно.
     tuning = open;
     if (galya) galya.setState(open ? 'idle' : baseState());
-    if (open && isNight()) say('Ну ладно, подержу глаза открытыми.');
+    if (open && asleep()) say('Ну ладно, подержу глаза открытыми.');
   });
 
   tunePane.addEventListener('input', function (e) {
@@ -721,11 +732,11 @@ paintSliders();
 
 /* ---------- запуск ---------- */
 
-btnPet.addEventListener('click', () => { isNight() ? wakeFromButton() : petHer(null); });
+btnPet.addEventListener('click', () => { asleep() ? wakeFromButton() : petHer(null); });
 
 btnCup.addEventListener('click', () => {
   if (btnCup.getAttribute('aria-disabled') === 'true') {
-    say(isNight() ? pick(LINES.woken) : pick(LINES.enough));
+    say(asleep() ? pick(LINES.woken) : pick(LINES.enough));
     return;
   }
   pourCoffee();
@@ -734,7 +745,7 @@ btnCup.addEventListener('click', () => {
 // клик по самой Гале
 stage.addEventListener('click', e => {
   if (!galya || upset) return;
-  if (isNight()) {
+  if (asleep()) {
     const part = galya.hitTest(e.clientX, e.clientY);
     if (part || isAntenna(e.clientX, e.clientY)) wakeHer();
     return;
@@ -751,7 +762,7 @@ stage.addEventListener('pointermove', e => {
   const t = Date.now();
   if (t - moveGate < 100) return;      // троттлинг
   moveGate = t;
-  if (!galya || isNight()) { hoverFrom = 0; return; }
+  if (!galya || asleep()) { hoverFrom = 0; return; }
 
   const part = galya.hitTest(e.clientX, e.clientY);
   if (!part) { hoverFrom = 0; return; }
@@ -824,7 +835,7 @@ updateButtons();
   followHead();
   setTimeout(greet, 1200);
   idleKick();
-  scheduleSpark();
+  scheduleSpark(true);
 })();
 
 window.addEventListener('pagehide', () => { if (galya) galya.dispose(); });
