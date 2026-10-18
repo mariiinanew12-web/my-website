@@ -341,10 +341,6 @@ const WAKES = [
 
 function wakeHer(line) {
   idleKick();
-  awakeUntil = Date.now() + AWAKE_FOR;   // «Ладно. У тебя 5 минут.»
-  applyState();                          // заодно обновит кнопки и статус
-  scheduleSpark(true);                   // чтобы искра не ждала полминуты впустую
-
   let i = Math.floor(Math.random() * WAKES.length);
   if (i === lastWake) i = (i + 1) % WAKES.length;   // подряд одно и то же не показываем
   lastWake = i;
@@ -353,20 +349,23 @@ function wakeHer(line) {
   setTimeout(function () { say(line || pick(LINES.woken), line ? 4600 : undefined); }, 420);
 }
 
-/* Третье нажатие «Разбудить» за визит: соглашается, но выставляет счёт. */
+/* Каждое третье нажатие «Разбудить»: соглашается поиграть, но выставляет счёт.
+   До этого она просто бурчит и спит дальше — иначе сделка ничего не стоит. */
 let wakePresses = 0;
 
 function wakeFromButton() {
   wakePresses++;
-  if (wakePresses !== 3) { wakeHer(); return; }
+  if (wakePresses % 3 !== 0) { wakeHer(); return; }
 
-  wakeHer(LINES.bamble);
   const n = sameDayCups() + 1;          // бамбл записан на тебя — кофе +1
   S.cupsToday = n;
   S.lastFed = Date.now();
   save();
-  updateStatus();
-  updateButtons();
+
+  awakeUntil = Date.now() + AWAKE_FOR;  // «Ладно. У тебя 5 минут.»
+  wakeHer(LINES.bamble);
+  applyState();                         // заодно обновит кнопки и статус
+  scheduleSpark(true);                  // чтобы искра не ждала полминуты впустую
 }
 
 /* ---------- кофе ---------- */
