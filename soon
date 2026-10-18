@@ -21,7 +21,7 @@
       <li><a href="#process" class="header__nav-link">Этапы работы</a></li>
       <li><a href="#portfolio" class="header__nav-link">Кейсы</a></li>
       <li><a href="dizaineram.html" class="header__nav-link">Дизайнерам</a></li>
-      <li><a href="ai-tutorials.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
+      <li><a href="soon.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
     </ul>
   </nav>
 
