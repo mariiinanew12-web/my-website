@@ -28,8 +28,8 @@
       <li><a href="index.html" class="header__nav-link">На главную</a></li>
       <li><a href="index.html#services" class="header__nav-link">Услуги</a></li>
       <li><a href="index.html#portfolio" class="header__nav-link">Кейсы</a></li>
-      <li><a href="dizaineram.html" class="header__nav-link">Дизайнерам</a></li>
-      <li><a href="ai-tutorials.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
+      <li><a href="designers.html" class="header__nav-link">Дизайнерам</a></li>
+      <li><a href="soon.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
       <li><span class="header__nav-link header__nav-link--current" aria-current="page">Галя</span></li>
     </ul>
   </nav>
@@ -66,9 +66,49 @@
   <div class="gp__actions">
     <button type="button" class="btn btn--pink gp__btn" id="gpPet">Погладить</button>
     <button type="button" class="btn btn--glass gp__btn" id="gpCoffee">Налить кофе</button>
+    <button type="button" class="gp__theme" id="gpTheme" role="switch" aria-checked="false"
+            aria-label="Светлый фон">
+      <span class="gp__theme-knob"></span>
+    </button>
   </div>
 
   <p class="gp__note">С ней можно поиграть.</p>
+
+  <!-- Тюнинг: только с компьютера, на телефоне ползунками не покрутишь -->
+  <button type="button" class="gp__tune-btn" id="gpTuneBtn" aria-expanded="false" aria-controls="gpTune">Тюнинг Гали</button>
+
+  <div class="gp__tune" id="gpTune" hidden>
+    <label class="gp__sl">
+      <span class="gp__sl-name">Размер бабочки</span>
+      <input type="range" data-tune="size" min="70" max="140" step="1" value="100">
+      <output class="gp__sl-val">100%</output>
+    </label>
+    <label class="gp__sl">
+      <span class="gp__sl-name">Размер глаз</span>
+      <input type="range" data-tune="eyes" min="20" max="60" step="1" value="38">
+      <output class="gp__sl-val">0.38</output>
+    </label>
+    <label class="gp__sl">
+      <span class="gp__sl-name">Ширина улыбки</span>
+      <input type="range" data-tune="smile" min="4" max="20" step="1" value="10">
+      <output class="gp__sl-val">0.10</output>
+    </label>
+    <label class="gp__sl">
+      <span class="gp__sl-name">Экспозиция</span>
+      <input type="range" data-tune="exposure" min="40" max="160" step="1" value="92">
+      <output class="gp__sl-val">0.92</output>
+    </label>
+    <label class="gp__sl">
+      <span class="gp__sl-name">Свечение</span>
+      <input type="range" data-tune="glow" min="0" max="250" step="1" value="107">
+      <output class="gp__sl-val">1.07</output>
+    </label>
+
+    <div class="gp__tune-foot">
+      <button type="button" class="gp__tune-reset" id="gpTuneReset">Вернуть как было</button>
+      <span class="gp__tune-hint" id="gpTuneHint"></span>
+    </div>
+  </div>
 
   <!-- Показывается, если сеть отвалилась или машина не тянет -->
   <div class="gp__sos" id="gpSos" role="alert" hidden>

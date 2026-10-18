@@ -184,6 +184,35 @@ bubble.addEventListener('pointerleave', () => { if (bubble.classList.contains('h
 /* ---------- состояние ---------- */
 
 let galya = null;
+let mod = null;
+
+/* ---------- фон и тюнинг ---------- */
+/* Внешний вид Галя читает один раз при сборке, поэтому ползунки
+   пересобирают её заново. Фон и размер меняются на лету. */
+
+const TUNE_KEY = 'galya.tune.v1';
+const TUNE_BASE = { light: false, size: 100, eyes: 38, smile: 10, exposure: 92, glow: 107 };
+let T = Object.assign({}, TUNE_BASE);
+
+try {
+  const raw = localStorage.getItem(TUNE_KEY);
+  if (raw) T = Object.assign(T, JSON.parse(raw));
+} catch (e) { /* приватное окно — живём на значениях по умолчанию */ }
+
+const saveTune = () => { try { localStorage.setItem(TUNE_KEY, JSON.stringify(T)); } catch (e) {} };
+
+const bgColor = () => (T.light ? '#f7f7f7' : '#181818');
+
+function galyaOptions() {
+  return {
+    background: bgColor(),
+    margin: 0.98,
+    params: {
+      face:  { eyeSize: T.eyes / 100, smileWidth: T.smile / 100 },
+      light: { exposure: T.exposure / 100, innerGlow: T.glow / 100 }
+    }
+  };
+}
 
 function baseState() {
   if (isNight()) return 'sleep';
@@ -407,6 +436,108 @@ function lagTick(now) {
   requestAnimationFrame(lagTick);
 }
 
+/* ---------- переключатель фона и ползунки ---------- */
+
+const themeBtn = document.getElementById('gpTheme');
+const tuneBtn  = document.getElementById('gpTuneBtn');
+const tunePane = document.getElementById('gpTune');
+const tuneHint = document.getElementById('gpTuneHint');
+
+function applyTheme() {
+  document.documentElement.classList.toggle('is-light', T.light);
+  if (themeBtn) themeBtn.setAttribute('aria-checked', T.light ? 'true' : 'false');
+  if (galya) galya.setBackground(bgColor());   // Галя стеклянная: фон ей нужен точный
+}
+
+function applyZoom() {
+  document.documentElement.style.setProperty('--gp-zoom', (T.size / 100).toFixed(2));
+}
+
+/* Пересборка: единственный способ применить глаза, улыбку, экспозицию
+   и свечение — модуль читает их при создании. */
+let rebuildTimer = 0;
+
+function rebuildGalya() {
+  if (!mod) return;
+  const was = galya ? galya.state : 'idle';
+  if (galya) galya.dispose();
+  host.textContent = '';
+  try {
+    galya = mod.createGalya(host, galyaOptions());
+    galya.setState(was);
+  } catch (e) {
+    galya = null;
+    fallback.hidden = false;
+  }
+  if (tuneHint) tuneHint.textContent = '';
+}
+
+function queueRebuild() {
+  if (tuneHint) tuneHint.textContent = 'пересобираю…';
+  clearTimeout(rebuildTimer);
+  rebuildTimer = setTimeout(rebuildGalya, 320);
+}
+
+const SL_FMT = {
+  size:     v => v + '%',
+  eyes:     v => (v / 100).toFixed(2),
+  smile:    v => (v / 100).toFixed(2),
+  exposure: v => (v / 100).toFixed(2),
+  glow:     v => (v / 100).toFixed(2)
+};
+
+function paintSliders() {
+  document.querySelectorAll('[data-tune]').forEach(function (el) {
+    const k = el.getAttribute('data-tune');
+    el.value = T[k];
+    const out = el.parentElement.querySelector('.gp__sl-val');
+    if (out) out.textContent = SL_FMT[k](T[k]);
+  });
+}
+
+if (themeBtn) {
+  themeBtn.addEventListener('click', function () {
+    T.light = !T.light;
+    saveTune();
+    applyTheme();
+  });
+}
+
+if (tuneBtn && tunePane) {
+  tuneBtn.addEventListener('click', function () {
+    const open = tunePane.hidden;
+    tunePane.hidden = !open;
+    tuneBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    tuneBtn.textContent = open ? 'Свернуть тюнинг' : 'Тюнинг Гали';
+  });
+
+  tunePane.addEventListener('input', function (e) {
+    const el = e.target.closest('[data-tune]');
+    if (!el) return;
+    const k = el.getAttribute('data-tune');
+    T[k] = Number(el.value);
+    const out = el.parentElement.querySelector('.gp__sl-val');
+    if (out) out.textContent = SL_FMT[k](T[k]);
+    saveTune();
+    if (k === 'size') applyZoom();   // размер меняется живьём, без пересборки
+    else queueRebuild();
+  });
+
+  const reset = document.getElementById('gpTuneReset');
+  if (reset) reset.addEventListener('click', function () {
+    const light = T.light;                       // фон не трогаем, он не часть тюнинга
+    T = Object.assign({}, TUNE_BASE, { light: light });
+    saveTune();
+    paintSliders();
+    applyZoom();
+    queueRebuild();
+  });
+}
+
+applyTheme();
+applyZoom();
+paintSliders();
+
 /* ---------- запуск ---------- */
 
 btnPet.addEventListener('click', () => { isNight() ? wakeHer() : petHer(null); });
@@ -471,8 +602,6 @@ updateStatus();
 updateButtons();
 
 (async function start() {
-  let mod = null;
-
   // Модуль и three.js едут с CDN. Не доехали — это почти наверняка сеть.
   try {
     mod = await import('../assets/galya/galya.js');
@@ -485,7 +614,7 @@ updateButtons();
 
   if (mod) {
     try {
-      galya = mod.createGalya(host, { background: '#181818', margin: 0.95 });
+      galya = mod.createGalya(host, galyaOptions());
       // кружок уезжает плавно, уже поверх собранной Гали
       loader.classList.add('is-gone');
       setTimeout(() => { loader.hidden = true; }, 320);
