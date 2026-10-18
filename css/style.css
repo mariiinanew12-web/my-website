@@ -1596,3 +1596,48 @@ button {
   .curtain > .hero .hero__content { opacity: 1; transform: none; }
   .curtain > .about { border-radius: 0; box-shadow: none; }
 }
+
+/* Инстаграм в футере — <span>, а не ссылка. Базовые стили висят на классе,
+   поэтому без этого он продолжал бы подпрыгивать на наведении. */
+span.footer__social-link { cursor: default; }
+span.footer__social-link:hover,
+span.footer__social-link:active { transform: none; filter: none; }
+
+
+/* ============ Кнопка Гали в шапке ============ */
+
+.header__galya {
+  flex-shrink: 0;
+  width: 52px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.header__galya img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.header__galya:hover { background: var(--glass-fill-pink); }
+.header__galya:hover img { transform: scale(1.18) rotate(-8deg); }
+.header__galya:active img { transform: scale(1.05); }
+
+.menu__link--galya {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu__link--galya img { width: 28px; height: 28px; }
+
+@media (max-width: 900px) {
+  .header__galya { width: 46px; height: 46px; }
+  .header__galya img { width: 26px; height: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__galya img { transition: none; }
+  .header__galya:hover img { transform: none; }
+}
