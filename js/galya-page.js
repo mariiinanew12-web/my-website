@@ -78,6 +78,7 @@ const LINES = {
     'Пять минуточек... ну или до утра.',
     'Тсс. Я в спящем режиме, как твой ноутбук.'
   ],
+  bamble: 'Хорошо, я проснусь поиграть с тобой. Но ты должен мне ещё бамбл.',
   antenna: ['Эй!', 'Это антенна, а не кнопка.', 'Щекотно... нет, обидно.'],
   antennaLog: 'Я всё записала.',
   sparkWin: ['Ага! Моя искра.', 'Поймала. Я молодец.', 'Видел? Я быстрая.'],
@@ -210,6 +211,9 @@ try {
   if (raw) T = Object.assign(T, JSON.parse(raw));
 } catch (e) { /* приватное окно — живём на значениях по умолчанию */ }
 
+// Галя теперь во весь экран, и выше 115 % её начинает резать краями
+T.size = Math.min(Math.max(Number(T.size) || 100, 70), 115);
+
 const saveTune = () => { try { localStorage.setItem(TUNE_KEY, JSON.stringify(T)); } catch (e) {} };
 
 const bgColor = () => (T.light ? '#f7f7f7' : '#181818');
@@ -328,14 +332,30 @@ const WAKES = [
   }
 ];
 
-function wakeHer() {
+function wakeHer(line) {
   idleKick();
   let i = Math.floor(Math.random() * WAKES.length);
   if (i === lastWake) i = (i + 1) % WAKES.length;   // подряд одно и то же не показываем
   lastWake = i;
   WAKES[i]();
   // пока она просыпается, взгляд цепляется за курсор сам: followPointer
-  setTimeout(function () { say(pick(LINES.woken)); }, 420);
+  setTimeout(function () { say(line || pick(LINES.woken), line ? 4600 : undefined); }, 420);
+}
+
+/* Третье нажатие «Разбудить» за визит: соглашается, но выставляет счёт. */
+let wakePresses = 0;
+
+function wakeFromButton() {
+  wakePresses++;
+  if (wakePresses !== 3) { wakeHer(); return; }
+
+  wakeHer(LINES.bamble);
+  const n = sameDayCups() + 1;          // бамбл записан на тебя — кофе +1
+  S.cupsToday = n;
+  S.lastFed = Date.now();
+  save();
+  updateStatus();
+  updateButtons();
 }
 
 /* ---------- кофе ---------- */
@@ -489,7 +509,9 @@ let antennaHits = 0, antennaAt = 0;
 function isAntenna(x, y) {
   if (!galya) return false;
   const top = galya.screenPoint('top');
-  return y < top.y && y > top.y - 120 && Math.abs(x - top.x) < 70;
+  // Зона тянется за размером Гали: на маленькой это те же ~120 px, что и раньше
+  const h = stage.getBoundingClientRect().height || 660;
+  return y < top.y && y > top.y - h * 0.16 && Math.abs(x - top.x) < h * 0.09;
 }
 
 function flickAntenna() {
@@ -699,7 +721,7 @@ paintSliders();
 
 /* ---------- запуск ---------- */
 
-btnPet.addEventListener('click', () => { isNight() ? wakeHer() : petHer(null); });
+btnPet.addEventListener('click', () => { isNight() ? wakeFromButton() : petHer(null); });
 
 btnCup.addEventListener('click', () => {
   if (btnCup.getAttribute('aria-disabled') === 'true') {

@@ -47,7 +47,7 @@
     <p class="gp__tagline">хранительница доменного очага</p>
   </div>
 
-  <!-- Контейнеру нужен явный размер: Галя заполняет его целиком -->
+  <!-- На большом экране Галя занимает весь экран, а панели лежат поверх неё -->
   <div class="gp__stage" id="gpStage">
     <!-- пока строится сетка крыльев -->
     <div class="gp__loader" id="gpLoader" role="status" aria-label="Галя собирается"></div>
@@ -60,31 +60,34 @@
     <button type="button" class="gp__spark" id="gpSpark" hidden aria-label="Поймать искру"></button>
   </div>
 
-  <!-- если доклацаться — Галя уходит, и зовут её обратно отсюда -->
-  <button type="button" class="btn btn--pink gp__sorry" id="gpSorry" hidden>Попросить прощения у Гали</button>
-
   <div class="gp__bubble" id="gpBubble" role="status" aria-live="polite" hidden></div>
 
-  <p class="gp__status" id="gpStatus">У Гали сейчас…</p>
+  <!-- Левая колонка: всё, чем Галю трогают -->
+  <div class="gp__controls">
+    <!-- если доклацаться — Галя уходит, и зовут её обратно отсюда -->
+    <button type="button" class="btn btn--pink gp__sorry" id="gpSorry" hidden>Попросить прощения у Гали</button>
 
-  <div class="gp__actions">
-    <button type="button" class="btn btn--pink gp__btn" id="gpPet">Погладить</button>
-    <button type="button" class="btn btn--glass gp__btn" id="gpCoffee">Налить кофе</button>
-    <button type="button" class="gp__theme" id="gpTheme" role="switch" aria-checked="false"
-            aria-label="Светлый фон">
-      <span class="gp__theme-knob"></span>
-    </button>
+    <p class="gp__status" id="gpStatus">У Гали сейчас…</p>
+
+    <div class="gp__actions">
+      <button type="button" class="btn btn--pink gp__btn" id="gpPet">Погладить</button>
+      <button type="button" class="btn btn--glass gp__btn" id="gpCoffee">Налить кофе</button>
+      <button type="button" class="gp__theme" id="gpTheme" role="switch" aria-checked="false"
+              aria-label="Светлый фон">
+        <span class="gp__theme-knob"></span>
+      </button>
+    </div>
+
+    <p class="gp__note">С ней можно поиграть.</p>
+
+    <!-- Тюнинг: только с компьютера, на телефоне ползунками не покрутишь -->
+    <button type="button" class="gp__tune-btn" id="gpTuneBtn" aria-expanded="false" aria-controls="gpTune">Тюнинг Гали</button>
   </div>
-
-  <p class="gp__note">С ней можно поиграть.</p>
-
-  <!-- Тюнинг: только с компьютера, на телефоне ползунками не покрутишь -->
-  <button type="button" class="gp__tune-btn" id="gpTuneBtn" aria-expanded="false" aria-controls="gpTune">Тюнинг Гали</button>
 
   <div class="gp__tune" id="gpTune" hidden>
     <label class="gp__sl">
       <span class="gp__sl-name">Размер бабочки</span>
-      <input type="range" data-tune="size" min="70" max="140" step="1" value="100">
+      <input type="range" data-tune="size" min="70" max="115" step="1" value="100">
       <output class="gp__sl-val">100%</output>
     </label>
     <label class="gp__sl">

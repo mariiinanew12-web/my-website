@@ -241,6 +241,18 @@ a.header__nav-link--soon:hover { opacity: 0.8; background: transparent; }
 
 .dz__card:hover { transform: scale(1.03); }
 
+/* Текст вместо мемов — в блоке «В каком формате работаем» */
+.dz__text {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 860px;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.45;
+  color: var(--color-text);
+}
+
 .dz__card-title { font-weight: 600; font-size: 20px; }
 .dz__card-note { font-weight: 300; font-size: 17px; }
 
@@ -324,6 +336,7 @@ span.dz-footer__social:hover { transform: none; filter: none; }
   .dz__card-pink { padding: 28px 24px; min-height: 0; font-size: 17px; text-align: center; }
 
   .dz__heading { font-size: 20px; }
+  .dz__text { font-size: 17px; gap: 10px; }
   .dz__meme { width: 280px; }
   .dz__cards { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
   .dz__card { padding: 20px 18px; min-height: 130px; }

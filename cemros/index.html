@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЦЕМРОС — тендерное ТЗ | Марина Магомедова</title>
+<meta name="description" content="Концепт сайта ЦЕМРОС БЛОК: главная страница по тендерному техническому заданию — хиро-слайдер, каталог, объекты, калькулятор.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=PT+Sans:wght@400;700&family=PT+Sans+Caption:wght@700&display=swap">
+</head>
+<body>
+<style>
+/* Макет: хедер + хиро-слайдер. Серая скруглённая панель, слева карточка с оффером, справа товар на круге-подложке. Одна светлая тема — как на cemros.ru */
+:root {
+  --green: #008C78;
+  --green-dark: #00715F;
+  --red: #951E1E;
+  --ink: #1B1F1E;
+  --ink-soft: #4A5452;
+  --panel: #EEF0EF;
+  --card: rgba(255, 255, 255, .55);
+  --white: #FFFFFF;
+  --font: "PT Sans", "Segoe UI", Arial, sans-serif;
+  --font-accent: "Montserrat", "Segoe UI", Arial, sans-serif; /* только кнопка в хедере, как в макете */
+  --grey-panel: #EFEFEF;
+  --grey-line: #D6D6D6;
+  --grey-text: #7A7A7A;
+  --ink-title: #3D4246;
+  --font-head: "PT Sans Caption", "PT Sans", "Segoe UI", Arial, sans-serif;
+  --graphite: #3E4549;
+  --card: #F0F0F0;
+  --radius-xl: 24px;
+  --radius-md: 8px;
+  --container: 1440px;
+  --ease: cubic-bezier(.65, 0, .35, 1);       /* мягкий in-out для смены слайдов */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);    /* expo-out для появления */
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--white); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+.wrap {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-left: max(32px, env(safe-area-inset-left, 0px));
+  padding-right: max(32px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- HEADER ---------- */
+.header { padding-block: 24px; }
+.header__row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.logo { display: block; width: 184px; flex-shrink: 0; }
+.logo img { display: block; width: 100%; height: auto; }
+.header__actions { display: flex; align-items: center; gap: 16px; }
+.header__actions .btn { font-family: var(--font-accent); font-size: 14px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; padding: 0 26px;
+  border-radius: var(--radius-md);
+  font-weight: 700; font-size: 15px; line-height: 1;
+  border: 1.5px solid var(--green);
+  transition: background-color .2s, color .2s, border-color .2s;
+  white-space: nowrap;
+}
+.btn--outline { background: transparent; color: var(--green); }
+.btn--outline:hover { background: var(--green); color: var(--white); }
+.btn--fill { background: var(--green); color: var(--white); }
+.btn--fill:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.btn--lg { height: 56px; padding: 0 32px; font-size: 16px; }
+
+.icon-btn {
+  width: 46px; height: 46px; flex-shrink: 0;
+  display: inline-grid; place-items: center;
+  border: 0; border-radius: var(--radius-md);
+  background: var(--green); color: var(--white);
+  position: relative;
+  transition: background-color .2s;
+}
+.icon-btn:hover { background: var(--green-dark); }
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn .badge {
+  position: absolute; top: -6px; right: -6px;
+  min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 10px; background: var(--red); color: var(--white);
+  font-size: 11px; font-weight: 700; line-height: 20px; text-align: center;
+}
+.icon-btn--phone { display: none; }
+
+/* ---------- HERO ---------- */
+.hero { padding-bottom: 40px; }
+.hero__panel {
+  position: relative;
+  background: var(--panel);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  height: 552px; /* фиксированная высота слайдера на десктопе */
+}
+/* все слайды лежат в одной ячейке грида — контейнер не прыгает по высоте */
+.slides { display: grid; height: 100%; }
+.slide {
+  grid-area: 1 / 1;
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  padding: 56px 56px 56px 58px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1s var(--ease), visibility 0s linear 1s;
+}
+.slide.is-active { opacity: 1; visibility: visible; z-index: 1; transition: opacity 1s var(--ease), visibility 0s; }
+
+/* --- анимация контента: лесенка снизу вверх, на выходе плавно гаснет --- */
+.slide__card > * {
+  opacity: 0; transform: translate3d(0, 18px, 0);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+}
+.slide.is-active .slide__card > * {
+  opacity: 1; transform: none;
+  transition: opacity .9s var(--ease-out), transform 1.1s var(--ease-out);
+  transition-delay: calc(.35s + var(--i, 0) * .09s);
+}
+.slide__card > :nth-child(2) { --i: 1; }
+.slide__card > :nth-child(3) { --i: 2; }
+.slide__card > :nth-child(4) { --i: 3; }
+.slide__card { transform: scale(.985); transition: transform 1.2s var(--ease-out); }
+.slide.is-active .slide__card { transform: none; }
+
+.slide__card {
+  position: relative; z-index: 2;
+  /* стекло: полупрозрачная серо-белая заливка + размытие фона + светлая обводка */
+  background: linear-gradient(110deg, rgba(196, 198, 196, .55) 0%, rgba(232, 233, 231, .45) 60%, rgba(214, 216, 214, .4) 100%);
+  backdrop-filter: blur(24px) saturate(110%);
+  -webkit-backdrop-filter: blur(24px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: var(--radius-xl);
+  padding: 48px 40px;
+  max-width: 612px;
+}
+.slide__eyebrow {
+  display: inline-block; margin-bottom: 18px;
+  font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--green);
+}
+.slide__title {
+  margin: 0;
+  font-size: clamp(32px, 3.6vw, 52px); line-height: 1.05; font-weight: 800;
+  color: var(--green); letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.slide__sub {
+  margin: 12px 0 0;
+  font-size: clamp(18px, 1.6vw, 22px); line-height: 1.3; font-weight: 700; color: var(--ink);
+}
+.slide__text { margin: 16px 0 0; font-size: 16px; line-height: 1.5; font-weight: 500; color: var(--ink-soft); max-width: 46ch; }
+.slide__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+.slide__media { position: relative; z-index: 1; height: 100%; min-height: 440px; }
+/* большой круг, обрезанный правым краем панели */
+.slide__circle {
+  position: absolute; z-index: 0;
+  top: 50%; right: 40px;
+  height: 124%; aspect-ratio: 1;
+  transform: translate(50%, -50%) scale(.82);
+  border-radius: 50%;
+  background: var(--red);
+  transition: transform 1.4s var(--ease-out);
+}
+.slide.is-active .slide__circle { transform: translate(50%, -50%) scale(1); transition-delay: .1s; }
+.slide__circle--green { background: var(--green); }
+.slide__img {
+  position: absolute; z-index: 1;
+  right: -8px; top: 50%;
+  height: min(520px, 118%); width: auto; max-width: none;
+  --ty: -48%;
+  /* въезжает со стороны направления листания, уезжает в противоположную */
+  transform: translate3d(calc(var(--dir, 1) * 64px), var(--ty), 0) scale(.96);
+  opacity: 0;
+  transition: transform 1s var(--ease), opacity .7s var(--ease);
+  will-change: transform, opacity;
+}
+.slide.is-leaving .slide__img { transform: translate3d(calc(var(--dir, 1) * -64px), var(--ty), 0) scale(.98); }
+.slide.is-active .slide__img {
+  transform: translate3d(0, var(--ty), 0) scale(1);
+  opacity: 1;
+  transition: transform 1.6s var(--ease-out) .15s, opacity 1s var(--ease) .15s;
+}
+
+/* слайд 2: фото-фон, блоки справа */
+.slide__bg {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%; max-width: none; object-fit: cover;
+  transform: scale(1.08);
+  transition: transform 2.4s var(--ease-out);
+}
+.slide.is-active .slide__bg { transform: scale(1); }
+.slide--photo .slide__card {
+  max-width: 805px;
+}
+.slide__title--dark {
+  color: var(--ink);
+  font-size: clamp(26px, 2.5vw, 36px); line-height: 1.15; font-weight: 700; letter-spacing: 0;
+}
+.slide__img--blocks {
+  height: min(470px, 100%);
+  right: -110px;
+  --ty: -50%;
+}
+.slide--photo { grid-template-columns: minmax(0, 805px) minmax(0, 1fr); }
+
+.features {
+  display: flex; gap: 40px;
+  margin: 28px 0 0; padding: 0; list-style: none;
+}
+.features li {
+  flex: none;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 18px; line-height: 1.25; font-weight: 500; color: var(--ink);
+}
+.features li span { white-space: nowrap; } /* ширина текста = длине строки, отступы между пунктами одинаковые */
+/* контейнер иконки 48, сам вектор 36 */
+.feat-ic {
+  width: 48px; height: 48px; padding: 6px; box-sizing: border-box; flex-shrink: 0;
+  color: var(--green);
+}
+
+/* слайд 3 (только десктоп): армированные изделия */
+.slide--hammer { grid-template-columns: minmax(0, 725px) minmax(0, 1fr); }
+.slide--hammer .slide__card {
+  max-width: 725px;
+  background: rgba(255, 255, 255, .9);
+  border-color: rgba(255, 255, 255, .95);
+}
+.slide__sub--light { font-weight: 500; font-size: 20px; margin-top: 8px; }
+.slide__img--hammer {
+  top: auto; bottom: -30px; right: -170px;
+  height: 570px; /* ручка кувалды уходит за верхний край панели */
+  --ty: 0px;
+}
+
+/* навигация */
+.hero__nav {
+  position: absolute; z-index: 3;
+  right: 40px; bottom: 32px;
+  display: flex; align-items: center; gap: 16px;
+}
+.arrow {
+  width: 68px; height: 68px; border-radius: 50%;
+  border: 0; background: var(--white); color: var(--ink);
+  display: grid; place-items: center;
+  transition: transform .2s, color .2s;
+}
+.arrow:hover { color: var(--green); transform: scale(1.05); }
+.arrow svg { width: 24px; height: 24px; }
+.dots { display: flex; gap: 8px; margin-right: 8px; }
+.dot {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px;
+  background: rgba(255, 255, 255, .65);
+  position: relative; overflow: hidden;
+  transition: width .6s var(--ease), background-color .6s var(--ease);
+}
+.dot.is-active { width: 44px; }
+/* полоска прогресса автопрокрутки внутри активной точки */
+.dot::after {
+  content: ""; position: absolute; inset: 0;
+  background: var(--white);
+  transform: scaleX(0); transform-origin: left;
+}
+.dot.is-active::after { animation: progress var(--autoplay, 7s) linear forwards; }
+.hero__panel.is-paused .dot.is-active::after { animation-play-state: paused; }
+@keyframes progress { to { transform: scaleX(1); } }
+
+/* ---------- НАША ПРОДУКЦИЯ ---------- */
+.prod-section { padding-block: 72px 8px; }
+.section-title, .adv__title, .prod__title { font-family: var(--font-head); }
+.prod-section .section-title { margin-bottom: 32px; }
+.prod-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.prod {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+  min-height: 320px; padding: 44px 48px 40px;
+  border-radius: 20px; background: var(--card); color: var(--ink);
+  text-decoration: none;
+  transition: background-color .55s var(--ease);
+}
+.prod:hover, .prod:focus-visible { background: var(--graphite); }
+.prod__title {
+  position: relative; z-index: 1; margin: 0; max-width: 46%;
+  font-size: clamp(26px, 2.5vw, 36px); line-height: 1.2; font-weight: 700; color: #000;
+  transition: color .55s var(--ease);
+}
+.prod:hover .prod__title, .prod:focus-visible .prod__title { color: var(--white); }
+.prod__next {
+  position: relative; z-index: 1;
+  width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--white); color: var(--green);
+  transition: background-color .55s var(--ease), color .55s var(--ease), transform .55s var(--ease);
+}
+.prod__next svg { width: 20px; height: 20px; }
+.prod:hover .prod__next, .prod:focus-visible .prod__next { background: var(--green); color: var(--white); transform: translateX(4px); }
+.prod__img {
+  position: absolute; z-index: 0; right: 40px; top: 50%;
+  max-width: 50%; max-height: 80%; width: auto; height: auto;
+  transform: translateY(-50%);
+  transition: transform .8s var(--ease-out);
+}
+.prod:hover .prod__img { transform: translateY(-50%) scale(1.05); }
+.prod__img--mixer { max-height: 88%; }
+.prod__img--bags { max-height: 92%; right: 24px; }
+.prod__img--helmet { top: auto; bottom: 0; right: 0; max-height: 104%; max-width: 52%; transform: none; transform-origin: bottom right; }
+.prod:hover .prod__img--helmet { transform: scale(1.04); }
+.prod__img--armored { right: 28px; max-height: 92%; }
+
+/* домокомплект — бирюзовая карточка */
+.prod--accent { background: var(--green); }
+.prod--accent .prod__title { color: var(--white); }
+.prod__more {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; height: 52px; padding: 0 28px;
+  border: 1.5px solid var(--white); border-radius: var(--radius-md);
+  color: var(--white); font-weight: 700; font-size: 18px;
+  transition: background-color .4s var(--ease), color .4s var(--ease);
+}
+.prod--accent:hover .prod__more { background: var(--white); color: var(--graphite); }
+
+/* армированный — «скоро в продаже» */
+.prod--soon .prod__title { color: #000; }
+/* «скоро в продаже»: карточка приглушена, на ховере не темнеет — только контент проявляется до 100% */
+.prod--soon:hover, .prod--soon:focus-visible { background: var(--card); }
+.prod--soon:hover .prod__title, .prod--soon:focus-visible .prod__title { color: #000; }
+.prod--soon .prod__top, .prod--soon .prod__soon, .prod--soon .prod__img { opacity: .65; transition: opacity .55s var(--ease), transform .8s var(--ease-out); }
+.prod--soon:hover .prod__top, .prod--soon:hover .prod__soon, .prod--soon:hover .prod__img,
+.prod--soon:focus-visible .prod__top, .prod--soon:focus-visible .prod__soon, .prod--soon:focus-visible .prod__img { opacity: 1; }
+.prod--soon:hover .prod__img { transform: translateY(-50%); }
+.prod__chip {
+  position: relative; z-index: 1; margin-top: 10px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px 5px 10px; border-radius: 100px; background: var(--white);
+  font-size: 13px; color: rgba(62, 69, 73, .8);
+}
+.prod__chip svg { width: 14px; height: 14px; }
+.prod__soon {
+  position: relative; z-index: 1; margin-top: auto;
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 20px; color: var(--green);
+  transition: color .55s var(--ease);
+}
+.prod__soon svg { width: 18px; height: 18px; transition: transform .55s var(--ease); }
+.prod--soon:hover .prod__soon svg { transform: translateX(4px); }
+.prod__top { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; }
+
+@media (max-width: 768px) {
+  .prod-section { padding-block: 40px 0; }
+  .prod-section .section-title { margin-bottom: 20px; }
+  .prod-grid { grid-template-columns: 1fr; gap: 12px; }
+  .prod { min-height: 184px; padding: 24px 22px 22px; border-radius: 20px; }
+  .prod:not(.prod--accent) { background: var(--white); }
+  .prod:not(.prod--accent):not(.prod--soon):hover { background: var(--graphite); }
+  .prod--soon:hover { background: var(--white); }
+  .prod__title { font-size: 24px; max-width: 52%; }
+  .prod__next { width: 40px; height: 40px; }
+  .prod__img { right: 16px; max-width: 46%; max-height: 78%; }
+  .prod__img--helmet { right: 0; max-height: 100%; max-width: 50%; }
+  .prod__more { height: 44px; padding: 0 20px; font-size: 16px; }
+  .prod__soon { font-size: 17px; }
+  .prod:not(.prod--accent) .prod__next, .prod__chip { background: var(--card); }
+  .prod:hover .prod__next { background: var(--green); }
+  .prod__img--bags { max-width: 40%; }
+}
+
+/* ---------- ОБЪЕКТЫ ---------- */
+.obj-section { padding-block: 72px 24px; overflow: hidden; }
+.obj-head { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.obj-nav { display: flex; gap: 12px; }
+.obj-nav button {
+  width: 56px; height: 56px; border-radius: 50%; border: 0;
+  display: grid; place-items: center;
+  background: var(--card); color: var(--ink);
+  transition: background-color .3s var(--ease), color .3s var(--ease), opacity .3s;
+}
+.obj-nav button:hover:not(:disabled) { background: var(--graphite); color: var(--white); }
+.obj-nav button:disabled { opacity: .35; cursor: default; }
+.obj-nav svg { width: 22px; height: 22px; }
+
+/* лента: начинается по сетке контейнера и уходит за правый край экрана; края мягко растворяются */
+.obj-viewport { position: relative; }
+.obj-track {
+  display: flex; gap: 20px;
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; cursor: grab;
+  padding-left: var(--obj-inset, 32px); padding-right: 32px; scroll-padding-left: var(--obj-inset, 32px);
+  /* мягкое растворение у краёв экрана: плавная кривая вместо линейной, без «молочной» полосы */
+  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0) 0, rgba(0,0,0,.35) calc(var(--fade-l, 0px) * .35), rgba(0,0,0,.8) calc(var(--fade-l, 0px) * .7), #000 var(--fade-l, 0px), #000 calc(100% - var(--fade-r, 56px)), rgba(0,0,0,.8) calc(100% - var(--fade-r, 56px) * .7), rgba(0,0,0,.35) calc(100% - var(--fade-r, 56px) * .35), rgba(0,0,0,0) 100%);
+          mask-image: linear-gradient(90deg, rgba(0,0,0,0) 0, rgba(0,0,0,.35) calc(var(--fade-l, 0px) * .35), rgba(0,0,0,.8) calc(var(--fade-l, 0px) * .7), #000 var(--fade-l, 0px), #000 calc(100% - var(--fade-r, 56px)), rgba(0,0,0,.8) calc(100% - var(--fade-r, 56px) * .7), rgba(0,0,0,.35) calc(100% - var(--fade-r, 56px) * .35), rgba(0,0,0,0) 100%);
+}
+.obj-track::-webkit-scrollbar { display: none; }
+.obj-track.is-drag { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+.obj-track.is-drag * { pointer-events: none; }
+.obj { flex: 0 0 522px; scroll-snap-align: start; user-select: none; }
+.obj__card {
+  position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px;
+  height: 520px; padding: 20px; border-radius: 20px; overflow: hidden; color: var(--white); isolation: isolate;
+}
+.obj__img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none; object-fit: cover; transition: transform 1s var(--ease-out); -webkit-user-drag: none; }
+.obj__card::before { /* затемнение 3E4549: 0% сверху → 100% снизу */
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(62, 69, 73, 0) 38%, rgba(62, 69, 73, .55) 72%, #3E4549 100%);
+}
+.obj:hover .obj__img { transform: scale(1.05); }
+.obj__meta { display: flex; flex-direction: column; gap: 8px; font-family: var(--font-head); font-size: 20px; font-weight: 400; line-height: 1.2; }
+.obj__meta span { display: inline-flex; align-items: center; gap: 6px; }
+.obj__meta .ic { width: 24px; height: 24px; flex-shrink: 0; }
+.obj__more {
+  display: inline-flex; align-items: center; gap: 4px; height: 56px; padding: 14px 28px 14px 30px; /* +2px слева: иконка справа визуально «утяжеляет» */
+  border: 1px solid var(--white); border-radius: 12px;
+  font-family: var(--font); font-size: 24px; color: var(--white); text-decoration: none; white-space: nowrap;
+  transition: background-color .35s var(--ease), color .35s var(--ease);
+}
+.obj__more .ic-arrow { width: 24px; height: 24px; transition: transform .35s var(--ease); }
+.obj__more:hover { background: var(--white); color: var(--graphite); }
+.obj__more:hover .ic-arrow { transform: translate(2px, -2px); }
+.obj__name { margin: 14px 0 0; font-family: var(--font-head); font-size: 22px; font-weight: 700; line-height: 1.25; color: #000; }
+
+/* ---------- ЦИФРЫ + CTA ---------- */
+.stats-section { padding-block: 48px 72px; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.stat { padding: 40px 48px 44px; border-radius: 20px; background: var(--card); }
+.stat__num {
+  margin: 0; font-family: var(--font-head); font-weight: 400; font-size: clamp(56px, 6.8vw, 98px); line-height: 1;
+  color: var(--green); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.count { display: inline-grid; }
+.count > span { grid-area: 1 / 1; }
+.count__ghost { visibility: hidden; }
+.stat__num sup { font-size: .5em; vertical-align: top; position: relative; top: -.05em; }
+.stat__text { margin: 16px 0 0; font-family: var(--font-head); font-weight: 700; font-size: 18px; color: var(--ink-title); }
+.cta-banner {
+  position: relative; overflow: hidden; margin-top: 24px;
+  display: flex; flex-direction: column; justify-content: center; gap: 32px;
+  min-height: 320px; padding: 56px 76px; border-radius: 20px; background: var(--green); color: var(--white);
+}
+.cta-banner__title { margin: 0; font-family: var(--font-head); font-weight: 700; font-size: 36px; line-height: 1.2; position: relative; z-index: 1; }
+.cta-banner__btns { display: flex; flex-wrap: wrap; gap: 24px; position: relative; z-index: 1; }
+.btn--ghost {
+  height: 64px; padding: 0 32px; border: 1px solid var(--white); border-radius: 12px;
+  background: transparent; color: var(--white); font-family: var(--font); font-weight: 700; font-size: 24px; gap: 8px;
+}
+.btn--ghost:hover { background: var(--white); color: var(--green); }
+.btn--ghost .ic-arrow { width: 24px; height: 24px; transform: rotate(90deg); }
+.btn--ghost:has(.ic-arrow) { padding-left: 34px; } /* +2px слева у кнопок с иконкой */
+.cta-banner__img {
+  position: absolute; right: 2%; top: -6%; height: 135%; width: auto; max-width: none;
+  transform: rotate(-4deg); transition: transform 1.2s var(--ease-out);
+}
+.cta-banner:hover .cta-banner__img { transform: rotate(0deg) translateY(-8px); }
+
+@media (max-width: 768px) {
+  .obj-section { padding-block: 40px 8px; }
+  .obj-head { margin-bottom: 20px; }
+  .obj-nav { display: none; }
+  .obj-track { gap: 12px; padding-right: 16px; --fade-r: 24px; }
+  .obj { flex-basis: 280px; }
+  .obj__card { height: 340px; padding: 14px; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
+  .obj__meta { font-size: 16px; gap: 6px; }
+  .obj__meta .ic { width: 20px; height: 20px; }
+  .obj__more { height: 44px; padding: 10px 18px 10px 20px; font-size: 18px; border-radius: 10px; }
+  .obj__name { font-size: 18px; margin-top: 10px; }
+  .stats-section { padding-block: 32px 48px; }
+  .stats { grid-template-columns: 1fr; gap: 12px; }
+  .stat { padding: 24px 22px 26px; background: var(--white); }
+  .stat__num { font-size: 46px; }
+  .stat__text { font-size: 16px; margin-top: 10px; }
+  .cta-banner { margin-top: 12px; padding: 28px 22px 220px; gap: 20px; min-height: 0; }
+  .cta-banner__title { font-size: 28px; }
+  .cta-banner__btns { flex-direction: column; gap: 12px; }
+  .btn--ghost { height: 52px; font-size: 18px; width: 100%; }
+  .cta-banner__img { top: auto; bottom: -60px; right: -10px; height: 280px; }
+}
+
+/* ---------- НОВОСТИ ---------- */
+.news-section { padding-block: 24px 80px; }
+.news-section .section-title { margin-bottom: 32px; }
+.news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.news {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  aspect-ratio: 443 / 640; border-radius: 12px; text-decoration: none; color: #000;
+}
+.news__img { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: center top; transition: transform 1.1s var(--ease-out); }
+.news:hover .news__img { transform: scale(1.04); }
+/* стеклянная плашка: белый 70% + размытие фото, книзу плотнее */
+.news__body {
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 20px 40px 24px; border-radius: 8px 8px 0 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.82) 55%, rgba(255,255,255,.96) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(110%); backdrop-filter: blur(22px) saturate(110%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+.news__date { margin: 0; font-family: var(--font-head); font-size: 18px; font-weight: 400; color: rgba(62, 69, 73, .7); }
+.news__title { margin: 16px 0 0; font-family: var(--font-head); font-size: 24px; font-weight: 700; line-height: 1.3; color: #000; text-wrap: pretty; }
+.news__btn {
+  margin-top: 36px; display: inline-flex; align-items: center; gap: 4px;
+  height: 36px; padding: 8px 16px 8px 18px; border: 1.5px solid var(--green); border-radius: 10px;
+  font-family: var(--font); font-size: 18px; color: var(--green);
+  transition: background-color .35s var(--ease), color .35s var(--ease);
+}
+.news__btn .ic-arrow { width: 20px; height: 20px; transition: transform .35s var(--ease); }
+.news:hover .news__btn { background: var(--green); color: var(--white); }
+.news:hover .news__btn .ic-arrow { transform: translate(2px, -2px); }
+
+@media (max-width: 1100px) {
+  .news__body { padding: 18px 24px 22px; }
+  .news__title { font-size: 20px; }
+}
+@media (max-width: 768px) {
+  .news-section { padding-block: 8px 48px; }
+  .news-section .section-title { margin-bottom: 20px; }
+  /* на мобиле — лента со свайпом */
+  .news-grid {
+    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    scroll-padding-left: max(16px, env(safe-area-inset-left, 0px));
+  }
+  .news-grid::-webkit-scrollbar { display: none; }
+  .news { flex: 0 0 280px; scroll-snap-align: start; aspect-ratio: auto; height: 420px; }
+  .news__body { padding: 16px 20px 20px; }
+  .news__date { font-size: 15px; }
+  .news__title { font-size: 18px; margin-top: 10px; }
+  .news__btn { margin-top: 20px; font-size: 16px; }
+}
+
+/* ---------- ПРЕИМУЩЕСТВА ---------- */
+.adv-section { padding-block: 64px 72px; }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.section-title { margin: 0; font-size: clamp(30px, 3.2vw, 48px); line-height: 1.1; font-weight: 700; color: var(--ink); text-wrap: balance; }
+.adv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+/* карточка по компоненту из Figma: заголовок и подпись по центру, ниже область с инфографикой */
+.adv {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 44px 36px 36px;
+  background: var(--grey-panel); border-radius: 24px;
+  cursor: default;
+}
+.adv__title {
+  margin: 0; font-size: 36px; line-height: 1.15; font-weight: 700;
+  color: var(--ink-title);
+  transition: color .45s var(--ease);
+}
+.adv:hover .adv__title, .adv.is-live .adv__title { color: var(--green); }
+.adv__sub { margin: 12px 0 0; font-family: var(--font); font-size: 18px; line-height: 1.35; font-weight: 400; color: var(--grey-text); }
+/* 3D-сцена в фиксированном контейнере 3:2 внутри паддингов карточки; камера сама вписывает объект */
+.adv__3d { width: 100%; aspect-ratio: 3 / 2; margin-top: 28px; }
+.adv__3d canvas { display: block; width: 100%; height: 100%; }
+
+@media (max-width: 1100px) {
+  .adv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 768px) {
+  .adv-section { padding-block: 40px 48px; }
+  .section-head { flex-direction: column; align-items: stretch; margin-bottom: 20px; }
+  .section-head .btn { width: 100%; height: 52px; }
+  .adv-grid { grid-template-columns: 1fr; gap: 12px; }
+  .adv { padding: 32px 24px 24px; border-radius: 20px; background: var(--white); }
+  .adv__title { font-size: 30px; }
+  .adv__sub { font-size: 16px; }
+  .adv__3d { margin-top: 16px; }
+}
+
+/* ---------- TABLET ---------- */
+@media (max-width: 1100px) {
+  .slide { padding: 40px; }
+  .slide__card { padding: 36px 32px; }
+  .header__actions .btn { padding: 0 18px; }
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 768px) {
+  .slide--desktop, .dot--desktop { display: none !important; }
+  body { background: var(--panel); }
+  .wrap {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  /* хедер: бургер + лого слева, избранное + корзина справа */
+  .header { padding-block: 14px; }
+  .header__row { gap: 12px; }
+  .header__actions { display: contents; }
+  .header__actions .btn, .icon-btn--phone { display: none; }
+  .icon-btn--menu { order: -2; }
+  .logo { order: -1; width: 104px; margin-right: auto; }
+  .icon-btn { width: 44px; height: 44px; }
+  .icon-btn svg { width: 22px; height: 22px; }
+
+  /* панель слайдера */
+  .hero { padding-bottom: 24px; }
+  .hero__panel {
+    height: auto; border-radius: 24px;
+    background: linear-gradient(180deg, var(--white) 0%, var(--panel) 100%);
+  }
+  .slide {
+    display: flex; flex-direction: column;
+    padding: 12px 12px 88px;
+  }
+  .slide__media {
+    order: -1; height: auto; min-height: 0;
+    display: flex; justify-content: center;
+    padding: 4px 0 0;
+  }
+  .slide__img { --ty: 0px; position: relative; right: auto; top: auto; height: auto; width: 92%; max-width: 100%; }
+
+  /* красная плашка за паллетой — скруглённый прямоугольник */
+  .slide__circle {
+    top: 16px; right: 16px;
+    width: 58%; height: 300px; aspect-ratio: auto;
+    border-radius: 24px;
+    transform: scale(.92); transform-origin: top right;
+  }
+  .slide.is-active .slide__circle { transform: scale(1); }
+
+  /* стеклянная карточка */
+  .slide__card {
+    flex: 1;
+    display: flex; flex-direction: column;
+    margin-top: 8px;
+    padding: 28px 24px 32px;
+    border-radius: 20px;
+    max-width: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.55) 100%);
+    border: 1px solid rgba(255, 255, 255, .9);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  }
+  .slide__eyebrow {
+    font-size: 16px; font-weight: 600; letter-spacing: 0; text-transform: none;
+    margin-bottom: 16px;
+  }
+  .slide__title { font-size: clamp(24px, 7.2vw, 30px); white-space: nowrap; }
+  .slide__title--dark { white-space: normal; }
+  .slide__sub { font-size: 21px; line-height: 1.3; margin-top: 18px; }
+  .slide__cta { margin-top: 28px; flex-direction: column; align-items: stretch; }
+  .slide__cta .btn { width: 100%; height: 52px; }
+  .slide:not(.slide--photo) .slide__cta { align-items: center; }
+  .slide:not(.slide--photo) .slide__cta .btn { width: auto; padding: 0 36px; }
+
+  /* слайд 2: фото только сверху, плавно растворяется в белый */
+  .slide__bg {
+    height: 380px;
+    -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  }
+  .slide--photo { padding-top: 0; }
+  .slide--photo .slide__media { padding-top: 0; height: 110px; overflow: hidden; align-items: flex-start; }
+  .slide__img--blocks { width: 68%; margin-top: -40px; }
+  .slide--photo .slide__card { margin-top: 0; }
+  .slide__title--dark { font-size: 22px; line-height: 1.3; }
+  .features { flex-direction: column; gap: 22px; margin-top: 28px; }
+  .features li { font-size: 16px; gap: 16px; }
+  .features li span { white-space: normal; }
+  .feat-ic { width: 44px; height: 44px; padding: 5px; }
+  .slide--photo .slide__cta { margin-top: 32px; }
+
+  /* навигация */
+  .hero__nav { left: 16px; right: 16px; bottom: 20px; justify-content: space-between; gap: 12px; }
+  .arrow { width: 52px; height: 52px; }
+  .arrow svg { width: 20px; height: 20px; }
+  .dots { order: 0; margin: 0; }
+  .arrow--prev { order: -1; }
+  .dot { background: rgba(27, 31, 30, .15); }
+  .dot::after { background: var(--green); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide, .slide *, .dot, .btn, .arrow { transition: none !important; }
+  .dot.is-active::after { animation: none; transform: scaleX(1); }
+}
+
+/* ---------- МОБИЛА: компоненты ---------- */
+@media (max-width: 768px) {
+  /* продукция: заголовок по центру, картинка, кнопка справа снизу (компонент 353×hug, паддинги 40/20) */
+  .prod { min-height: 0; align-items: stretch; padding: 24px 20px 20px; gap: 10px; border-radius: 20px; }
+  .prod__title, .prod--soon .prod__top { align-self: center; text-align: center; max-width: none; align-items: center; }
+  .prod__title { font-size: 30px; }
+  .prod__img, .prod__img--helmet, .prod__img--bags, .prod__img--mixer, .prod__img--armored {
+    position: relative; inset: auto; right: auto; top: auto; bottom: auto; order: 1;
+    width: 100%; max-width: none; height: 220px; max-height: none; object-fit: contain; transform: none; margin: 10px 0;
+  }
+  .prod:hover .prod__img, .prod:hover .prod__img--helmet, .prod--soon:hover .prod__img { transform: none; }
+  .prod__next { order: 2; align-self: flex-end; width: 56px; height: 56px; }
+  .prod__more, .prod__soon { order: 2; align-self: center; margin-top: 0; }
+  .prod__img--helmet { object-position: center bottom; }
+
+  /* объекты: одна карточка на экран, остальные листаем */
+  .obj { flex: 0 0 calc(100vw - 32px); }
+  .obj__card { height: auto; aspect-ratio: 358 / 420; }
+
+  /* цифры: две квадратные плашки в ряд */
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .stat { aspect-ratio: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 18px 14px; }
+  .stat__num { font-size: clamp(22px, 6.9vw, 32px); white-space: normal; line-height: 1.05; }
+  .stat__num .count { white-space: nowrap; }
+  .stat__text { font-size: 14px; line-height: 1.3; margin-top: 8px; }
+}
+</style>
+
+<header class="header">
+  <div class="wrap header__row">
+    <a class="logo" href="#" aria-label="ЦЕМРОС БЛОК — на главную">
+      <img src="img/logo.webp" alt="ЦЕМРОС БЛОК" width="600" height="221">
+    </a>
+    <div class="header__actions">
+      <button class="btn btn--outline" type="button">Заказать звонок</button>
+      <button class="icon-btn icon-btn--phone" type="button" aria-label="Заказать звонок">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+      </button>
+      <button class="icon-btn icon-btn--menu" type="button" aria-label="Меню">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <button class="icon-btn icon-btn--fav" type="button" aria-label="Избранное">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.3-9.1C1.5 7.7 3.6 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.4 0 5.5 3.2 4.3 6.4C19.5 15.4 12 20 12 20z"/></svg>
+      </button>
+      <button class="icon-btn" type="button" aria-label="Корзина, 2 товара">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg>
+        <span class="badge">2</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-roledescription="carousel" aria-label="Предложения ЦЕМРОС БЛОК">
+    <div class="wrap">
+      <div class="hero__panel">
+        <div class="slides">
+
+          <article class="slide" aria-roledescription="slide" aria-label="1 из 3">
+            <div class="slide__card">
+              <span class="slide__eyebrow">Газобетон, которому доверяют</span>
+              <h1 class="slide__title">ЦЕМРОС БЛОК —</h1>
+              <p class="slide__sub">Новое имя известного газобетона</p>
+              <div class="slide__cta">
+                <a class="btn btn--outline btn--lg" href="#">Подробнее</a>
+              </div>
+            </div>
+            <span class="slide__circle" aria-hidden="true"></span>
+            <div class="slide__media">
+              <img class="slide__img" src="img/pallet.webp" alt="Паллета газобетонных блоков ЦЕМРОС БЛОК" width="900" height="783">
+            </div>
+          </article>
+
+          <article class="slide slide--photo" aria-roledescription="slide" aria-label="2 из 3">
+            <img class="slide__bg" src="img/houses.webp" alt="" aria-hidden="true">
+            <div class="slide__card">
+              <h2 class="slide__title slide__title--dark">Газобетонные блоки в&nbsp;Краснодарском крае от&nbsp;завода-производителя с&nbsp;доставкой до&nbsp;объекта</h2>
+              <ul class="features">
+                <li><svg class="feat-ic" aria-hidden="true" focusable="false" viewBox="0 0 40 40" fill="none">
+<path d="M20 40C19.2 40 18.4333 39.85 17.7 39.55C16.9667 39.25 16.3167 38.8167 15.75 38.25C14.7833 37.2833 13.95 36.65 13.25 36.35C12.55 36.05 11.5 35.9 10.1 35.9C8.43333 35.9 7.01667 35.3167 5.85 34.15C4.68333 32.9833 4.1 31.5667 4.1 29.9C4.1 28.5 3.95 27.45 3.65 26.75C3.35 26.05 2.71667 25.2167 1.75 24.25C1.18333 23.6833 0.75 23.0333 0.45 22.3C0.15 21.5667 0 20.8 0 20C0 19.2 0.15 18.4333 0.45 17.7C0.75 16.9667 1.18333 16.3167 1.75 15.75C2.71667 14.7833 3.35 13.95 3.65 13.25C3.95 12.55 4.1 11.5 4.1 10.1C4.1 8.43333 4.68333 7.01667 5.85 5.85C7.01667 4.68333 8.43333 4.1 10.1 4.1C11.5 4.1 12.55 3.95 13.25 3.65C13.95 3.35 14.7833 2.71667 15.75 1.75C16.3167 1.18333 16.9667 0.75 17.7 0.45C18.4333 0.15 19.2 0 20 0C20.8 0 21.5667 0.15 22.3 0.45C23.0333 0.75 23.6833 1.18333 24.25 1.75C25.2167 2.71667 26.05 3.35 26.75 3.65C27.45 3.95 28.5 4.1 29.9 4.1C31.5667 4.1 32.9833 4.68333 34.15 5.85C35.3167 7.01667 35.9 8.43333 35.9 10.1C35.9 11.5 36.05 12.55 36.35 13.25C36.65 13.95 37.2833 14.7833 38.25 15.75C38.8167 16.3167 39.25 16.9667 39.55 17.7C39.85 18.4333 40 19.2 40 20C40 20.8 39.85 21.5667 39.55 22.3C39.25 23.0333 38.8167 23.6833 38.25 24.25C37.2833 25.2167 36.65 26.05 36.35 26.75C36.05 27.45 35.9 28.5 35.9 29.9C35.9 31.5667 35.3167 32.9833 34.15 34.15C32.9833 35.3167 31.5667 35.9 29.9 35.9C28.5 35.9 27.45 36.05 26.75 36.35C26.05 36.65 25.2167 37.2833 24.25 38.25C23.6833 38.8167 23.0333 39.25 22.3 39.55C21.5667 39.85 20.8 40 20 40ZM20 36C20.2667 36 20.5253 35.9413 20.776 35.824C21.0267 35.7067 21.2347 35.5653 21.4 35.4C22.7667 34.0333 24.05 33.1087 25.25 32.626C26.45 32.1433 28 31.9013 29.9 31.9C30.4667 31.9 30.942 31.7087 31.326 31.326C31.71 30.9433 31.9013 30.468 31.9 29.9C31.9 27.9667 32.142 26.4087 32.626 25.226C33.11 24.0433 34.0347 22.768 35.4 21.4C35.8 21 36 20.5333 36 20C36 19.4667 35.8 19 35.4 18.6C34.0333 17.2333 33.1087 15.95 32.626 14.75C32.1433 13.55 31.9013 12 31.9 10.1C31.9 9.53333 31.708 9.05867 31.324 8.676C30.94 8.29333 30.4653 8.10133 29.9 8.1C27.9667 8.1 26.4087 7.85867 25.226 7.376C24.0433 6.89333 22.768 5.968 21.4 4.6C21.2333 4.43333 21.0253 4.29133 20.776 4.174C20.5267 4.05667 20.268 3.99867 20 4C19.732 4.00133 19.474 4.06 19.226 4.176C18.978 4.292 18.7693 4.43333 18.6 4.6C17.2333 5.96667 15.95 6.892 14.75 7.376C13.55 7.86 12 8.10133 10.1 8.1C9.53333 8.1 9.05867 8.292 8.676 8.676C8.29333 9.06 8.10133 9.53467 8.1 10.1C8.1 12.0333 7.85867 13.592 7.376 14.776C6.89333 15.96 5.968 17.2347 4.6 18.6C4.2 19 4 19.4667 4 20C4 20.5333 4.2 21 4.6 21.4C5.96667 22.7667 6.892 24.05 7.376 25.25C7.86 26.45 8.10133 28 8.1 29.9C8.1 30.4667 8.292 30.942 8.676 31.326C9.06 31.71 9.53467 31.9013 10.1 31.9C12.0333 31.9 13.592 32.142 14.776 32.626C15.96 33.11 17.2347 34.0347 18.6 35.4C18.7667 35.5667 18.9753 35.7087 19.226 35.826C19.4767 35.9433 19.7347 36.0013 20 36ZM25 28C25.8333 28 26.542 27.7087 27.126 27.126C27.71 26.5433 28.0013 25.8347 28 25C27.9987 24.1653 27.7073 23.4573 27.126 22.876C26.5447 22.2947 25.836 22.0027 25 22C24.164 21.9973 23.456 22.2893 22.876 22.876C22.296 23.4627 22.004 24.1707 22 25C21.996 25.8293 22.288 26.538 22.876 27.126C23.464 27.714 24.172 28.0053 25 28ZM14.9 27.9L27.9 14.9L25.1 12.1L12.1 25.1L14.9 27.9ZM17.126 17.126C17.7087 16.542 18 15.8333 18 15C18 14.1667 17.7087 13.4587 17.126 12.876C16.5433 12.2933 15.8347 12.0013 15 12C14.1653 11.9987 13.4573 12.2907 12.876 12.876C12.2947 13.4613 12.0027 14.1693 12 15C11.9973 15.8307 12.2893 16.5393 12.876 17.126C13.4627 17.7127 14.1707 18.004 15 18C15.8293 17.996 16.538 17.7047 17.126 17.126Z" fill="currentColor"/>
+</svg><span>Скидка<br>от&nbsp;объёма</span></li>
+                <li><svg class="feat-ic" aria-hidden="true" focusable="false" viewBox="0 0 36 40" fill="none">
+<path d="M0 17.9V8.45C0 7.61667 0.242 6.86667 0.726 6.2C1.21 5.53333 1.83467 5.05 2.6 4.75L14.6 0.25C15.0667 0.0833333 15.5333 0 16 0C16.4667 0 16.9333 0.0833333 17.4 0.25L29.4 4.75C30.1667 5.05 30.792 5.53333 31.276 6.2C31.76 6.86667 32.0013 7.61667 32 8.45V17.9C32 18.5667 31.792 19.0667 31.376 19.4C30.96 19.7333 30.5013 19.9 30 19.9C29.4333 19.9 28.9587 19.7167 28.576 19.35C28.1933 18.9833 28.0013 18.5 28 17.9V8.45L16 3.95L4 8.45V17.9C4 21.9333 5.13333 25.6 7.4 28.9C9.66667 32.2 12.5333 34.4 16 35.5C16.3667 35.3667 16.75 35.2087 17.15 35.026C17.55 34.8433 17.9333 34.668 18.3 34.5C18.8 34.2667 19.3167 34.25 19.85 34.45C20.3833 34.65 20.7667 35 21 35.5C21.2333 36 21.25 36.5167 21.05 37.05C20.85 37.5833 20.5 37.9667 20 38.2C19.6333 38.3667 19.2247 38.542 18.774 38.726C18.3233 38.91 17.9153 39.0847 17.55 39.25C17.35 39.3167 17.142 39.3753 16.926 39.426C16.71 39.4767 16.4847 39.5013 16.25 39.5C16.0153 39.4987 15.7987 39.474 15.6 39.426C15.4013 39.378 15.2013 39.3193 15 39.25C10.5 37.75 6.90867 34.9833 4.226 30.95C1.54333 26.9167 0.134667 22.5667 0 17.9ZM25.7 39.7C25.2333 39.7 24.8333 39.5333 24.5 39.2C24.1667 38.8667 24 38.4667 24 38V31.4C24 30.9333 24.1667 30.5333 24.5 30.2C24.8333 29.8667 25.2333 29.7 25.7 29.7H26V27.7C26 26.6 26.392 25.6587 27.176 24.876C27.96 24.0933 28.9013 23.7013 30 23.7C31.0987 23.6987 32.0407 24.0907 32.826 24.876C33.6113 25.6613 34.0027 26.6027 34 27.7V29.7H34.3C34.7667 29.7 35.1667 29.8667 35.5 30.2C35.8333 30.5333 36 30.9333 36 31.4V38C36 38.4667 35.8333 38.8667 35.5 39.2C35.1667 39.5333 34.7667 39.7 34.3 39.7H25.7ZM28 29.7H32V27.7C32 27.1333 31.808 26.6587 31.424 26.276C31.04 25.8933 30.5653 25.7013 30 25.7C29.4347 25.6987 28.96 25.8907 28.576 26.276C28.192 26.6613 28 27.136 28 27.7V29.7Z" fill="currentColor"/>
+</svg><span>Чёткое соответствие<br>параметрам и&nbsp;ГОСТам</span></li>
+                <li><svg class="feat-ic" aria-hidden="true" focusable="false" viewBox="0 0 45 32" fill="none">
+<path d="M8.25001 30.25C7.08334 29.0833 6.50001 27.6667 6.50001 26H3.95001C3.38334 26 2.90801 25.808 2.52401 25.424C2.14001 25.04 1.94867 24.5653 1.95001 24C1.95134 23.4347 2.14334 22.96 2.52601 22.576C2.90867 22.192 3.38334 22 3.95001 22H8.05001C8.61667 21.3667 9.28334 20.8753 10.05 20.526C10.8167 20.1767 11.6333 20.0013 12.5 20C13.3667 19.9987 14.1833 20.174 14.95 20.526C15.7167 20.878 16.3833 21.3693 16.95 22H25.3L29.5 4H10C9.43334 4 8.95867 3.808 8.57601 3.424C8.19334 3.04 8.00134 2.56533 8.00001 2C7.99867 1.43467 8.19067 0.96 8.57601 0.576C8.96134 0.192 9.43601 0 10 0H32C32.6667 0 33.2 0.25 33.6 0.75C34 1.25 34.1167 1.81667 33.95 2.45L32.65 8H36.5C37.1333 8 37.7333 8.142 38.3 8.426C38.8667 8.71 39.3333 9.10133 39.7 9.6L43.45 14.55C43.8167 15.0167 44.05 15.5253 44.15 16.076C44.25 16.6267 44.25 17.1847 44.15 17.75L42.8 24.4C42.7 24.8667 42.4667 25.25 42.1 25.55C41.7333 25.85 41.3167 26 40.85 26H38.5C38.5 27.6667 37.9167 29.0833 36.75 30.25C35.5833 31.4167 34.1667 32 32.5 32C30.8333 32 29.4167 31.4167 28.25 30.25C27.0833 29.0833 26.5 27.6667 26.5 26H18.5C18.5 27.6667 17.9167 29.0833 16.75 30.25C15.5833 31.4167 14.1667 32 12.5 32C10.8333 32 9.41667 31.4167 8.25001 30.25ZM30.35 18H40L40.2 16.95L36.5 12H31.75L30.35 18ZM25.4 21.65L25.726 20.2C25.942 19.2333 26.2167 18.05 26.55 16.65C26.65 16.2167 26.75 15.8167 26.85 15.45C26.95 15.0833 27.0333 14.7167 27.1 14.35L27.426 12.9C27.642 11.9333 27.9167 10.75 28.25 9.35C28.5833 7.95 28.8587 6.76667 29.076 5.8L29.4 4.35L29.5 4L25.3 22L25.4 21.65ZM2.00001 18.65C1.43334 18.65 0.958674 18.4587 0.576007 18.076C0.19334 17.6933 0.00134023 17.218 6.89655e-06 16.65C-0.00132644 16.082 0.190674 15.6073 0.576007 15.226C0.96134 14.8447 1.43601 14.6527 2.00001 14.65H9.00001C9.56667 14.65 10.042 14.842 10.426 15.226C10.81 15.61 11.0013 16.0847 11 16.65C10.9987 17.2153 10.8067 17.6907 10.424 18.076C10.0413 18.4613 9.56667 18.6527 9.00001 18.65H2.00001ZM6.00001 11.35C5.43334 11.35 4.95867 11.158 4.57601 10.774C4.19334 10.39 4.00134 9.91533 4.00001 9.35C3.99867 8.78467 4.19067 8.31 4.57601 7.926C4.96134 7.542 5.43601 7.35 6.00001 7.35H15C15.5667 7.35 16.042 7.542 16.426 7.926C16.81 8.31 17.0013 8.78467 17 9.35C16.9987 9.91533 16.8067 10.3907 16.424 10.776C16.0413 11.1613 15.5667 11.3527 15 11.35H6.00001ZM12.5 28C13.0667 28 13.542 27.808 13.926 27.424C14.31 27.04 14.5013 26.5653 14.5 26C14.4987 25.4347 14.3067 24.96 13.924 24.576C13.5413 24.192 13.0667 24 12.5 24C11.9333 24 11.4587 24.192 11.076 24.576C10.6933 24.96 10.5013 25.4347 10.5 26C10.4987 26.5653 10.6907 27.0407 11.076 27.426C11.4613 27.8113 11.936 28.0027 12.5 28ZM32.5 28C33.0667 28 33.542 27.808 33.926 27.424C34.31 27.04 34.5013 26.5653 34.5 26C34.4987 25.4347 34.3067 24.96 33.924 24.576C33.5413 24.192 33.0667 24 32.5 24C31.9333 24 31.4587 24.192 31.076 24.576C30.6933 24.96 30.5013 25.4347 30.5 26C30.4987 26.5653 30.6907 27.0407 31.076 27.426C31.4613 27.8113 31.936 28.0027 32.5 28Z" fill="currentColor"/>
+</svg><span>Собственная<br>доставка</span></li>
+              </ul>
+              <div class="slide__cta">
+                <button class="btn btn--fill btn--lg" type="button">Оставить заявку</button>
+                <a class="btn btn--outline btn--lg" href="#">Перейти в каталог</a>
+              </div>
+            </div>
+            <div class="slide__media">
+              <img class="slide__img slide__img--blocks" src="img/blocks.webp" alt="Газобетонные блоки" width="1100" height="741" loading="lazy">
+            </div>
+          </article>
+
+          <article class="slide slide--desktop slide--hammer" aria-roledescription="slide" aria-label="3 из 3">
+            <div class="slide__card">
+              <h2 class="slide__title">Армированные изделия</h2>
+              <p class="slide__sub slide__sub--light">Скоро в продаже</p>
+              <div class="slide__cta">
+                <button class="btn btn--outline btn--lg" type="button">Оставить заявку</button>
+                <a class="btn btn--fill btn--lg" href="#">Перейти в каталог</a>
+              </div>
+            </div>
+            <div class="slide__media">
+              <img class="slide__img slide__img--hammer" src="img/hammer.webp" alt="Кувалда разбивает газобетонный блок ЦЕМРОС БЛОК" width="1200" height="582" loading="lazy">
+            </div>
+          </article>
+
+        </div>
+
+        <div class="hero__nav">
+          <div class="dots" role="tablist" aria-label="Выбор слайда"></div>
+          <button class="arrow arrow--prev" type="button" aria-label="Предыдущий слайд">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <button class="arrow arrow--next" type="button" aria-label="Следующий слайд">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="prod-section" aria-labelledby="prod-title">
+    <div class="wrap">
+      <h2 class="section-title" id="prod-title">Наша продукция</h2>
+      <div class="prod-grid">
+        <a class="prod" href="#">
+          <h3 class="prod__title">Газобетон</h3>
+          <span class="prod__next" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+          <img class="prod__img prod__img--gb" src="img/p_gb.webp" alt="" loading="lazy">
+        </a>
+        <a class="prod" href="#">
+          <h3 class="prod__title">U-блоки</h3>
+          <span class="prod__next" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+          <img class="prod__img prod__img--ublock" src="img/p_ublock.webp" alt="" loading="lazy">
+        </a>
+        <a class="prod" href="#">
+          <h3 class="prod__title">Строительные<br>смеси</h3>
+          <span class="prod__next" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+          <img class="prod__img prod__img--bags" src="img/p_bags.webp" alt="" loading="lazy">
+        </a>
+        <a class="prod" href="#">
+          <h3 class="prod__title">Инструменты</h3>
+          <span class="prod__next" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+          <img class="prod__img prod__img--mixer" src="img/p_mixer.webp" alt="" loading="lazy">
+        </a>
+        <a class="prod prod--accent" href="#">
+          <h3 class="prod__title">Домокомплект под&nbsp;ключ</h3>
+          <span class="prod__more">Подробнее</span>
+          <img class="prod__img prod__img--helmet" src="img/p_helmet.webp" alt="" loading="lazy">
+        </a>
+        <a class="prod prod--soon" href="#">
+          <div class="prod__top">
+            <h3 class="prod__title">Армированный газобетон</h3>
+            <span class="prod__chip"><svg aria-hidden="true" viewBox="0 0 14 14" fill="none">
+<path d="M10.6667 13.3333H3.33333V4.66667L8 0L8.83333 0.833333C8.91111 0.911111 8.97511 1.01667 9.02533 1.15C9.07556 1.28333 9.10044 1.41111 9.1 1.53333V1.76667L8.36667 4.66667H12.6667C13.0222 4.66667 13.3333 4.8 13.6 5.06667C13.8667 5.33333 14 5.64444 14 6V7.33333C14 7.41111 13.9889 7.49444 13.9667 7.58333C13.9444 7.67222 13.9222 7.75556 13.9 7.83333L11.9 12.5333C11.8 12.7556 11.6333 12.9444 11.4 13.1C11.1667 13.2556 10.9222 13.3333 10.6667 13.3333ZM4.66667 12H10.6667L12.6667 7.33333V6H6.66667L7.56667 2.33333L4.66667 5.23333V12ZM3.33333 4.66667V6H1.33333V12H3.33333V13.3333H0V4.66667H3.33333Z" fill="#3E4549" fill-opacity="0.7"/>
+</svg>Гарантия</span>
+          </div>
+          <span class="prod__soon">Скоро в продаже<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+          <img class="prod__img prod__img--armored" src="img/p_armored.webp" alt="" loading="lazy">
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="adv-section" aria-labelledby="adv-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="adv-title">Почему выбирают ЦЕМРОС БЛОК</h2>
+        </div>
+        <a class="btn btn--fill btn--lg" href="#">О компании</a>
+      </div>
+
+      <div class="adv-grid">
+
+        <article class="adv">
+          <h3 class="adv__title">Топ‑5</h3>
+          <p class="adv__sub">производителей газобетона<br>в России по объёму</p>
+          <div class="adv__3d" data-scene="top" aria-hidden="true"></div>
+        </article>
+
+        <article class="adv">
+          <h3 class="adv__title">ГОСТ</h3>
+          <p class="adv__sub">Чёткое соответствие<br>параметрам и ГОСТам</p>
+          <div class="adv__3d" data-scene="gost" aria-hidden="true"></div>
+        </article>
+
+        <article class="adv">
+          <h3 class="adv__title">Полный цикл</h3>
+          <p class="adv__sub">Собственное производство<br>от сырья до блока</p>
+          <div class="adv__3d" data-scene="cycle" aria-hidden="true"></div>
+        </article>
+
+        <article class="adv">
+          <h3 class="adv__title">Одно окно</h3>
+          <p class="adv__sub">Заказ, оплата и доставка<br>в одном месте</p>
+          <div class="adv__3d" data-scene="window" aria-hidden="true"></div>
+        </article>
+
+        <article class="adv">
+          <h3 class="adv__title">Своя доставка</h3>
+          <p class="adv__sub">Привезём с завода<br>прямо на объект</p>
+          <div class="adv__3d" data-scene="truck" aria-hidden="true"></div>
+        </article>
+
+        <article class="adv">
+          <h3 class="adv__title">Скидки</h3>
+          <p class="adv__sub">Чем больше объём,<br>тем ниже цена</p>
+          <div class="adv__3d" data-scene="discount" aria-hidden="true"></div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+  <section class="obj-section" aria-labelledby="obj-title">
+    <div class="wrap obj-head">
+      <h2 class="section-title" id="obj-title">Объекты ЦЕМРОС</h2>
+      <div class="obj-nav">
+        <button type="button" class="obj-prev" aria-label="Предыдущие объекты"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="obj-next" aria-label="Следующие объекты"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <div class="obj-viewport">
+      <div class="obj-track" tabindex="0" aria-label="Объекты, построенные из нашего газобетона">
+          <article class="obj">
+            <div class="obj__card">
+              <img class="obj__img" src="img/o_hotel.webp" alt="" loading="lazy" draggable="false">
+              <div class="obj__meta"><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M12 19.35C14.0333 17.4833 15.5417 15.7877 16.525 14.263C17.5083 12.7383 18 11.384 18 10.2C18 8.38333 17.421 6.896 16.263 5.738C15.105 4.58 13.684 4.00067 12 4C10.316 3.99933 8.89533 4.57867 7.738 5.738C6.58067 6.89733 6.00133 8.38467 6 10.2C6 11.3833 6.49167 12.7377 7.475 14.263C8.45833 15.7883 9.96667 17.484 12 19.35ZM11.3 21.2C11.0667 21.1167 10.8583 20.9917 10.675 20.825C9.59167 19.825 8.63333 18.85 7.8 17.9C6.96667 16.95 6.271 16.0293 5.713 15.138C5.155 14.2467 4.73 13.3883 4.438 12.563C4.146 11.7377 4 10.95 4 10.2C4 7.7 4.80433 5.70833 6.413 4.225C8.02167 2.74167 9.884 2 12 2C14.116 2 15.9787 2.74167 17.588 4.225C19.1973 5.70833 20.0013 7.7 20 10.2C20 10.95 19.8543 11.7377 19.563 12.563C19.2717 13.3883 18.8467 14.2467 18.288 15.138C17.7293 16.0293 17.0333 16.95 16.2 17.9C15.3667 18.85 14.4083 19.825 13.325 20.825C13.1417 20.9917 12.9333 21.1167 12.7 21.2C12.4667 21.2833 12.2333 21.325 12 21.325C11.7667 21.325 11.5333 21.2833 11.3 21.2ZM13.413 11.413C13.8043 11.021 14 10.55 14 10C14 9.45 13.8043 8.97933 13.413 8.588C13.0217 8.19667 12.5507 8.00067 12 8C11.4493 7.99933 10.9787 8.19533 10.588 8.588C10.1973 8.98067 10.0013 9.45133 10 10C9.99867 10.5487 10.1947 11.0197 10.588 11.413C10.9813 11.8063 11.452 12.002 12 12C12.548 11.998 13.019 11.8023 13.413 11.413Z" fill="currentColor"/>
+</svg>г. Усть-Лабинск</span><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M8 3H15V0.5L18.5 4L15 7.5V5H8V7.5L4.5 4L8 0.5V3ZM3 17V6.5H5V17C5 17.5304 5.21071 18.0391 5.58579 18.4142C5.96086 18.7893 6.46957 19 7 19H17.5V21H7C5.93913 21 4.92172 20.5786 4.17157 19.8284C3.42143 19.0783 3 18.0609 3 17ZM21 16V9H23.5L20 5.5L16.5 9H19V16H16.5L20 19.5L23.5 16H21Z" fill="currentColor"/>
+</svg>1111&nbsp;м²</span></div>
+              <a class="obj__more" href="#">Подробнее<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+            </div>
+            <h3 class="obj__name">Отель LEGENDA</h3>
+          </article>
+          <article class="obj">
+            <div class="obj__card">
+              <img class="obj__img" src="img/o_zhk.webp" alt="" loading="lazy" draggable="false">
+              <div class="obj__meta"><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M12 19.35C14.0333 17.4833 15.5417 15.7877 16.525 14.263C17.5083 12.7383 18 11.384 18 10.2C18 8.38333 17.421 6.896 16.263 5.738C15.105 4.58 13.684 4.00067 12 4C10.316 3.99933 8.89533 4.57867 7.738 5.738C6.58067 6.89733 6.00133 8.38467 6 10.2C6 11.3833 6.49167 12.7377 7.475 14.263C8.45833 15.7883 9.96667 17.484 12 19.35ZM11.3 21.2C11.0667 21.1167 10.8583 20.9917 10.675 20.825C9.59167 19.825 8.63333 18.85 7.8 17.9C6.96667 16.95 6.271 16.0293 5.713 15.138C5.155 14.2467 4.73 13.3883 4.438 12.563C4.146 11.7377 4 10.95 4 10.2C4 7.7 4.80433 5.70833 6.413 4.225C8.02167 2.74167 9.884 2 12 2C14.116 2 15.9787 2.74167 17.588 4.225C19.1973 5.70833 20.0013 7.7 20 10.2C20 10.95 19.8543 11.7377 19.563 12.563C19.2717 13.3883 18.8467 14.2467 18.288 15.138C17.7293 16.0293 17.0333 16.95 16.2 17.9C15.3667 18.85 14.4083 19.825 13.325 20.825C13.1417 20.9917 12.9333 21.1167 12.7 21.2C12.4667 21.2833 12.2333 21.325 12 21.325C11.7667 21.325 11.5333 21.2833 11.3 21.2ZM13.413 11.413C13.8043 11.021 14 10.55 14 10C14 9.45 13.8043 8.97933 13.413 8.588C13.0217 8.19667 12.5507 8.00067 12 8C11.4493 7.99933 10.9787 8.19533 10.588 8.588C10.1973 8.98067 10.0013 9.45133 10 10C9.99867 10.5487 10.1947 11.0197 10.588 11.413C10.9813 11.8063 11.452 12.002 12 12C12.548 11.998 13.019 11.8023 13.413 11.413Z" fill="currentColor"/>
+</svg>г. Краснодар</span><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M8 3H15V0.5L18.5 4L15 7.5V5H8V7.5L4.5 4L8 0.5V3ZM3 17V6.5H5V17C5 17.5304 5.21071 18.0391 5.58579 18.4142C5.96086 18.7893 6.46957 19 7 19H17.5V21H7C5.93913 21 4.92172 20.5786 4.17157 19.8284C3.42143 19.0783 3 18.0609 3 17ZM21 16V9H23.5L20 5.5L16.5 9H19V16H16.5L20 19.5L23.5 16H21Z" fill="currentColor"/>
+</svg>2222&nbsp;м²</span></div>
+              <a class="obj__more" href="#">Подробнее<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+            </div>
+            <h3 class="obj__name">ЖК «Парк Победы 2»</h3>
+          </article>
+          <article class="obj">
+            <div class="obj__card">
+              <img class="obj__img" src="img/o_church.webp" alt="" loading="lazy" draggable="false">
+              <div class="obj__meta"><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M12 19.35C14.0333 17.4833 15.5417 15.7877 16.525 14.263C17.5083 12.7383 18 11.384 18 10.2C18 8.38333 17.421 6.896 16.263 5.738C15.105 4.58 13.684 4.00067 12 4C10.316 3.99933 8.89533 4.57867 7.738 5.738C6.58067 6.89733 6.00133 8.38467 6 10.2C6 11.3833 6.49167 12.7377 7.475 14.263C8.45833 15.7883 9.96667 17.484 12 19.35ZM11.3 21.2C11.0667 21.1167 10.8583 20.9917 10.675 20.825C9.59167 19.825 8.63333 18.85 7.8 17.9C6.96667 16.95 6.271 16.0293 5.713 15.138C5.155 14.2467 4.73 13.3883 4.438 12.563C4.146 11.7377 4 10.95 4 10.2C4 7.7 4.80433 5.70833 6.413 4.225C8.02167 2.74167 9.884 2 12 2C14.116 2 15.9787 2.74167 17.588 4.225C19.1973 5.70833 20.0013 7.7 20 10.2C20 10.95 19.8543 11.7377 19.563 12.563C19.2717 13.3883 18.8467 14.2467 18.288 15.138C17.7293 16.0293 17.0333 16.95 16.2 17.9C15.3667 18.85 14.4083 19.825 13.325 20.825C13.1417 20.9917 12.9333 21.1167 12.7 21.2C12.4667 21.2833 12.2333 21.325 12 21.325C11.7667 21.325 11.5333 21.2833 11.3 21.2ZM13.413 11.413C13.8043 11.021 14 10.55 14 10C14 9.45 13.8043 8.97933 13.413 8.588C13.0217 8.19667 12.5507 8.00067 12 8C11.4493 7.99933 10.9787 8.19533 10.588 8.588C10.1973 8.98067 10.0013 9.45133 10 10C9.99867 10.5487 10.1947 11.0197 10.588 11.413C10.9813 11.8063 11.452 12.002 12 12C12.548 11.998 13.019 11.8023 13.413 11.413Z" fill="currentColor"/>
+</svg>х. Аргатов</span><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M8 3H15V0.5L18.5 4L15 7.5V5H8V7.5L4.5 4L8 0.5V3ZM3 17V6.5H5V17C5 17.5304 5.21071 18.0391 5.58579 18.4142C5.96086 18.7893 6.46957 19 7 19H17.5V21H7C5.93913 21 4.92172 20.5786 4.17157 19.8284C3.42143 19.0783 3 18.0609 3 17ZM21 16V9H23.5L20 5.5L16.5 9H19V16H16.5L20 19.5L23.5 16H21Z" fill="currentColor"/>
+</svg>50&nbsp;м²</span></div>
+              <a class="obj__more" href="#">Подробнее<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+            </div>
+            <h3 class="obj__name">Храм Владимира Равноапостольного</h3>
+          </article>
+          <article class="obj">
+            <div class="obj__card">
+              <img class="obj__img" src="img/o_lyceum.webp" alt="" loading="lazy" draggable="false">
+              <div class="obj__meta"><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M12 19.35C14.0333 17.4833 15.5417 15.7877 16.525 14.263C17.5083 12.7383 18 11.384 18 10.2C18 8.38333 17.421 6.896 16.263 5.738C15.105 4.58 13.684 4.00067 12 4C10.316 3.99933 8.89533 4.57867 7.738 5.738C6.58067 6.89733 6.00133 8.38467 6 10.2C6 11.3833 6.49167 12.7377 7.475 14.263C8.45833 15.7883 9.96667 17.484 12 19.35ZM11.3 21.2C11.0667 21.1167 10.8583 20.9917 10.675 20.825C9.59167 19.825 8.63333 18.85 7.8 17.9C6.96667 16.95 6.271 16.0293 5.713 15.138C5.155 14.2467 4.73 13.3883 4.438 12.563C4.146 11.7377 4 10.95 4 10.2C4 7.7 4.80433 5.70833 6.413 4.225C8.02167 2.74167 9.884 2 12 2C14.116 2 15.9787 2.74167 17.588 4.225C19.1973 5.70833 20.0013 7.7 20 10.2C20 10.95 19.8543 11.7377 19.563 12.563C19.2717 13.3883 18.8467 14.2467 18.288 15.138C17.7293 16.0293 17.0333 16.95 16.2 17.9C15.3667 18.85 14.4083 19.825 13.325 20.825C13.1417 20.9917 12.9333 21.1167 12.7 21.2C12.4667 21.2833 12.2333 21.325 12 21.325C11.7667 21.325 11.5333 21.2833 11.3 21.2ZM13.413 11.413C13.8043 11.021 14 10.55 14 10C14 9.45 13.8043 8.97933 13.413 8.588C13.0217 8.19667 12.5507 8.00067 12 8C11.4493 7.99933 10.9787 8.19533 10.588 8.588C10.1973 8.98067 10.0013 9.45133 10 10C9.99867 10.5487 10.1947 11.0197 10.588 11.413C10.9813 11.8063 11.452 12.002 12 12C12.548 11.998 13.019 11.8023 13.413 11.413Z" fill="currentColor"/>
+</svg>х. Аргатов</span><span><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M8 3H15V0.5L18.5 4L15 7.5V5H8V7.5L4.5 4L8 0.5V3ZM3 17V6.5H5V17C5 17.5304 5.21071 18.0391 5.58579 18.4142C5.96086 18.7893 6.46957 19 7 19H17.5V21H7C5.93913 21 4.92172 20.5786 4.17157 19.8284C3.42143 19.0783 3 18.0609 3 17ZM21 16V9H23.5L20 5.5L16.5 9H19V16H16.5L20 19.5L23.5 16H21Z" fill="currentColor"/>
+</svg>1717&nbsp;м²</span></div>
+              <a class="obj__more" href="#">Подробнее<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+            </div>
+            <h3 class="obj__name">Первый университетский Лицей имени Н.&nbsp;И.&nbsp;Лобачевского</h3>
+          </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-section" aria-label="ЦЕМРОС БЛОК в цифрах">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat"><p class="stat__num"><span data-count="5000">0</span>+</p><p class="stat__text">Клиентов выбрали нашу продукцию</p></div>
+        <div class="stat"><p class="stat__num"><span data-count="5011875">0</span> м<sup>3</sup></p><p class="stat__text">Газобетонных блоков произвели</p></div>
+      </div>
+      <div class="cta-banner">
+        <h2 class="cta-banner__title">Планируете строительство?</h2>
+        <div class="cta-banner__btns">
+          <button class="btn btn--ghost" type="button">Оставить заявку</button>
+          <a class="btn btn--ghost" href="#">Рассчитать стоимость<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+        </div>
+        <img class="cta-banner__img" src="img/calc.webp" alt="" loading="lazy">
+      </div>
+    </div>
+  </section>
+  <section class="news-section" aria-labelledby="news-title">
+    <div class="wrap">
+      <h2 class="section-title" id="news-title">Новости и блог</h2>
+      <div class="news-grid">
+        <a class="news" href="#">
+          <img class="news__img" src="img/n1.webp" alt="" loading="lazy">
+          <div class="news__body">
+            <p class="news__date">09.10.2025</p>
+            <h3 class="news__title">Эффективность начинается с&nbsp;людей: как обучение помогает решать сложные задачи</h3>
+            <span class="news__btn">Читать<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          </div>
+        </a>
+        <a class="news" href="#">
+          <img class="news__img" src="img/n2.webp" alt="" loading="lazy">
+          <div class="news__body">
+            <p class="news__date">12.11.2026</p>
+            <h3 class="news__title">ЦЕМРОС БЛОК принимает участие в&nbsp;выставке Yug Build 2026&nbsp;— одном из&nbsp;главных событий строительной отрасли Юга России</h3>
+            <span class="news__btn">Читать<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          </div>
+        </a>
+        <a class="news" href="#">
+          <img class="news__img" src="img/n3.webp" alt="" loading="lazy">
+          <div class="news__body">
+            <p class="news__date">09.12.2027</p>
+            <h3 class="news__title">Главстрой-Усть-Лабинск распахнул двери в&nbsp;рамках «Недели без турникетов»</h3>
+            <span class="news__btn">Читать<svg class="ic-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+<path d="M18 6L6 18M8 6L18 6L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  const all = [...document.querySelectorAll('.slide')];
+  const dotsBox = document.querySelector('.dots');
+  const panel = document.querySelector('.hero__panel');
+  const AUTOPLAY = 7000; // мс; та же длительность у полоски прогресса
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let cur = all[0], lock = false;
+  panel.style.setProperty('--autoplay', AUTOPLAY + 'ms');
+
+  // слайды, которые видны на текущей ширине (3-й — только на десктопе)
+  const visible = () => all.filter(s => getComputedStyle(s).display !== 'none');
+
+  const dots = all.map((s, n) => {
+    const d = document.createElement('button');
+    d.className = 'dot' + (s.classList.contains('slide--desktop') ? ' dot--desktop' : '');
+    d.type = 'button';
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Слайд ' + (n + 1));
+    d.addEventListener('click', () => { const v = visible(); go(s, v.indexOf(s) > v.indexOf(cur) ? 1 : -1); });
+    // следующий слайд — когда полоска прогресса дошла до конца
+    d.addEventListener('animationend', () => { if (!reduce) step(1); });
+    dotsBox.appendChild(d);
+    return d;
+  });
+
+  function step(dir) {
+    const v = visible();
+    const k = Math.max(0, v.indexOf(cur));
+    go(v[(k + dir + v.length) % v.length], dir);
+  }
+
+  function go(next, dir) {
+    if (!next || (next === cur && cur.classList.contains('is-active'))) return;
+    if (lock) return;
+    lock = true; setTimeout(() => { lock = false; }, 700);
+    panel.style.setProperty('--dir', dir || 1);
+    const prev = cur;
+    prev.classList.add('is-leaving');
+    setTimeout(() => prev.classList.remove('is-leaving'), 1100);
+    cur = next;
+    all.forEach(s => s.classList.toggle('is-active', s === cur));
+    dots.forEach((d, k) => {
+      d.classList.remove('is-active'); void d.offsetWidth; // перезапуск прогресса
+      d.classList.toggle('is-active', all[k] === cur);
+      d.setAttribute('aria-selected', all[k] === cur);
+    });
+  }
+
+  document.querySelector('.arrow--prev').addEventListener('click', () => step(-1));
+  document.querySelector('.arrow--next').addEventListener('click', () => step(1));
+  panel.addEventListener('mouseenter', () => panel.classList.add('is-paused'));
+  panel.addEventListener('mouseleave', () => panel.classList.remove('is-paused'));
+
+  // если окно сузили, пока открыт десктопный слайд, — переходим на первый
+  window.matchMedia('(max-width: 768px)').addEventListener('change', () => {
+    if (getComputedStyle(cur).display === 'none') { lock = false; go(all[0], -1); }
+  });
+
+  // свайп на мобиле
+  let x0 = null;
+  panel.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  panel.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+    x0 = null;
+  });
+
+  // первый показ: даём странице отрисоваться, затем запускаем вход
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    all[0].classList.add('is-active');
+    dots[0].classList.add('is-active'); dots[0].setAttribute('aria-selected', true);
+  }));
+})();
+</script>
+<script>
+/* Объекты: лента со скроллом колесом/тачпадом, перетаскиванием мышью и стрелками; края растворяются */
+(function () {
+  const track = document.querySelector('.obj-track'); if (!track) return;
+  const prev = document.querySelector('.obj-prev'), next = document.querySelector('.obj-next');
+  const wrap = document.querySelector('.obj-head');
+  // отступ слева = как у контейнера, чтобы первая карточка стояла по сетке
+  const inset = () => {
+    const r = wrap.getBoundingClientRect(), pl = parseFloat(getComputedStyle(wrap).paddingLeft);
+    track.style.setProperty('--obj-inset', (r.left + pl) + 'px');
+  };
+  const step = () => { const c = track.querySelector('.obj'); return c.getBoundingClientRect().width + 20; };
+  const update = () => {
+    const max = track.scrollWidth - track.clientWidth - 2, x = track.scrollLeft;
+    prev.disabled = x <= 2; next.disabled = x >= max;
+    // левый край растворяется, только когда ленту уже прокрутили; правый — пока есть что листать
+    track.style.setProperty('--fade-l', Math.min(40, x) + 'px');
+    track.style.setProperty('--fade-r', (x >= max ? 0 : innerWidth < 769 ? 24 : 56) + 'px');
+  };
+  // стрелки листают сразу на две карточки
+  prev.addEventListener('click', () => track.scrollBy({ left: -step() * 2 }));
+  next.addEventListener('click', () => track.scrollBy({ left: step() * 2 }));
+  track.addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', () => { inset(); update(); });
+  // перетаскивание мышью
+  let down = false, sx = 0, sl = 0, moved = false;
+  track.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = track.scrollLeft; });
+  addEventListener('pointermove', e => {
+    if (!down) return; const dx = e.clientX - sx;
+    if (Math.abs(dx) > 4) { moved = true; track.classList.add('is-drag'); }
+    if (moved) track.scrollLeft = sl - dx;
+  });
+  addEventListener('pointerup', () => {
+    if (!down) return; down = false;
+    if (moved) { track.classList.remove('is-drag'); const s = step(); track.scrollTo({ left: Math.round(track.scrollLeft / s) * s }); }
+  });
+  track.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+  // вертикальное колесо мыши листает ленту вбок, пока есть куда
+  track.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const max = track.scrollWidth - track.clientWidth;
+    if ((e.deltaY > 0 && track.scrollLeft < max - 2) || (e.deltaY < 0 && track.scrollLeft > 2)) {
+      e.preventDefault(); track.style.scrollBehavior = 'auto'; track.scrollLeft += e.deltaY; track.style.scrollBehavior = '';
+    }
+  }, { passive: false });
+  inset(); update();
+})();
+
+/* Цифры «досчитываются» при появлении на экране */
+(function () {
+  const els = [...document.querySelectorAll('[data-count]')]; if (!els.length) return;
+  const fmt = n => Math.round(n).toLocaleString('ru-RU').replace(/ /g, ' ');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const run = el => {
+    const to = +el.dataset.count, dur = 1300, t0 = performance.now();
+    if (reduce) { el.lastChild.textContent = fmt(to); return; }
+    const tick = now => {
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3); // мягкое торможение без долгого «доползания»
+      el.lastChild.textContent = fmt(to * (p === 1 ? 1 : e));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  // место под итоговое число держит невидимая «тень» — «+» и «м³» не прыгают ни при каком шрифте и размере
+  els.forEach(el => {
+    const to = fmt(+el.dataset.count);
+    el.classList.add('count');
+    el.innerHTML = '<span class="count__ghost" aria-hidden="true">' + to + '</span><span class="count__live">' + fmt(0) + '</span>';
+    el.setAttribute('aria-label', to);
+  });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { run(e.target); io.unobserve(e.target); } }), { threshold: .6 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+/* 3D-инфографика преимуществ: бетон с фактурой газоблока + золото, как в стиле холдинга.
+   В покое — статичный кадр; при наведении сцена плавно оживает, ушли — плавно замирает. */
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const noHover = matchMedia('(hover: none)').matches;
+
+/* ---------- материалы ---------- */
+// плавный шум для крупных неровностей и пятен бетона
+function valueNoise(s, cell) {
+  const n = Math.ceil(s / cell) + 2, grid = new Float32Array(n * n).map(() => Math.random());
+  const out = new Float32Array(s * s), sm = x => x * x * (3 - 2 * x);
+  for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+    const gx = x / cell, gy = y / cell, x0 = gx | 0, y0 = gy | 0, fx = sm(gx - x0), fy = sm(gy - y0);
+    const a = grid[y0 * n + x0], b = grid[y0 * n + x0 + 1], c = grid[(y0 + 1) * n + x0], d = grid[(y0 + 1) * n + x0 + 1];
+    out[y * s + x] = (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
+  }
+  return out;
+}
+// фактура газобетона: серый, пятна, мелкое зерно, поры. Цвет и рельеф — две разные карты
+function concreteMaps() {
+  const s = 1024;
+  const big = valueNoise(s, 180), mid = valueNoise(s, 48), fine = valueNoise(s, 9);
+  const col = document.createElement('canvas'), bmp = document.createElement('canvas');
+  col.width = col.height = bmp.width = bmp.height = s;
+  const gc = col.getContext('2d'), gb = bmp.getContext('2d');
+  const ic = gc.createImageData(s, s), ib = gb.createImageData(s, s);
+  for (let i = 0; i < s * s; i++) {
+    const grain = (Math.random() - .5);
+    const v = 188 + (big[i] - .5) * 30 + (mid[i] - .5) * 16 + (fine[i] - .5) * 10 + grain * 12;
+    ic.data[i * 4] = v; ic.data[i * 4 + 1] = v; ic.data[i * 4 + 2] = v - 3; ic.data[i * 4 + 3] = 255;
+    const h = 150 + (mid[i] - .5) * 60 + (fine[i] - .5) * 50 + grain * 40;
+    ib.data[i * 4] = ib.data[i * 4 + 1] = ib.data[i * 4 + 2] = h; ib.data[i * 4 + 3] = 255;
+  }
+  gc.putImageData(ic, 0, 0); gb.putImageData(ib, 0, 0);
+  // поры: тёмная впадина со светлым краем — читаются и в цвете, и в рельефе
+  for (let i = 0; i < 2600; i++) {
+    const x = Math.random() * s, y = Math.random() * s, r = Math.pow(Math.random(), 2.2) * 5 + .6;
+    const gr = gc.createRadialGradient(x, y, 0, x, y, r);
+    gr.addColorStop(0, `rgba(60,60,58,${.35 + Math.random() * .35})`); gr.addColorStop(1, 'rgba(60,60,58,0)');
+    gc.fillStyle = gr; gc.beginPath(); gc.arc(x, y, r, 0, 7); gc.fill();
+    gb.fillStyle = 'rgba(0,0,0,.85)'; gb.beginPath(); gb.arc(x, y, r * .8, 0, 7); gb.fill();
+  }
+  const mk = (c, srgb) => { const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; };
+  return { map: mk(col, true), bump: mk(bmp, false) };
+}
+const CM = concreteMaps();
+const concrete = (rep = 1) => {
+  const map = CM.map.clone(), bump = CM.bump.clone();
+  [map, bump].forEach(x => { x.repeat.set(rep, rep); x.offset.set(Math.random(), Math.random()); x.needsUpdate = true; });
+  return new THREE.MeshStandardMaterial({ color: 0xffffff, map, bumpMap: bump, bumpScale: 1.6, roughness: .93, metalness: 0 });
+};
+// золото «литое»: глянцевое, со слегка разной шероховатостью у разных деталей
+const goldMat = (rough = .14) => new THREE.MeshPhysicalMaterial({ color: 0xf2c76d, metalness: 1, roughness: rough, clearcoat: .4, clearcoatRoughness: .2 });
+const gold = goldMat(.12), goldSoft = goldMat(.28);
+
+// лёгкая неровность поверхности: сдвигаем вершины по нормали плавным шумом
+function roughen(geo, amp) {
+  const p = geo.attributes.position, nrm = geo.attributes.normal, v = new THREE.Vector3(), n = new THREE.Vector3();
+  const f = (x, y, z) => Math.sin(x * 7.1 + Math.sin(y * 5.3)) * Math.sin(y * 6.7 + Math.cos(z * 4.9)) * Math.sin(z * 8.3 + Math.sin(x * 3.7));
+  for (let i = 0; i < p.count; i++) {
+    v.fromBufferAttribute(p, i); n.fromBufferAttribute(nrm, i);
+    v.addScaledVector(n, f(v.x, v.y, v.z) * amp); p.setXYZ(i, v.x, v.y, v.z);
+  }
+  geo.computeVertexNormals(); return geo;
+}
+
+const tube = (pts, r = .036, closed = false, seg = 160, mat = gold) =>
+  Object.assign(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, closed), seg, r, 16, closed), mat), { castShadow: true });
+const block = (w, h, d, rep = 1) => {
+  const m = new THREE.Mesh(roughen(new RoundedBoxGeometry(w, h, d, 6, .04), .004), concrete(rep));
+  m.castShadow = true; return m;
+};
+const ball = (r, mat) => {
+  const geo = new THREE.SphereGeometry(r, 96, 72);
+  if (mat !== gold && mat !== goldSoft) roughen(geo, r * .012);
+  const m = new THREE.Mesh(geo, mat); m.castShadow = true; return m;
+};
+
+// окружение для отражений: «фотостудия» с софтбоксами разной яркости — золото бликует неравномерно
+function studioEnv(renderer) {
+  const sc = new THREE.Scene();
+  const room = new THREE.Mesh(new THREE.SphereGeometry(20, 32, 16), new THREE.MeshBasicMaterial({ color: 0xc4c4c2, side: THREE.BackSide }));
+  sc.add(room);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshBasicMaterial({ color: 0x6e6e6b }));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -3; sc.add(floor);
+  const box = (w, h, x, y, z, c) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); sc.add(m); };
+  box(10, 4, -6, 8, 6, 0xffffff);   // главный верхний
+  box(3, 10, 9, 2, -2, 0xfff1d6);   // тёплая полоса справа
+  box(4, 3, -9, 1, -6, 0xd9e6ff);   // холодный контровой
+  box(14, 1.2, 0, 4, -10, 0xffffff); // узкий блик сзади
+  const pm = new THREE.PMREMGenerator(renderer);
+  return pm.fromScene(sc, .02).texture;
+}
+
+/* ---------- сцены ---------- */
+// у каждой: build(scene) → update(t, k), где t — «время жизни» (идёт только при наведении), k — сила 0..1
+const scenes = {
+  top(sc) { // пьедестал из пяти газоблоков, на «нашем» — золотой шар
+    const g = new THREE.Group(); sc.add(g);
+    const H = [1.5, 1.25, 1.02, .82, .64], cols = [];
+    H.forEach((h, i) => {
+      const b = block(.46, h, .46, .6); b.position.set((i - 2) * .58, h / 2, (Math.abs(i - 2)) * -.12);
+      g.add(b); cols.push(b);
+    });
+    const s = ball(.17, gold); g.add(s);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(.32, .026, 16, 120), goldSoft); ring.rotation.x = Math.PI / 2; g.add(ring);
+    g.rotation.y = -.35;
+    return (t, k) => {
+      g.rotation.y = -.35 + Math.sin(t * .6) * .35;
+      const top = H[2] + .17 + Math.abs(Math.sin(t * 2.4)) * .28;
+      s.position.set(0, top, 0);
+      ring.position.set(0, H[2] + .02, 0); ring.scale.setScalar(1 + .25 * Math.sin(t * 2.4 + Math.PI / 2) ** 2);
+      cols.forEach((c, i) => { c.position.y = H[i] / 2 + Math.sin(t * 1.6 + i * .7) * .03; });
+    };
+  },
+  gost(sc) { // газоблок в золотой «размерной» рамке, по ребру бежит шарик-метка
+    const g = new THREE.Group(); sc.add(g);
+    const W = 2.2, Hh = .9, D = 1.05;
+    const b = block(W, Hh, D, 1.3); b.position.y = Hh / 2; g.add(b);
+    const y = Hh + .16, z = D / 2 + .12, x0 = -W / 2, x1 = W / 2;
+    g.add(tube([new THREE.Vector3(x0, y, z), new THREE.Vector3(x1, y, z)], .024));
+    [x0, x1].forEach(x => g.add(tube([new THREE.Vector3(x, Hh + .04, z), new THREE.Vector3(x, y + .1, z)], .024)));
+    const xr = W / 2 + .16;
+    g.add(tube([new THREE.Vector3(xr, 0, z), new THREE.Vector3(xr, Hh, z)], .024));
+    g.rotation.y = -.42; g.rotation.x = .05;
+    return (t, k) => {
+      g.rotation.y = -.42 + Math.sin(t * .5) * .3;
+    };
+  },
+  cycle(sc) { // бетонный шар в золотых орбитах, по одной бежит золотой шарик
+    const g = new THREE.Group(); g.position.y = .86; g.scale.setScalar(.84); sc.add(g);
+    const core = ball(.72, concrete(1.6)); g.add(core);
+    const rings = [[.92, .3, .2], [1.0, -.55, .9], [.88, 1.1, -.4]].map(([r, ax, az], i) => {
+      const o = new THREE.Group(); o.rotation.set(ax, 0, az);
+      const tor = new THREE.Mesh(new THREE.TorusGeometry(r, .026, 16, 220), i === 1 ? goldSoft : gold); tor.castShadow = true;
+      o.add(tor); g.add(o); return { o, r };
+    });
+    const sat = ball(.08, gold); rings[1].o.add(sat);
+    return (t, k) => {
+      g.rotation.y = t * .35;
+      rings.forEach((r, i) => { r.o.rotation.y = t * (.4 + i * .18) * (i % 2 ? -1 : 1); });
+      const a = t * 1.3; sat.position.set(Math.cos(a) * rings[1].r, Math.sin(a) * rings[1].r, 0);
+    };
+  },
+  window(sc) { // несколько бетонных шаров сходятся золотыми нитями в один золотой центр
+    const g = new THREE.Group(); g.position.y = .9; sc.add(g);
+    const hub = ball(.2, gold); g.add(hub);
+    const P = [[-1.35, .45, -.3, .32], [-1.0, -.55, .4, .26], [1.25, .55, -.2, .3], [1.05, -.5, .45, .22]];
+    const sats = P.map(([x, y, z, r]) => {
+      const s = ball(r, concrete(.8)); s.position.set(x, y, z); g.add(s);
+      const w = tube([new THREE.Vector3(x, y, z), new THREE.Vector3(x * .5, y * .2 + .15, z * .5), new THREE.Vector3(0, 0, 0)], .022, false, 60);
+      g.add(w); return { s, w, base: new THREE.Vector3(x, y, z) };
+    });
+    // бусины, бегущие по нитям к центру
+    const beads = sats.map(o => { const b = ball(.04, gold); g.add(b); return b; });
+    return (t, k) => {
+      g.rotation.y = Math.sin(t * .45) * .5;
+      sats.forEach((o, i) => {
+        o.s.position.copy(o.base).multiplyScalar(1 + Math.sin(t * 1.2 + i) * .04);
+        const c = o.w.geometry.parameters.path, p = ((t * .45 + i * .25) % 1);
+        beads[i].position.copy(c.getPointAt(p)); beads[i].scale.setScalar(k * Math.sin(p * Math.PI));
+      });
+      hub.scale.setScalar(1 + .08 * Math.sin(t * 3) * k);
+    };
+  },
+  truck(sc) { // газоблок едет по золотой дуге с завода к объекту
+    const g = new THREE.Group(); sc.add(g);
+    const pts = [new THREE.Vector3(-1.6, .25, .2), new THREE.Vector3(-.7, 1.1, -.1), new THREE.Vector3(.4, .55, .2), new THREE.Vector3(1.4, 1.0, -.1)];
+    const path = new THREE.CatmullRomCurve3(pts);
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(path, 160, .028, 14, false), gold));
+    // «завод» — стопка блоков, «объект» — бетонный шар в золотом кольце
+    [[0, .14], [0, .42]].forEach(([x, y], i) => { const b = block(.62, .26, .36, .4); b.position.set(-1.7 + x + i * .06, y, .2); g.add(b); });
+    const obj = ball(.34, concrete(.7)); obj.position.set(1.55, .34, -.1); g.add(obj);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(.5, .022, 16, 160), gold); ring.position.set(1.55, .34, -.1); ring.rotation.x = Math.PI / 2.4; g.add(ring);
+    const cargo = block(.36, .16, .2, .3); g.add(cargo);
+    g.rotation.y = -.2; g.scale.setScalar(.86); g.position.x = -.08;
+    const up = new THREE.Vector3(0, 1, 0), tmp = new THREE.Vector3();
+    return (t, k) => {
+      const p = (t * .28 + .62) % 1;
+      cargo.position.copy(path.getPointAt(p)).add(tmp.set(0, .12, 0));
+      const tg = path.getTangentAt(p); cargo.rotation.set(0, Math.atan2(-tg.z, tg.x), Math.atan2(tg.y, Math.hypot(tg.x, tg.z)));
+      cargo.scale.setScalar(Math.min(1, Math.min(p, 1 - p) * 12));
+      ring.rotation.z = t * .6;
+    };
+  },
+  discount(sc) { // чем выше стопка блоков — тем ниже скатывается золотой шар цены
+    const g = new THREE.Group(); sc.add(g);
+    [1, 2, 3].forEach((n, i) => { for (let j = 0; j < n; j++) { const b = block(.62, .3, .4, .4); b.position.set(-.9 + i * .78, .15 + j * .31, 0); g.add(b); } });
+    // золотая наклонная направляющая сверху вниз (цена падает)
+    const a = new THREE.Vector3(-1.25, 1.55, .45), b = new THREE.Vector3(1.35, .55, .45);
+    g.add(tube([a, b], .032, false, 40));
+    const s = ball(.12, gold); g.add(s);
+    g.rotation.y = -.3;
+    return (t, k) => {
+      const p = (t * .32 + .55) % 1;
+      s.position.lerpVectors(a, b, p).add(new THREE.Vector3(0, .13, 0));
+      s.rotation.z = -p * 9;
+      s.scale.setScalar(Math.min(1, Math.min(p, 1 - p) * 10));
+      g.rotation.y = -.3 + Math.sin(t * .4) * .2;
+    };
+  }
+};
+
+/* ---------- запуск ---------- */
+const cards = [...document.querySelectorAll('[data-scene]')].map(host => {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap;
+  host.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  scene.environment = studioEnv(renderer);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xbdbdbb, .55));
+  // ключевой свет мягко сверху-слева + слабый контровой справа: объём без жёстких бликов
+  const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+  sun.position.set(-2.2, 6, 3); sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024); sun.shadow.radius = 22; sun.shadow.blurSamples = 25; sun.shadow.bias = -.0005;
+  Object.assign(sun.shadow.camera, { left: -2.6, right: 2.6, top: 2.6, bottom: -2.6, near: 1, far: 14 });
+  scene.add(sun);
+  const rim = new THREE.DirectionalLight(0xfff4e2, .45); rim.position.set(3, 2.5, -3); scene.add(rim);
+  // тень только на «полу», очень лёгкая и размытая
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.ShadowMaterial({ opacity: .07 }));
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+  const camera = new THREE.PerspectiveCamera(30, 1.5, .1, 50);
+  const update = scenes[host.dataset.scene](scene);
+
+  // габариты сцены за весь цикл анимации (объекты двигаются и вращаются) — чтобы ничего не выходило за контейнер
+  const box = new THREE.Box3(), tmpBox = new THREE.Box3();
+  for (let s = 0; s <= 16; s++) {
+    update(s * .8, 1); scene.updateMatrixWorld(true);
+    scene.traverse(o => { if (o.isMesh && o !== ground) box.union(tmpBox.setFromObject(o, true)); }); // по вершинам, а не по грубой рамке
+  }
+  update(0, 0);
+  const center = box.getCenter(new THREE.Vector3());
+  const viewDir = new THREE.Vector3(0, .97, 4.15).normalize(); // тот же ракурс чуть сверху для всех карточек
+  const corners = [0, 1, 2, 3, 4, 5, 6, 7].map(i => new THREE.Vector3(
+    i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z).sub(center));
+  // точная вписка: для каждого угла габарита считаем, на каком расстоянии он помещается в кадр по ширине и высоте
+  const fit = () => {
+    const tv = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2), th = tv * camera.aspect;
+    const right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), viewDir).normalize();
+    const up = new THREE.Vector3().crossVectors(viewDir, right);
+    let d = 0;
+    corners.forEach(p => {
+      const x = Math.abs(p.dot(right)), y = Math.abs(p.dot(up)), z = p.dot(viewDir);
+      d = Math.max(d, x / th + z, y / tv + z);
+    });
+    d *= 1.02; // небольшой воздух до краёв контейнера
+    camera.position.copy(center).addScaledVector(viewDir, d);
+    camera.near = d / 20; camera.far = d * 4;
+    camera.lookAt(center); camera.updateProjectionMatrix();
+  };
+
+  const card = { host, renderer, scene, camera, update, t: 0, k: 0, target: 0 };
+  const resize = () => {
+    const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; fit(); draw(card);
+  };
+  new ResizeObserver(resize).observe(host);
+  const el = host.closest('.adv');
+  el.addEventListener('mouseenter', () => { card.target = 1; wake(); });
+  el.addEventListener('mouseleave', () => { card.target = 0; wake(); });
+  return card;
+});
+
+function draw(c) { c.update(c.t, c.k); c.renderer.render(c.scene, c.camera); }
+cards.forEach(draw);
+
+if (!reduce) {
+  // на тач-устройствах: оживляем карточку на пару секунд, когда она появилась на экране
+  if (noHover) {
+    // полоса в середине экрана: сцена проигрывается, когда карточка доезжает до центра, ~1,4 с
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      const c = cards.find(c => c.host === e.target), el = c.host.closest('.adv');
+      clearTimeout(c.timer); c.target = 1; el.classList.add('is-live'); wake();
+      c.timer = setTimeout(() => { c.target = 0; el.classList.remove('is-live'); wake(); }, 1400);
+    }), { rootMargin: '-42% 0px -42% 0px', threshold: 0 });
+    cards.forEach(c => io.observe(c.host));
+  }
+}
+
+let raf = 0, last = 0;
+function wake() { if (!raf && !reduce) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+function tick(now) {
+  raf = 0; const dt = Math.min(.05, (now - last) / 1000); last = now; let busy = false;
+  cards.forEach(c => {
+    c.k += (c.target - c.k) * Math.min(1, dt * (noHover ? 6 : 3.2));          // плавный разгон и торможение
+    if (Math.abs(c.target - c.k) < .002) c.k = c.target;
+    if (c.k > 0) { c.t += dt * c.k * (noHover ? 2 : 1); draw(c); } // на телефоне — быстрее
+    if (c.k !== c.target || c.target > 0) busy = true;
+  });
+  if (busy) raf = requestAnimationFrame(tick);
+}
+</script>
+<script src="../js/analytics.js?v=20261019"></script>
+</body>
+</html>
