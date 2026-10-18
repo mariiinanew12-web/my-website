@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дизайн, который решает задачи бизнеса</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=20261016d">
+</head>
+<body>
+
+<header class="header">
+  <nav class="header__nav">
+    <ul class="header__nav-list">
+      <li><a href="#about" class="header__nav-link">Обо мне</a></li>
+      <li><a href="#services" class="header__nav-link">Услуги</a></li>
+      <li><a href="#process" class="header__nav-link">Этапы работы</a></li>
+      <li><a href="#portfolio" class="header__nav-link">Кейсы</a></li>
+      <li><a href="dizaineram.html" class="header__nav-link">Дизайнерам</a></li>
+      <li><a href="ai-tutorials.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
+    </ul>
+  </nav>
+
+  <button type="button" class="btn btn--glass header__menu-btn" id="menuOpen"
+          aria-expanded="false" aria-controls="mobileMenu">Меню</button>
+
+  <!-- Кнопка заказа и Галя держатся вместе, поэтому они в одной обёртке -->
+  <div class="header__right">
+    <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="header_cta" class="btn btn--glass header__cta">
+      <span class="header__cta-long">Заказать дизайн</span>
+      <span class="header__cta-short">Заказать</span>
+    </a>
+
+    <!-- Галя: та же бабочка, что в фавиконке -->
+    <a href="galya.html" class="btn btn--glass header__galya" data-goal="galya_open"
+       title="Познакомиться с Галей" aria-label="Галя, живая бабочка">
+      <img src="assets/icons/favicon-192.png" alt="" width="192" height="192" decoding="async">
+    </a>
+  </div>
+</header>
+
+<div class="menu" id="mobileMenu" hidden>
+  <div class="menu__panel" role="dialog" aria-modal="true" aria-label="Навигация">
+    <button type="button" class="menu__close" id="menuClose" aria-label="Закрыть меню">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <ul class="menu__list">
+      <li><a href="#about" class="menu__link">Обо мне</a></li>
+      <li><a href="#services" class="menu__link">Услуги</a></li>
+      <li><a href="#process" class="menu__link">Этапы работы</a></li>
+      <li><a href="#portfolio" class="menu__link">Кейсы</a></li>
+      <li><a href="dizaineram.html" class="menu__link">Дизайнерам</a></li>
+      <li><a href="ai-tutorials.html" class="menu__link menu__link--soon">Soon...</a></li>
+      <li><a href="galya.html" class="menu__link menu__link--galya" data-goal="galya_open">Галя
+        <img src="assets/icons/favicon-192.png" alt="" width="192" height="192" decoding="async"></a></li>
+    </ul>
+  </div>
+</div>
+
+<main>
+
+  <!-- Герой прилипает, «Почему я?» наезжает на него шторкой -->
+  <div class="curtain">
+
+  <section class="hero">
+    <div class="hero__content">
+      <h1 class="hero__title">
+        <span class="text-main">Дизайн</span>, который решает задачи <span class="text-main-2">бизнеса</span>
+      </h1>
+      <div class="hero__tags-row">
+        <ul class="hero__tags-list">
+          <li>MVP</li>
+          <li>UX/UI</li>
+          <li>Сайты</li>
+        </ul>
+        <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" class="btn btn--pink">Обсудить проект</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="about__content">
+      <div class="about__heading-wrapper">
+        <h2 class="about__heading"><span class="text-main">Почему</span> я?</h2>
+      </div>
+      <div class="about__cards-wrapper">
+        <div class="about__cards-row">
+          <div class="about__avatar-group">
+            <div class="about__avatar-bg">
+              <img src="assets/icons/about-avatar-bg.svg" alt="">
+            </div>
+            <div class="about__avatar-image">
+              <img src="assets/images/about-avatar.webp" alt="Марина">
+            </div>
+            <div class="about__name-badge">Марина</div>
+          </div>
+          <div class="card card--about card--experience">
+            <div class="card__list">
+              <p>5 лет в дизайне.</p>
+              <p>Сбер.</p>
+              <p>ВШЭ.</p>
+              <p>Маркетинг.</p>
+              <p>Бизнес аналитика.</p>
+              <p>Код. ИИ.</p>
+            </div>
+          </div>
+          <div class="card card--about card--projects">
+            <p class="card__lead"><strong>– список регалий, но!</strong></p>
+          </div>
+          <div class="card card--about card--approach">
+            <p class="card__lead"><strong>Моя сильная сторона это –</strong><br>
+              <span class="card__muted">видение</span><br>
+              и <span class="card__muted">стратегическое мышление</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /curtain -->
+
+  <section id="services" class="services">
+    <div class="services__content">
+      <div class="services__main">
+        <h2 class="section-title section-title--sm">Что вы получите?</h2>
+        <div class="services__tabs-wrapper">
+
+          <div class="services__group services__group--sites">
+            <p class="services__group-label">Сайты</p>
+            <div class="services__cards-row">
+              <button type="button" class="service-card" data-svc="audit" data-goal="svc_audit">
+                <span class="service-card__title">Аудит</span>
+              </button>
+              <button type="button" class="service-card" data-svc="landing" data-goal="svc_landing">
+                <span class="service-card__title">Лендинги</span>
+              </button>
+              <button type="button" class="service-card" data-svc="multipage" data-goal="svc_multipage">
+                <span class="service-card__title">Многостраничники</span>
+              </button>
+              <button type="button" class="service-card" data-svc="shop" data-goal="svc_shop">
+                <span class="service-card__title">Интернет-магазины</span>
+              </button>
+            </div>
+            <button type="button" class="services__switch" id="funSwitch"
+                    role="switch" aria-checked="false" aria-label="Режим веселья">
+              <span class="services__switch-knob"></span>
+            </button>
+          </div>
+
+          <div class="services__group services__group--products">
+            <p class="services__group-label">Продукты</p>
+            <div class="services__cards-row">
+              <button type="button" class="service-card" data-svc="product" data-goal="svc_product" data-title="Web-сервисы">
+                <span class="service-card__title">Web-сервисы</span>
+              </button>
+              <button type="button" class="service-card" data-svc="product" data-goal="svc_product" data-title="Личные кабинеты">
+                <span class="service-card__title">Личные кабинеты</span>
+              </button>
+              <button type="button" class="service-card" data-svc="product" data-goal="svc_product" data-title="Интерфейсы">
+                <span class="service-card__title">Интерфейсы</span>
+              </button>
+              <button type="button" class="service-card" data-svc="product" data-goal="svc_product" data-title="Дизайн-системы">
+                <span class="service-card__title">Дизайн-системы</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="services__switch-mobile">
+        <button type="button" class="services__switch" id="funSwitchMobile"
+                role="switch" aria-checked="false" aria-label="Режим веселья">
+          <span class="services__switch-knob"></span>
+        </button>
+      </div>
+
+      <div class="cta-banner-wrap">
+        <div class="cta-banner">
+        <div class="cta-banner__text">
+          <p class="cta-banner__title">Макеты нужны еще вчера?</p>
+          <p class="cta-banner__subtitle">Не повод экономить на деталях</p>
+        </div>
+          <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="urgent_cta" class="btn btn--dark">
+            Обсудить срочный проект
+            <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="custom-projects">
+    <div class="custom-projects__content">
+      <div class="custom-projects__main">
+        <h2 class="custom-projects__title">Нестандартный проект?</h2>
+
+        <div class="custom-projects__body">
+          <div class="bf" id="bf">
+            <div class="bf__flight">
+              <div class="bf__depart">
+                <div class="bf__tilt">
+                  <div class="bf__wing-box">
+                    <img class="bf__layer bf__wing bf__wing--left" src="assets/images/wing-left.webp" alt="" decoding="async">
+                  </div>
+                  <div class="bf__wing-box">
+                    <img class="bf__layer bf__wing bf__wing--right" src="assets/images/wing-right.webp" alt="" decoding="async">
+                  </div>
+                  <img class="bf__layer bf__body" src="assets/images/body.webp" alt="Стеклянная бабочка" decoding="async">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ul class="custom-projects__tags-list">
+            <li class="tag">Интерактивные сайты</li>
+            <li class="tag">Генеративная графика</li>
+            <li class="tag">Анимации</li>
+            <li class="tag">AI-продукты</li>
+          </ul>
+        </div>
+      </div>
+
+      <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="idea_cta" class="btn btn--pink btn--wide" id="ideaBtn">
+        Обсудить идею
+        <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section id="process" class="process">
+    <div class="process__content">
+      <h2 class="process__title">Этапы работы</h2>
+      <div class="process__steps-grid">
+        <div class="process__steps-row">
+          <div class="process__step">
+            <span class="process__step-num">01</span>
+            <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Знакомство и бриф</p>
+              <div class="step-card__text">
+                <p><strong>Знакомимся</strong> с продуктом, бизнесом и задачей</p>
+                <p><strong>Обсуждаем</strong> цели, аудиторию</p>
+                <p>и <strong>ожидания от проекта</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">02</span>
+            <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Анализ и структура</p>
+              <p class="step-card__text"><strong>Изучаю</strong> материалы и аналитику, <strong>формирую структуру</strong> сайта. Схему страниц. Тексты</p>
+            </div>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">03</span>
+            <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Концепция</p>
+              <p class="step-card__text">Собираю референсы и мудборд, формируем дизайн-концепцию</p>
+            </div>
+          </div>
+        </div>
+        <div class="process__steps-row process__steps-row--bottom">
+          <div class="process__steps-group">
+            <div class="process__step">
+              <span class="process__step-num">04</span>
+              <div class="step-card">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+                <p class="step-card__title">Дизайн</p>
+                <p class="step-card__text"><strong>Отрисовываю сайт</strong> по согласованной концепции</p>
+              </div>
+            </div>
+            <div class="process__step">
+              <span class="process__step-num">05</span>
+              <div class="step-card step-card--dense">
+              <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+                <p class="step-card__title">Верстка</p>
+                <div class="step-card__text">
+                  <p>Подготавливаю финальные макеты, состояния, адаптивы и необходимые материалы <strong>для разработчика</strong></p>
+                  <p class="step-card__or">/</p>
+                  <p><strong>Верстаю сама</strong> (Tilda, свой хост)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">06</span>
+            <div class="step-card step-card--alt">
+                <svg class="step-card__outline" viewBox="0 0 285 265" fill="none" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="285" height="265" rx="20" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+              <p class="step-card__title">Сопровождение</p>
+              <p class="step-card__text">После запуска я на связи 2 недели. Исправляем, консультируем</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="process__footer">
+        <span><strong class="text-main">Вам не нужно погружаться в каждую деталь процесса</strong> – я сама веду проект, соблюдаю согласованные этапы и держу вас в курсе процесса</span>
+        <span class="process__footer-note"><strong class="text-main">Правки</strong> вносятся по итогам каждого этапа</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="portfolio" class="portfolio">
+    <div class="portfolio__content">
+      <div class="portfolio__main">
+        <h2 class="section-title">Мои работы</h2>
+        <div class="portfolio__grid">
+
+          <a data-goal="case_open" class="portfolio-card" href="work-sber.html">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/work-sber.webp" alt="Сбер – портал учебно-исследовательского центра">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Сбер</p>
+              <ul class="portfolio-card__tags">
+                <li>финтех</li>
+                <li>корпоративный сайт</li>
+              </ul>
+            </div>
+          </a>
+
+          <a data-goal="case_open" class="portfolio-card" href="work-banya.html">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/work-banya.webp" alt="Русские бани – лендинг">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Русские бани</p>
+              <ul class="portfolio-card__tags">
+                <li>Бьюти</li>
+                <li>лендинг</li>
+              </ul>
+            </div>
+          </a>
+
+          <a data-goal="case_open" class="portfolio-card" href="work-praktiki.html">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/work-praktiki.webp" alt="Практики созидания – редизайн сайта">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Практики созидания</p>
+              <ul class="portfolio-card__tags">
+                <li>НКО, образование</li>
+                <li>корпоративный сайт</li>
+                <li>редизайн</li>
+              </ul>
+            </div>
+          </a>
+
+          <div class="portfolio-card portfolio-card--static">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/work-melke.webp" alt="MELKE – лендинг оконных систем">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">MELKE</p>
+              <ul class="portfolio-card__tags">
+                <li>Мебель</li>
+                <li>Лендинг</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="portfolio-card portfolio-card--static">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/work-yoga.webp" alt="Студия йоги – многостраничный сайт">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">Студия йоги</p>
+              <ul class="portfolio-card__tags">
+                <li>Фитнесс/Велнес</li>
+                <li>Многостраничный сайт</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="portfolio-card portfolio-card--static">
+            <div class="portfolio-card__preview">
+              <img src="assets/images/work-artschool.webp" alt="Детская арт-школа – многостраничный сайт">
+            </div>
+            <div class="portfolio-card__info">
+              <p class="portfolio-card__name">MELKE</p>
+              <ul class="portfolio-card__tags">
+                <li>Творчество/Образование</li>
+                <li>Многостраничный сайт</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <a href="404.html" data-goal="portfolio_all" class="btn btn--outline btn--wide">
+        Смотреть все
+        <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="faq__content">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq__list">
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Что входит в макет?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Полный комплект для разработки: все состояния компонентов (hover, ошибка, пустой экран, 404), адаптивные версии под мобильные и десктоп, и понятные материалы для передачи верстальщику.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Вы делаете сайты с помощью ИИ?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Полноценные сайты нет. Я не считаю ИИ-генерацию самостоятельным решением для серьёзного проекта. А вот для усложнения (уникальных анимаций, нестандартных переходов, кастомного контента) можем использовать различные сервисы как инструмент.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Как проходит оплата?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Предоплата 50%, остаток – после сдачи проекта. Для больших проектов можно разбить на этапы: оплата после каждого согласованного этапа.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Что если вы не успеете в срок?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">Закладываю запас времени при планировании, поэтому срывы случаются редко. Но если дедлайн всё же сорван по моей вине – даю скидку на проект в качестве извинения.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">Сколько правок включено?</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">2 правки на каждый этап.</p>
+        </button>
+        <button type="button" class="faq-card">
+          <div class="faq-card__row">
+            <p class="faq-card__question">У меня нет ТЗ/текстов/контента</p>
+            <img src="assets/icons/faq-chevron.svg" alt="" class="faq-card__icon">
+          </div>
+          <p class="faq-card__answer">ТЗ и структуру мы формируем вместе на этапе первичного аудита – я задаю вопросы про бизнес, продукт и цели, и на основе этого предлагаю концепцию. Тексты и контент тоже не обязательно готовить заранее: могу подготовить структуру и заглушки под финальный текст, или помочь с текстом отдельно.</p>
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="footer" class="footer">
+  <div class="footer__content">
+    <div class="footer__cta-wrapper">
+      <p class="footer__title">Готовы обсудить проект?</p>
+      <div class="footer__social-links">
+        <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Telegram"><img src="assets/images/social-1.png" alt="Telegram"></a>
+        <a href="https://www.threads.com/@mgmdvmrn" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Threads"><img src="assets/images/social-2.png" alt="Threads"></a>
+        <a href="https://www.pinterest.com/mgmdvmrndesign/" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Pinterest"><img src="assets/images/social-5.png" alt="Pinterest"></a>
+        <span class="footer__social-link" aria-label="Instagram"><img src="assets/images/social-4.png" alt="Instagram"></span>
+        <a href="https://mail.yandex.ru/compose?to=mamagomedova_2%40edu.hse.ru" target="_blank" rel="noopener" data-goal="social" class="footer__social-link" aria-label="Написать письмо"><img src="assets/images/social-3.png" alt="Почта"></a>
+      </div>
+    </div>
+    <div class="footer__legal">
+      <p>©2026 Все права защищены.</p>
+      <p>Не является публичной офертой</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Пасхалка: бабочка под подвалом -->
+<a href="esli-by.html" class="egg" data-goal="egg_butterfly"
+   title="Нажми меня"
+   aria-label="Как бы выглядел мой сайт, если бы не общественное мнение">
+  <img class="egg__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" decoding="async">
+</a>
+
+<!-- ============ Попапы услуг ============ -->
+<!-- Тексты правятся прямо здесь, в блоках template ниже. Разметку вокруг трогать не нужно. -->
+
+<dialog class="svcm" id="svcModal" aria-labelledby="svcmTitle">
+  <div class="svcm__panel">
+    <button type="button" class="svcm__close" id="svcmClose" aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="svcm__scroll">
+      <div class="svcm__body" id="svcmBody"></div>
+    </div>
+    <div class="svcm__foot">
+      <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="service_cta" class="btn btn--dark svcm__cta">
+        Обсудить проект
+        <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</dialog>
+
+<template id="svc-audit">
+  <h3 class="svcm__title" id="svcmTitle">
+    <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
+    <span>Аудит</span>
+  </h3>
+  <p class="svcm__lead">Разбор готового сайта: показываю, что мешает людям дойти до заявки, и что с этим делать.</p>
+
+  <div class="svcm__tiers">
+    <div class="svcm__tier">
+      <p class="svcm__tier-name">Базовый</p>
+      <p class="svcm__tier-desc">Прохожу по сайту глазами пользователя: UX, тексты, SEO, дизайн</p>
+      <p class="svcm__tier-price">от 10 000 ₽ <span>|</span> 1–3 дня</p>
+    </div>
+    <div class="svcm__tier">
+      <p class="svcm__tier-name">С аналитикой</p>
+      <p class="svcm__tier-desc">То же самое плюс разбор ваших метрик: где именно падает конверсия и почему</p>
+      <p class="svcm__tier-price">от 15 000 ₽ <span>|</span> 1–3 дня</p>
+    </div>
+  </div>
+
+  <p class="svcm__sub">Что входит в базовый:</p>
+  <ul class="svcm__list">
+    <li>Прохожу сценарии как пользователь – ищу места, где непонятно или неудобно</li>
+    <li>Ловлю баги вёрстки и поведения на мобильном и на десктопе</li>
+    <li>Разбираю тексты: о том ли вы говорите и слышит ли это ваша аудитория</li>
+    <li>Смотрю, где проседает SEO</li>
+    <li>Показываю, какие дизайн-решения можно усилить</li>
+  </ul>
+
+  <p class="svcm__sub">С аналитикой – дополнительно:</p>
+  <ul class="svcm__list">
+    <li>Смотрю Яндекс.Метрику или аналитику Тильды, если дадите доступ</li>
+    <li>Нахожу шаг воронки, на котором вы теряете людей</li>
+    <li>Разбираю, почему бросают форму заявки, а не просто фиксирую, что бросают</li>
+  </ul>
+
+  <p class="svcm__note">Перед стартом коротко расспрошу о бизнесе – без понимания, кому и что вы продаёте, аудит превращается в список придирок.</p>
+</template>
+
+<template id="svc-landing">
+  <h3 class="svcm__title" id="svcmTitle">
+    <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
+    <span>Лендинг</span>
+  </h3>
+  <p class="svcm__lead">Одностраничный сайт под одну задачу: услуга, продукт, промо, запись, лонгрид.</p>
+  <p class="svcm__price">от 70 000 ₽ <span>|</span> от 2 недель</p>
+
+  <p class="svcm__sub">Что входит в стоимость:</p>
+  <ul class="svcm__list">
+    <li>Смотрю конкурентов – чтобы вы понимали, чем отличаетесь и за счёт чего выделяться</li>
+    <li>Разбираю ваши текущие метрики, если они есть: где слабые места и точки роста</li>
+    <li>Изучаю, как устроен ваш бизнес – от этого зависит структура сайта</li>
+    <li>Структура и прототип</li>
+    <li>Мудборд и дизайн-концепция</li>
+    <li>Дизайн всех блоков и адаптив</li>
+    <li>2 круга правок на каждом этапе с согласованием</li>
+    <li>Две недели на связи после запуска</li>
+  </ul>
+
+  <p class="svcm__sub">От чего зависит цена:</p>
+  <ul class="svcm__list svcm__list--muted">
+    <li>Объём лендинга</li>
+    <li>Нужны ли анимации</li>
+    <li>Есть ли готовые тексты и контент – или их пишу и генерирую я</li>
+    <li>Нужны ли интеграции и подключение форм</li>
+    <li>Нужна ли вёрстка с моей стороны и на какой платформе</li>
+  </ul>
+
+</template>
+
+<template id="svc-multipage">
+  <h3 class="svcm__title" id="svcmTitle">
+    <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
+    <span>Многостраничный сайт</span>
+  </h3>
+  <p class="svcm__lead">Сайт компании или агентства, портфолио, сайт школы, персональный сайт.</p>
+  <p class="svcm__price">от 120 000 ₽ <span>|</span> от месяца</p>
+
+  <p class="svcm__sub">Что входит в стоимость:</p>
+  <ul class="svcm__list">
+    <li>Смотрю конкурентов – чтобы вы понимали, чем отличаетесь и за счёт чего выделяться</li>
+    <li>Разбираю ваши текущие метрики, если они есть: где слабые места и точки роста</li>
+    <li>Изучаю, как устроен ваш бизнес – от этого зависит структура сайта</li>
+    <li>Сценарий пользовательского пути для каждого сегмента аудитории</li>
+    <li>Структура разделов, навигация и прототип</li>
+    <li>Мудборд и дизайн-концепция</li>
+    <li>Дизайн всех страниц и адаптив</li>
+    <li>2 круга правок на каждом этапе с согласованием</li>
+    <li>Две недели на связи после запуска</li>
+  </ul>
+
+  <p class="svcm__sub">От чего зависит цена:</p>
+  <ul class="svcm__list svcm__list--muted">
+    <li>Количество страниц и глубина структуры</li>
+    <li>Нужны ли анимации</li>
+    <li>Есть ли готовые тексты и контент – или их пишу и генерирую я</li>
+    <li>Нужны ли интеграции и подключение форм</li>
+    <li>Нужна ли вёрстка с моей стороны и на какой платформе</li>
+  </ul>
+
+</template>
+
+<template id="svc-shop">
+  <h3 class="svcm__title" id="svcmTitle">
+    <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
+    <span>Интернет-магазин</span>
+  </h3>
+  <p class="svcm__lead">Каталог товаров, карточки, корзина и оплата.</p>
+  <p class="svcm__price">от 200 000 ₽ <span>|</span> от 5 недель</p>
+
+  <p class="svcm__sub">Что входит в стоимость:</p>
+  <ul class="svcm__list">
+    <li>Смотрю конкурентов – чтобы вы понимали, чем отличаетесь и за счёт чего выделяться</li>
+    <li>Разбираю ваши текущие метрики, если они есть: где слабые места и точки роста</li>
+    <li>Изучаю, как устроен ваш бизнес – от этого зависит структура каталога</li>
+    <li>Структура каталога, фильтры и карточка товара</li>
+    <li>Корзина и сценарий оформления заказа</li>
+    <li>Мудборд и дизайн-концепция</li>
+    <li>Дизайн всех страниц и адаптив</li>
+    <li>2 круга правок на каждом этапе с согласованием</li>
+    <li>Две недели на связи после запуска</li>
+  </ul>
+
+  <p class="svcm__sub">От чего зависит цена:</p>
+  <ul class="svcm__list svcm__list--muted">
+    <li>Количество товаров и сложность каталога</li>
+    <li>Нужны ли анимации</li>
+    <li>Есть ли готовые тексты, фото товаров и описания</li>
+    <li>Подключение оплаты, доставки и выгрузки товаров</li>
+    <li>Нужна ли вёрстка с моей стороны и на какой платформе</li>
+  </ul>
+
+</template>
+
+<template id="svc-product">
+  <h3 class="svcm__title" id="svcmTitle">
+    <img class="svcm__bf" src="assets/icons/favicon-192.png" alt="" width="192" height="192" aria-hidden="true">
+    <span data-title-slot>Продукты</span>
+  </h3>
+  <p class="svcm__lead">Такие проекты не укладываются в прайс. Объём, сроки и стоимость обсуждаем индивидуально – под конкретную задачу и то, что уже есть на руках.</p>
+</template>
+
+<script src="js/script.js?v=20261016d"></script>
+<script src="js/analytics.js"></script>
+</body>
+</html>
