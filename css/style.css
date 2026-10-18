@@ -1606,6 +1606,14 @@ span.footer__social-link:active { transform: none; filter: none; }
 
 /* ============ Кнопка Гали в шапке ============ */
 
+/* Заказ и Галя стоят плечом к плечу, а не разъезжаются по краям */
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .header__galya {
   flex-shrink: 0;
   width: 52px;
@@ -1632,12 +1640,43 @@ span.footer__social-link:active { transform: none; filter: none; }
 
 .menu__link--galya img { width: 28px; height: 28px; }
 
+/* Размер не ужимаем: кнопка заказа на всех ширинах 52px,
+   и бабочка должна стоять с ней вровень. */
 @media (max-width: 900px) {
-  .header__galya { width: 46px; height: 46px; }
-  .header__galya img { width: 26px; height: 26px; }
+  .header__galya img { width: 27px; height: 27px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .header__galya img { transition: none; }
   .header__galya:hover img { transform: none; }
+}
+
+
+/* ============ Пункт «Soon...» ============ */
+/* Розовая обводка в половину силы: видно, что пункт есть,
+   но он честно не обещает, что там уже что-то лежит. */
+
+.header__nav-link--soon {
+  color: var(--color-main);
+  box-shadow: inset 0 0 0 1.5px var(--color-main);
+  opacity: 0.5;
+  transition: opacity 0.2s ease, background 0.15s ease;
+}
+
+.header__nav-link--soon:hover { opacity: 0.8; background: transparent; }
+
+.menu__link--soon {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 16px;
+  border-radius: 999px;
+  color: var(--color-main);
+  box-shadow: inset 0 0 0 1.5px var(--color-main);
+  opacity: 0.5;
+}
+
+.menu__link--soon:hover { opacity: 0.8; }
+
+@media (prefers-reduced-motion: reduce) {
+  .header__nav-link--soon { transition: none; }
 }

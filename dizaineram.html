@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дизайнерам — вёрстка портфолио</title>
+<meta name="description" content="Помогаю дизайнерам собрать портфолио: Behance, свой сайт, оформление кейса по шаблону.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="css/dizaineram.css?v=20261018">
+</head>
+<body>
+
+<header class="header">
+  <nav class="header__nav">
+    <ul class="header__nav-list">
+      <li><a href="index.html#about" class="header__nav-link">Обо мне</a></li>
+      <li><a href="index.html#services" class="header__nav-link">Услуги</a></li>
+      <li><a href="index.html#process" class="header__nav-link">Этапы работы</a></li>
+      <li><a href="index.html#portfolio" class="header__nav-link">Кейсы</a></li>
+      <li><span class="header__nav-link header__nav-link--current" aria-current="page">Дизайнерам</span></li>
+      <li><a href="ai-tutorials.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
+    </ul>
+  </nav>
+
+  <a href="index.html" class="btn btn--glass header__back-short">На главную</a>
+
+  <div class="header__right">
+    <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="header_cta" class="btn btn--glass header__cta">
+      <span class="header__cta-long">Заказать дизайн</span>
+      <span class="header__cta-short">Заказать</span>
+    </a>
+    <a href="galya.html" class="btn btn--glass header__galya" data-goal="galya_open"
+       title="Познакомиться с Галей" aria-label="Галя, живая бабочка">
+      <img src="assets/icons/favicon-192.png" alt="" width="192" height="192" decoding="async">
+    </a>
+  </div>
+</header>
+
+<main class="dz">
+
+  <!-- ---------- Герой ---------- -->
+  <section class="dz__hero">
+    <div class="dz__bf">
+      <img src="assets/galya/galya-fallback.png" alt="Галя, стеклянная бабочка" width="512" height="512" decoding="async">
+    </div>
+    <div class="dz__card-pink">
+      <p>Галя — моя помощница, и в свободное время верстает портфолио.</p>
+    </div>
+  </section>
+
+  <!-- ---------- Почему портфолио ---------- -->
+  <section class="dz__block">
+    <h2 class="dz__heading">Потому что портфолио:</h2>
+
+    <div class="dz__marquee" data-marquee data-speed="18">
+      <div class="dz__track" data-track>
+        <figure class="dz__meme"><img src="assets/memes/meme-dolgo.webp" alt="Долго" width="760" height="509" loading="lazy"></figure>
+        <figure class="dz__meme"><img src="assets/memes/meme-samokritika.webp" alt="Мешает самокритика" width="760" height="509" loading="lazy"></figure>
+        <figure class="dz__meme"><img src="assets/memes/meme-geshtalt.webp" alt="Вечно незакрытый гештальт" width="760" height="509" loading="lazy"></figure>
+        <figure class="dz__meme"><img src="assets/memes/meme-tiran.webp" alt="Заказчик тиран" width="760" height="509" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Формат ---------- -->
+  <section class="dz__block">
+    <h2 class="dz__heading">В каком формате работаем?</h2>
+
+    <div class="dz__marquee" data-marquee data-speed="14" data-dir="-1">
+      <div class="dz__track" data-track>
+        <figure class="dz__meme"><img src="assets/memes/meme-format.webp" alt="Как совместить картинку и процесс?" width="760" height="509" loading="lazy"></figure>
+        <figure class="dz__meme"><img src="assets/memes/meme-produkt.webp" alt="А если кейс продуктовый с исследованиями и метриками?" width="760" height="509" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Форматы вёрстки ---------- -->
+  <section class="dz__block">
+    <h2 class="dz__heading">Вёрстка портфолио</h2>
+
+    <div class="dz__cards">
+      <article class="dz__card">
+        <p class="dz__card-title">Behance</p>
+        <p class="dz__card-note">Коммерция</p>
+      </article>
+      <article class="dz__card">
+        <p class="dz__card-title">Behance</p>
+        <p class="dz__card-note">Найм / Процесс</p>
+      </article>
+      <article class="dz__card">
+        <p class="dz__card-title">Свой сайт с нуля</p>
+      </article>
+      <article class="dz__card">
+        <p class="dz__card-title">Оформление кейса</p>
+        <p class="dz__card-note">на сайт по вашему шаблону</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ---------- Призыв ---------- -->
+  <section class="dz__cta">
+    <p class="dz__cta-text">Обсудим ваше портфолио?</p>
+    <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="dz_cta" class="btn btn--pink">
+      Написать мне
+      <svg class="btn__icon" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M3 13.1756L12.4107 22.7515C12.7361 23.0828 13.2639 23.0828 13.5893 22.7515L23 13.1756M13 3V21.6553" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+</main>
+
+<footer class="dz-footer">
+  <div class="dz-footer__inner">
+    <p class="dz-footer__title">Готовы обсудить проект?</p>
+    <div class="dz-footer__socials">
+      <a href="https://t.me/qualcunodai" target="_blank" rel="noopener" data-goal="social" class="dz-footer__social" aria-label="Telegram"><img src="assets/images/social-1.png" alt="Telegram"></a>
+      <a href="https://www.threads.com/@mgmdvmrn" target="_blank" rel="noopener" data-goal="social" class="dz-footer__social" aria-label="Threads"><img src="assets/images/social-2.png" alt="Threads"></a>
+      <a href="https://www.pinterest.com/mgmdvmrndesign/" target="_blank" rel="noopener" data-goal="social" class="dz-footer__social" aria-label="Pinterest"><img src="assets/images/social-5.png" alt="Pinterest"></a>
+      <span class="dz-footer__social" aria-label="Instagram"><img src="assets/images/social-4.png" alt="Instagram"></span>
+      <a href="https://mail.yandex.ru/compose?to=mamagomedova_2%40edu.hse.ru" target="_blank" rel="noopener" data-goal="social" class="dz-footer__social" aria-label="Написать письмо"><img src="assets/images/social-3.png" alt="Почта"></a>
+    </div>
+  </div>
+  <div class="dz-footer__legal">
+    <p>©2026 Все права защищены.</p>
+    <p>Не является публичной офертой</p>
+  </div>
+</footer>
+
+<script src="js/dizaineram.js?v=20261018"></script>
+<script src="js/analytics.js?v=20261018"></script>
+</body>
+</html>

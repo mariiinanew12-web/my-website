@@ -9,7 +9,9 @@
    просто не участвует в болтовне, ничего не ломается. */
 const SHOP_URL = '';
 
-const CASES_URL = 'index.html#portfolio';
+const CASES_URL    = 'index.html#portfolio';
+const THREADS_URL  = 'https://www.threads.com/@mgmdvmrn';
+const TELEGRAM_URL = 'https://t.me/qualcunodai';
 
 /* ---------- реплики ---------- */
 
@@ -35,12 +37,20 @@ const LINES = {
   },
   morning: 'Доброе утро! Кофе будет?',
   evening: 'Уже зеваю. Скоро спать, бабочки ложатся до полуночи.',
+  phone: 'Кстати, я умею больше на компуктере.',
   chat: [
     { text: 'Если долго смотреть на сетку, сетка начинает смотреть на тебя.' },
     { text: 'Я не залипаю, я проверяю отступы.' },
     { text: 'Мне нравится твой курсор. Очень пиксель-перфект.' },
     { text: 'Иногда я мечтаю стать векторной.' },
     { text: 'Почему у меня прозрачные крылья? Ничего лишнего, как в хорошем интерфейсе.' },
+    { text: 'Подпишитесь на мой тредс.', href: THREADS_URL, link: 'вот он' },
+    { text: 'Мне кажется, ты хочешь обсудить проект с моей создательницей.', href: TELEGRAM_URL, link: 'написать ей' },
+    { text: 'Сумочка Jacquemus...' },
+    { text: 'Хочу бешбармак.' },
+    { text: 'Я всё узнаю в вебвизоре!!' },
+    { text: 'Хорошего тебе дня.' },
+    { text: 'Посылаю в космос импульс, чтобы тебе благоволила удача.' },
     { text: 'Кстати, тут есть кейсы. Я в них почти снималась.', href: CASES_URL, link: 'посмотреть' },
     { text: 'Тут продаются штуки для дизайнеров. Я бы купила, но у меня лапки.', href: SHOP_URL, link: 'в магазин' }
   ],
@@ -48,7 +58,7 @@ const LINES = {
   wing: 'осторожно, крылышко!',
   tickle: ['Всё-всё, сдаюсь!', 'Ты кликаешь как заказчик за час до дедлайна.'],
   coffee: [
-    'Ммм, капучино. Теперь можно и макет собрать.',
+    'Ммм, американо. Теперь можно и макет собрать.',
     'Второй кофе. Я чувствую кернинг.',
     'Третий... я вижу шрифты без сглаживания.'
   ],
@@ -57,7 +67,7 @@ const LINES = {
     'Нет-нет, крылья и так дрожат. Завтра!',
     'Лимит кофе на сегодня исчерпан. Как и бюджет у клиента.'
   ],
-  hungry: ['Кофе?..', 'Я бы не отказалась от эспрессо. Или двух.', 'Без кофе я работаю в режиме wireframe.'],
+  hungry: ['Кофе?..', 'Я бы не отказалась от американо. Или двух.', 'Без кофе я работаю в режиме wireframe.'],
   sleep: ['хррр... кернинг... хррр', 'zzz... переделай кнопку... zzz', '*сопит в макет*'],
   woken: [
     'М-м... у меня в Москве ночь. Приходи после восьми.',
@@ -78,6 +88,10 @@ const mskClock = () => { const p = mskParts(); return p.hour + ':' + p.minute; }
 const mskDate  = () => { const p = mskParts(); return p.year + '-' + p.month + '-' + p.day; };
 
 const isNight = () => { const h = mskHour(); return h >= 23 || h < 8; };
+
+/* Телефон: пальцем не наведёшь, так что часть фокусов Гали недоступна */
+const onPhone = () => window.matchMedia
+  && (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 760px)').matches);
 
 /* ---------- хранилище ---------- */
 /* В приватном окне localStorage может быть недоступен — тогда страница
@@ -122,6 +136,7 @@ save();
 const stage    = document.getElementById('gpStage');
 const host     = document.getElementById('galya');
 const fallback = document.getElementById('gpFallback');
+const loader   = document.getElementById('gpLoader');
 const bubble   = document.getElementById('gpBubble');
 const statusEl = document.getElementById('gpStatus');
 const btnPet   = document.getElementById('gpPet');
@@ -350,6 +365,46 @@ function greet() {
   const h = mskHour();
   if (h >= 8 && h <= 10)  setTimeout(() => say(LINES.morning), 4500);
   else if (h === 22)      setTimeout(() => say(LINES.evening), 4500);
+
+  // с телефона половина трюков недоступна — предупреждает об этом сама
+  if (onPhone()) setTimeout(() => say(LINES.phone), h >= 8 && h <= 10 || h === 22 ? 9000 : 5000);
+}
+
+/* ---------- «я не могу существовать в таких условиях» ---------- */
+/* Три разные беды приводят к одной плашке: сеть отвалилась, модуль не
+   доехал с CDN, или машина не вытягивает и кадры падают. */
+
+const sos = document.getElementById('gpSos');
+let sosShown = false;
+
+/* Счётчик кадров. Порог нарочно низкий: слабый телефон выдаёт 25-30,
+   и дёргать его плашкой незачем. Меньше десяти шесть секунд подряд —
+   это уже не «подтормаживает», а «невозможно смотреть». */
+let lagWatch = false, lagFrames = 0, lagSince = 0, lagBad = 0;
+
+function callSos() {
+  if (sosShown || !sos) return;
+  sosShown = true;
+  lagWatch = false;
+  sos.hidden = false;
+  requestAnimationFrame(() => sos.classList.add('is-on'));
+}
+
+window.addEventListener('offline', callSos);
+
+function lagTick(now) {
+  if (!lagWatch) return;
+  lagFrames++;
+  if (!lagSince) lagSince = now;
+  const span = now - lagSince;
+  if (span >= 1000) {
+    const fps = lagFrames / (span / 1000);
+    lagBad = fps < 10 ? lagBad + 1 : 0;
+    if (lagBad >= 6) callSos();
+    lagFrames = 0;
+    lagSince = now;
+  }
+  requestAnimationFrame(lagTick);
 }
 
 /* ---------- запуск ---------- */
@@ -391,12 +446,19 @@ stage.addEventListener('pointermove', e => {
   }
 }, { passive: true });
 
-// пузырь держится над головой
+// пузырь держится над головой; без 3D цепляется к картинке,
+// иначе он уезжает в угол и висит поверх шапки
 function followHead() {
-  if (galya && !bubble.hidden) {
-    const p = galya.screenPoint('top');
-    bubble.style.left = p.x + 'px';
-    bubble.style.top = p.y + 'px';
+  if (!bubble.hidden) {
+    let pt;
+    if (galya) {
+      pt = galya.screenPoint('top');
+    } else {
+      const r = (fallback.hidden ? stage : fallback).getBoundingClientRect();
+      pt = { x: r.left + r.width / 2, y: r.top + r.height * 0.16 };
+    }
+    bubble.style.left = pt.x + 'px';
+    bubble.style.top = pt.y + 'px';
   }
   requestAnimationFrame(followHead);
 }
@@ -409,16 +471,38 @@ updateStatus();
 updateButtons();
 
 (async function start() {
+  let mod = null;
+
+  // Модуль и three.js едут с CDN. Не доехали — это почти наверняка сеть.
   try {
-    const { createGalya } = await import('../assets/galya/galya.js');
-    galya = createGalya(host, { background: '#181818' });
-    fallback.classList.add('is-gone');
+    mod = await import('../assets/galya/galya.js');
   } catch (e) {
-    // без WebGL остаётся картинка, всё остальное работает как есть
-    galya = null;
-    host.textContent = '';   // модуль успевает вставить пустой canvas — убираем
-    console.warn('Галя не завелась, остаётся картинка:', e);
+    loader.hidden = true;
+    fallback.hidden = false;
+    console.warn('Галя не доехала по сети:', e);
+    callSos();
   }
+
+  if (mod) {
+    try {
+      galya = mod.createGalya(host, { background: '#181818', margin: 0.95 });
+      // кружок уезжает плавно, уже поверх собранной Гали
+      loader.classList.add('is-gone');
+      setTimeout(() => { loader.hidden = true; }, 320);
+      // следим за кадрами только когда есть что ронять
+      lagWatch = true;
+      requestAnimationFrame(lagTick);
+    } catch (e) {
+      // модуль приехал, но WebGL нет: это не сеть, плашку не показываем
+      galya = null;
+      host.textContent = '';   // модуль успевает вставить пустой canvas — убираем
+      loader.hidden = true;
+      fallback.hidden = false;
+      console.warn('Галя не завелась, остаётся картинка:', e);
+    }
+  }
+
+  if (!navigator.onLine) callSos();
 
   applyState();
   followHead();
@@ -443,5 +527,7 @@ window.galyaDebug = {
   apply: applyState,
   get state() { return galya ? galya.state : 'без WebGL'; },
   get reaction() { return galya ? galya.reaction : null; },
-  forget() { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); }
+  forget() { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); },
+  sos: callSos,                                  // показать плашку вручную
+  lagWatch(on) { lagWatch = on !== false; if (lagWatch) requestAnimationFrame(lagTick); }
 };

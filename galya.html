@@ -28,6 +28,8 @@
       <li><a href="index.html" class="header__nav-link">На главную</a></li>
       <li><a href="index.html#services" class="header__nav-link">Услуги</a></li>
       <li><a href="index.html#portfolio" class="header__nav-link">Кейсы</a></li>
+      <li><a href="dizaineram.html" class="header__nav-link">Дизайнерам</a></li>
+      <li><a href="ai-tutorials.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
       <li><span class="header__nav-link header__nav-link--current" aria-current="page">Галя</span></li>
     </ul>
   </nav>
@@ -44,13 +46,16 @@
 
   <div class="gp__intro">
     <h1 class="gp__title">Галя</h1>
-    <p class="gp__lead">Стеклянная бабочка и по совместительству мой фавикон. Живёт по московскому времени: следит за курсором, пьёт кофе и ночью спит.</p>
+    <p class="gp__tagline">хранительница доменного очага</p>
   </div>
 
   <!-- Контейнеру нужен явный размер: Галя заполняет его целиком -->
   <div class="gp__stage" id="gpStage">
+    <!-- пока строится сетка крыльев -->
+    <div class="gp__loader" id="gpLoader" role="status" aria-label="Галя собирается"></div>
+    <!-- запасной вариант, если WebGL недоступен -->
     <img class="gp__fallback" id="gpFallback" src="assets/galya/galya-fallback.png"
-         alt="Галя, стеклянная бабочка" width="512" height="512">
+         alt="Галя, стеклянная бабочка" width="512" height="512" hidden>
     <div class="gp__canvas" id="galya" aria-label="Галя, стеклянная бабочка"></div>
   </div>
 
@@ -63,7 +68,13 @@
     <button type="button" class="btn btn--glass gp__btn" id="gpCoffee">Налить кофе</button>
   </div>
 
-  <p class="gp__note">Её можно гладить прямо мышкой или пальцем — кнопка на случай клавиатуры.</p>
+  <p class="gp__note">С ней можно поиграть.</p>
+
+  <!-- Показывается, если сеть отвалилась или машина не тянет -->
+  <div class="gp__sos" id="gpSos" role="alert" hidden>
+    <p class="gp__sos-text">Я не могу существовать в таких условиях. Оплатите интернет или перезайдите с компьютера.</p>
+    <a href="index.html" class="btn btn--dark gp__sos-btn">На главную</a>
+  </div>
 
 </main>
 

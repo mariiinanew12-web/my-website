@@ -119,15 +119,15 @@ a.header__nav-link:focus-visible { outline: 2px solid var(--color-main); outline
 .gp {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 128px 40px 56px;
+  padding: 112px 40px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   text-align: center;
 }
 
-.gp__intro { max-width: 620px; display: flex; flex-direction: column; gap: 12px; }
+.gp__intro { max-width: 620px; display: flex; flex-direction: column; gap: 6px; }
 
 .gp__title {
   font-weight: 700;
@@ -136,30 +136,52 @@ a.header__nav-link:focus-visible { outline: 2px solid var(--color-main); outline
   color: var(--color-main);
 }
 
-.gp__lead { font-size: 17px; line-height: 1.5; color: var(--color-muted); }
+.gp__tagline {
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
 
 /* Галя заполняет контейнер целиком, поэтому размер задаём явно */
 .gp__stage {
   position: relative;
-  width: min(100%, 520px);
-  height: min(50vh, 440px);
-  margin-top: 4px;
+  width: min(100%, 640px);
+  height: min(56vh, 520px);
+  margin-top: 0;
 }
 
 .gp__canvas { position: absolute; inset: 0; }
 
-/* Картинка видна, пока строится сетка крыльев, и остаётся, если WebGL нет */
+/* ---------- Пока собирается ---------- */
+
+.gp__loader {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 3px solid rgba(247, 247, 247, 0.14);
+  border-top-color: var(--color-main);
+  animation: gp-spin 0.9s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.gp__loader[hidden] { display: none; }
+.gp__loader.is-gone { opacity: 0; }
+
+@keyframes gp-spin { to { transform: rotate(360deg); } }
+
+/* Картинка нужна, только если WebGL недоступен */
 .gp__fallback {
   position: absolute;
   inset: 0;
   margin: auto;
   width: 62%;
   height: auto;
-  opacity: 1;
-  transition: opacity 0.5s ease;
 }
 
-.gp__fallback.is-gone { opacity: 0; pointer-events: none; }
+.gp__fallback[hidden] { display: none; }
 
 /* ---------- Пузырь ---------- */
 
@@ -237,6 +259,14 @@ a.header__nav-link:focus-visible { outline: 2px solid var(--color-main); outline
 
 .gp__cup[hidden] { display: none; }
 
+/* Невысокие ноутбуки: ужимаем ритм, а не Галю на больших экранах */
+@media (min-width: 761px) and (max-height: 780px) {
+  .gp { padding: 92px 40px 32px; gap: 10px; }
+  .gp__title { font-size: 38px; }
+  .gp__stage { height: min(52vh, 400px); }
+  .gp__note { margin-top: -2px; }
+}
+
 /* ============ Телефон ============ */
 
 @media (max-width: 760px) {
@@ -247,14 +277,77 @@ a.header__nav-link:focus-visible { outline: 2px solid var(--color-main); outline
   .header__cta-long { display: none; }
   .header__cta-short { display: inline; }
 
-  .gp { padding: 100px 20px 60px; gap: 20px; }
-  .gp__lead { font-size: 15px; }
-  .gp__stage { height: min(56vh, 420px); }
+  .gp { padding: 100px 20px 60px; gap: 16px; }
+  .gp__tagline { font-size: 14px; }
+  .gp__stage { height: min(50vh, 420px); }
   .btn { height: 48px; font-size: 16px; }
   .gp__bubble { font-size: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn, .gp__fallback, .gp__bubble, .gp__cup, .header__nav-link { transition: none; }
+  .btn, .gp__bubble, .gp__cup, .header__nav-link, .gp__loader { transition: none; }
   .btn:hover { transform: none; }
+  .gp__loader { animation-duration: 2.4s; }   /* не выключаем совсем: это признак жизни */
 }
+
+
+/* ============ Плашка: Галя не тянет условия ============ */
+
+.gp__sos {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(14px);
+  z-index: 80;
+  width: min(560px, calc(100% - 32px));
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--color-main);
+  color: #1a1119;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.gp__sos[hidden] { display: none; }
+.gp__sos.is-on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.gp__sos-text {
+  flex: 1;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.gp__sos-btn {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+  background: var(--color-bg);
+  color: var(--color-main);
+}
+
+@media (max-width: 600px) {
+  .gp__sos { flex-direction: column; align-items: stretch; gap: 12px; bottom: 16px; }
+  .gp__sos-text { text-align: center; font-size: 14px; }
+  .gp__sos-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gp__sos { transition: none; }
+}
+
+/* «Soon...»: та же розовая обводка в половину силы, что и на главной */
+.header__nav-link--soon {
+  color: var(--color-main);
+  box-shadow: inset 0 0 0 1.5px var(--color-main);
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+a.header__nav-link--soon:hover { opacity: 0.8; background: transparent; }
