@@ -145,8 +145,8 @@ a.header__nav-link:focus-visible { outline: 2px solid var(--color-main); outline
 /* Галя заполняет контейнер целиком, поэтому размер задаём явно */
 .gp__stage {
   position: relative;
-  width: min(100%, calc(700px * var(--gp-zoom, 1)));
-  height: min(62vh, calc(580px * var(--gp-zoom, 1)));
+  width: min(100%, calc(820px * var(--gp-zoom, 1)));
+  height: min(68vh, calc(660px * var(--gp-zoom, 1)));
   margin-top: 0;
 }
 
@@ -516,4 +516,57 @@ a.header__nav-link--soon:hover { opacity: 0.8; background: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
   .gp__theme, .gp__theme-knob, .gp__tune-btn { transition: none; }
+}
+
+
+/* ============ Стрелка назад в навигации ============ */
+
+.header__nav-link--back { padding: 12px 14px; color: var(--color-text); }
+.header__nav-link--back svg { width: 20px; height: 20px; display: block; }
+
+/* ============ Искра ============ */
+
+.gp__spark {
+  position: absolute;
+  z-index: 6;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #fff 0%, var(--color-main) 42%, rgba(255, 155, 254, 0) 72%);
+  box-shadow: 0 0 18px 6px rgba(255, 155, 254, 0.55);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: left 0.45s cubic-bezier(0.4, 0, 0.3, 1), top 0.45s cubic-bezier(0.4, 0, 0.3, 1), opacity 0.3s ease;
+  animation: gp-spark 1.1s ease-in-out infinite;
+}
+
+.gp__spark[hidden] { display: none; }
+.gp__spark.is-gone { opacity: 0; pointer-events: none; }
+
+@keyframes gp-spark {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.5); }
+}
+
+/* ============ Галя обиделась ============ */
+
+.gp__canvas, .gp__fallback {
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.3, 1);
+}
+
+.gp__stage.is-upset .gp__canvas,
+.gp__stage.is-upset .gp__fallback {
+  opacity: 0;
+  transform: translateY(-40px) scale(0.86);
+  pointer-events: none;
+}
+
+.gp__sorry[hidden] { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gp__spark { animation: none; transition: opacity 0.2s ease; }
+  .gp__canvas, .gp__fallback { transition: opacity 0.2s ease; }
+  .gp__stage.is-upset .gp__canvas { transform: none; }
 }

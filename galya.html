@@ -25,11 +25,9 @@
 <header class="header">
   <nav class="header__nav">
     <ul class="header__nav-list">
-      <li><a href="index.html" class="header__nav-link">На главную</a></li>
-      <li><a href="index.html#services" class="header__nav-link">Услуги</a></li>
-      <li><a href="index.html#portfolio" class="header__nav-link">Кейсы</a></li>
-      <li><a href="designers.html" class="header__nav-link">Дизайнерам</a></li>
-      <li><a href="soon.html" class="header__nav-link header__nav-link--soon" title="Туториалы по ИИ — скоро">Soon...</a></li>
+      <li><a href="index.html" class="header__nav-link header__nav-link--back" aria-label="На главную">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a></li>
       <li><span class="header__nav-link header__nav-link--current" aria-current="page">Галя</span></li>
     </ul>
   </nav>
@@ -57,7 +55,13 @@
     <img class="gp__fallback" id="gpFallback" src="assets/galya/galya-fallback.png"
          alt="Галя, стеклянная бабочка" width="512" height="512" hidden>
     <div class="gp__canvas" id="galya" aria-label="Галя, стеклянная бабочка"></div>
+
+    <!-- искра: прыгает рядом и ждёт, успеешь ли -->
+    <button type="button" class="gp__spark" id="gpSpark" hidden aria-label="Поймать искру"></button>
   </div>
+
+  <!-- если доклацаться — Галя уходит, и зовут её обратно отсюда -->
+  <button type="button" class="btn btn--pink gp__sorry" id="gpSorry" hidden>Попросить прощения у Гали</button>
 
   <div class="gp__bubble" id="gpBubble" role="status" aria-live="polite" hidden></div>
 

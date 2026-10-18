@@ -70,10 +70,20 @@ const LINES = {
   hungry: ['Кофе?..', 'Я бы не отказалась от американо. Или двух.', 'Без кофе я работаю в режиме wireframe.'],
   sleep: ['хррр... кернинг... хррр', 'zzz... переделай кнопку... zzz', '*сопит в макет*'],
   woken: [
+    'А? Уже дедлайн?',
+    'Кто разрешил включать солнце.',
+    'Я вообще-то медитировала.',
+    'Ладно. У тебя 5 минут.',
     'М-м... у меня в Москве ночь. Приходи после восьми.',
     'Пять минуточек... ну или до утра.',
     'Тсс. Я в спящем режиме, как твой ноутбук.'
-  ]
+  ],
+  antenna: ['Эй!', 'Это антенна, а не кнопка.', 'Щекотно... нет, обидно.'],
+  antennaLog: 'Я всё записала.',
+  sparkWin: ['Ага! Моя искра.', 'Поймала. Я молодец.', 'Видел? Я быстрая.'],
+  sparkLose: ['Я её отпустила. Специально.', 'Так и было задумано.'],
+  upset: 'Всё. Я ушла.',
+  forgiven: ['Ладно. Но я помню.', 'Прощаю. В последний раз.']
 };
 
 /* ---------- московское время ---------- */
@@ -185,6 +195,7 @@ bubble.addEventListener('pointerleave', () => { if (bubble.classList.contains('h
 
 let galya = null;
 let mod = null;
+let tuning = false;   // пока открыт тюнинг, Галя не засыпает
 
 /* ---------- фон и тюнинг ---------- */
 /* Внешний вид Галя читает один раз при сборке, поэтому ползунки
@@ -224,7 +235,7 @@ function baseState() {
 let shownState = '';
 
 function applyState() {
-  const next = baseState();
+  const next = tuning ? 'idle' : baseState();
   if (galya && next !== shownState) {
     galya.setState(next);
     // проголодалась прямо при человеке — пусть скажет
@@ -288,10 +299,43 @@ function petHer(part) {
   }
 }
 
+/* Пробуждение. Модуль не даёт управлять антеннами и веками по
+   отдельности, поэтому «вздрогнула», «вяло разлепила» и «проснулась
+   бодрой» собраны из разных состояний, поставленных друг за другом.
+   Вариант каждый раз новый — одинаковое пробуждение читается как
+   заставка, а не как живое существо. */
+
+let lastWake = -1;
+
+const WAKES = [
+  // вздрогнула и открыла глаза
+  function () {
+    if (!galya) return;
+    galya.react('buzzed', 200);
+    setTimeout(function () { if (galya) galya.react('idle', 2800); }, 220);
+  },
+  // разлепила глаза медленно и недовольно
+  function () {
+    if (!galya) return;
+    galya.react('hungry', 800);
+    setTimeout(function () { if (galya) galya.react('idle', 2600); }, 820);
+  },
+  // проснулась и даже обрадовалась, что кто-то пришёл
+  function () {
+    if (!galya) return;
+    galya.react('idle', 3000);
+    setTimeout(function () { if (galya) galya.react('happy', 600); }, 1500);
+  }
+];
+
 function wakeHer() {
   idleKick();
-  if (galya) galya.react('idle', 2500);   // проснулась на пару секунд и снова спит
-  say(pick(LINES.woken));
+  let i = Math.floor(Math.random() * WAKES.length);
+  if (i === lastWake) i = (i + 1) % WAKES.length;   // подряд одно и то же не показываем
+  lastWake = i;
+  WAKES[i]();
+  // пока она просыпается, взгляд цепляется за курсор сам: followPointer
+  setTimeout(function () { say(pick(LINES.woken)); }, 420);
 }
 
 /* ---------- кофе ---------- */
@@ -436,6 +480,116 @@ function lagTick(now) {
   requestAnimationFrame(lagTick);
 }
 
+/* ---------- щелчок по антенне ---------- */
+/* hitTest знает только голову, тело и крыло. Антенны считаем по месту:
+   всё, что выше макушки и близко к ней по горизонтали. */
+
+let antennaHits = 0, antennaAt = 0;
+
+function isAntenna(x, y) {
+  if (!galya) return false;
+  const top = galya.screenPoint('top');
+  return y < top.y && y > top.y - 120 && Math.abs(x - top.x) < 70;
+}
+
+function flickAntenna() {
+  const t = Date.now();
+  antennaHits = t - antennaAt < 4000 ? antennaHits + 1 : 1;
+  antennaAt = t;
+  if (galya) galya.react('buzzed', 600);
+  say(antennaHits >= 3 ? LINES.antennaLog : pick(LINES.antenna));
+}
+
+/* ---------- Галя обиделась ---------- */
+
+const sorryBtn = document.getElementById('gpSorry');
+let rage = [], upset = false;
+
+function countRage() {
+  const t = Date.now();
+  rage.push(t);
+  rage = rage.filter(function (x) { return t - x < 6000; });
+  if (rage.length > 12 && !upset) getUpset();
+}
+
+function getUpset() {
+  upset = true;
+  rage = [];
+  sparkClear();                 // Галя ушла — ловить нечего, и её реплику перебивать нечем
+  say(LINES.upset, 2600);
+  stage.classList.add('is-upset');
+  if (galya) setTimeout(function () { if (galya) galya.pause(); }, 520);
+  if (sorryBtn) setTimeout(function () { sorryBtn.hidden = false; }, 540);
+}
+
+if (sorryBtn) {
+  sorryBtn.addEventListener('click', function () {
+    sorryBtn.hidden = true;
+    if (galya) galya.resume();
+    stage.classList.remove('is-upset');
+    upset = false;
+    setTimeout(function () {
+      if (galya) galya.react('happy', 1600);
+      say(pick(LINES.forgiven));
+      scheduleSpark();          // вернулась — искры снова возможны
+    }, 420);
+  });
+}
+
+/* ---------- искра ---------- */
+
+const sparkEl = document.getElementById('gpSpark');
+let sparkTimer = 0, sparkHop = 0, sparkEnd = 0;
+
+function sparkClear() {          // снять искру молча и ничего не планировать
+  clearTimeout(sparkTimer);
+  clearInterval(sparkHop);
+  clearTimeout(sparkEnd);
+  if (sparkEl && !sparkEl.hidden) {
+    sparkEl.hidden = true;
+    sparkEl.classList.remove('is-gone');
+  }
+}
+
+function sparkHide(caught) {
+  clearInterval(sparkHop);
+  clearTimeout(sparkEnd);
+  if (!sparkEl || sparkEl.hidden) return;
+  sparkEl.classList.add('is-gone');
+  setTimeout(function () { sparkEl.hidden = true; sparkEl.classList.remove('is-gone'); }, 320);
+  if (caught) {
+    if (galya) galya.react('happy', 1600);
+    say(pick(LINES.sparkWin));
+  } else {
+    say(pick(LINES.sparkLose));
+  }
+  scheduleSpark();
+}
+
+function moveSpark() {
+  const r = stage.getBoundingClientRect();
+  const a = Math.random() * Math.PI * 2, rad = 0.26 + Math.random() * 0.2;
+  sparkEl.style.left = (r.width * (0.5 + Math.cos(a) * rad)) + 'px';
+  sparkEl.style.top  = (r.height * (0.5 + Math.sin(a) * rad)) + 'px';
+}
+
+function showSpark() {
+  if (!sparkEl || upset || isNight() || document.hidden || !galya) { scheduleSpark(); return; }
+  sparkEl.hidden = false;
+  moveSpark();
+  sparkHop = setInterval(moveSpark, 700);
+  sparkEnd = setTimeout(function () { sparkHide(false); }, 4200);   // не поймал — улетела
+}
+
+function scheduleSpark() {
+  clearTimeout(sparkTimer);
+  sparkTimer = setTimeout(showSpark, 30000 + Math.random() * 40000);
+}
+
+if (sparkEl) {
+  sparkEl.addEventListener('click', function (e) { e.stopPropagation(); idleKick(); sparkHide(true); });
+}
+
 /* ---------- переключатель фона и ползунки ---------- */
 
 const themeBtn = document.getElementById('gpTheme');
@@ -464,7 +618,7 @@ function rebuildGalya() {
   host.textContent = '';
   try {
     galya = mod.createGalya(host, galyaOptions());
-    galya.setState(was);
+    galya.setState(tuning ? 'idle' : was);
   } catch (e) {
     galya = null;
     fallback.hidden = false;
@@ -509,6 +663,11 @@ if (tuneBtn && tunePane) {
     tunePane.hidden = !open;
     tuneBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     tuneBtn.textContent = open ? 'Свернуть тюнинг' : 'Тюнинг Гали';
+    // Подбирать внешность у спящей бабочки со сложенными крыльями
+    // бессмысленно: на время тюнинга будим её принудительно.
+    tuning = open;
+    if (galya) galya.setState(open ? 'idle' : baseState());
+    if (open && isNight()) say('Ну ладно, подержу глаза открытыми.');
   });
 
   tunePane.addEventListener('input', function (e) {
@@ -552,9 +711,15 @@ btnCup.addEventListener('click', () => {
 
 // клик по самой Гале
 stage.addEventListener('click', e => {
-  if (!galya) return;
+  if (!galya || upset) return;
+  if (isNight()) {
+    const part = galya.hitTest(e.clientX, e.clientY);
+    if (part || isAntenna(e.clientX, e.clientY)) wakeHer();
+    return;
+  }
+  if (isAntenna(e.clientX, e.clientY)) { countRage(); idleKick(); flickAntenna(); return; }
   const part = galya.hitTest(e.clientX, e.clientY);
-  if (part) petHer(part);
+  if (part) { countRage(); petHer(part); }
 });
 
 // курсор полежал на ней полторы секунды — тоже поглаживание
@@ -637,6 +802,7 @@ updateButtons();
   followHead();
   setTimeout(greet, 1200);
   idleKick();
+  scheduleSpark();
 })();
 
 window.addEventListener('pagehide', () => { if (galya) galya.dispose(); });
