@@ -609,7 +609,7 @@ function moveSpark() {
 }
 
 function showSpark() {
-  if (!sparkEl || upset || feeding || asleep() || document.hidden || !galya) { scheduleSpark(); return; }
+  if (!sparkEl || upset || feeding || formOpen() || asleep() || document.hidden || !galya) { scheduleSpark(); return; }
   sparkEl.hidden = false;
   moveSpark();
   sparkHop = setInterval(moveSpark, 700);
@@ -1024,6 +1024,46 @@ if (foodBtn && foodPane) {
 }
 
 if (foodGo) foodGo.addEventListener('click', feedHer);
+
+/* Своё блюдо: форма Яндекса. Скрипт и сам фрейм подгружаются только
+   при первом открытии — незачем тянуть чужой код на каждый заход. */
+const addBtn   = document.getElementById('gpFoodAdd');
+const formDlg  = document.getElementById('gpFormDlg');
+const formFrm  = document.getElementById('gpFormFrame');
+const formX    = document.getElementById('gpFormClose');
+const FORM_ID  = '6ad71f186d2d7383f2a5a95b';
+let formReady  = false;
+
+const formOpen = () => Boolean(formDlg && formDlg.open);
+
+function openForm() {
+  if (!formDlg || !formFrm) return;
+
+  if (!formReady) {
+    formFrm.src = 'https://forms.yandex.ru/u/' + FORM_ID + '?iframe=1';
+    const sc = document.createElement('script');
+    sc.src = 'https://forms.yandex.ru/_static/embed.js';
+    sc.async = true;
+    document.body.appendChild(sc);
+    formReady = true;
+  }
+
+  sparkClear();            // за окном с формой искру всё равно не поймать
+  formDlg.showModal();
+  say('Диктуй. Я всё записала.', 3000);
+}
+
+if (addBtn) addBtn.addEventListener('click', openForm);
+if (formX)  formX.addEventListener('click', function () { formDlg.close(); });
+
+// клик мимо панели закрывает окно
+if (formDlg) {
+  formDlg.addEventListener('click', function (e) {
+    if (e.target === formDlg) formDlg.close();
+  });
+  // закрылось любым способом — Esc, крестиком, кликом мимо
+  formDlg.addEventListener('close', function () { scheduleSpark(); });
+}
 
 
 /* ------------------------------------------------------------------

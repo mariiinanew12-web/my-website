@@ -174,6 +174,12 @@
           <span class="gpf__name">Бананы</span>
         </span>
       </label>
+      <button type="button" class="gpf gpf--add" id="gpFoodAdd">
+        <span class="gpf__card gpf__card--add">
+          <span class="gpf__pic gpf__pic--add" aria-hidden="true">+</span>
+          <span class="gpf__name">Предложить своё</span>
+        </span>
+      </button>
     </div>
 
     <button type="button" class="btn btn--pink gp__food-go" id="gpFeedGo">Угостить</button>
@@ -186,6 +192,17 @@
   </div>
 
 </main>
+
+<!-- Своё блюдо: форма Яндекса, ответы копятся у Марины в таблице -->
+<dialog class="gpd" id="gpFormDlg" aria-label="Предложить блюдо для Гали">
+  <div class="gpd__panel">
+    <button type="button" class="gpd__close" id="gpFormClose" aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <iframe class="gpd__frame" id="gpFormFrame" title="Форма: предложить блюдо для Гали"
+            src="about:blank" frameborder="0" name="ya-form-6ad71f186d2d7383f2a5a95b"></iframe>
+  </div>
+</dialog>
 
 <!-- летящая чашка -->
 <div class="gp__cup" id="gpCup" aria-hidden="true" hidden>☕</div>
