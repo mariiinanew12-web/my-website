@@ -398,19 +398,22 @@ a.header__nav-link:focus-visible { outline: 2px solid var(--color-main); outline
 .gpd[open] { display: grid; place-items: center; }
 .gpd::backdrop { background: rgba(10, 10, 10, 0.72); }
 
+/* Высоту фрейма выставляет скрипт Яндекса под содержимое формы,
+   поэтому своей высоты здесь нет — иначе под формой остаётся пустыня. */
 .gpd__panel {
   position: relative;
-  width: min(680px, 100%);
-  height: min(760px, 100%);
+  width: min(660px, 100%);
+  max-height: 100%;
   border-radius: var(--radius-card, 20px);
   background: #fff;
-  overflow: hidden;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .gpd__frame {
   display: block;
   width: 100%;
-  height: 100%;
+  min-height: 420px;    /* если скрипт не доехал, форма всё равно видна */
   border: 0;
 }
 
