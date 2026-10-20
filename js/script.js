@@ -261,6 +261,29 @@
     document.documentElement.style.setProperty('--curtain', c);
   }
 
+  /* ---------- Разлёт карточек «боли клиента» ---------- */
+  /* 0 — карточки сложены стопкой в центре, 1 — разошлись по сетке.
+     Сам разлёт рисует CSS, отсюда идёт только прогресс. */
+
+  var pains = document.querySelector('.pains');
+  var painsGrid = document.querySelector('.pains__grid');
+  var lastScatter = -1;
+
+  function updateScatter() {
+    if (!pains || !painsGrid || reduced) return;
+    var h = window.innerHeight || 1;
+    /* Считаем по самой сетке, а не по секции: карточки лежат ниже её
+       верхнего края, и по секции разлёт успевал кончиться до того,
+       как стопку вообще видно. */
+    var top = painsGrid.getBoundingClientRect().top;
+    var s = clamp((h - top) / (h * 0.65), 0, 1);
+    s = s * s * (3 - 2 * s);              // плавный старт и мягкое оседание в конце
+    s = Math.round(s * 1000) / 1000;
+    if (s === lastScatter) return;
+    lastScatter = s;
+    pains.style.setProperty('--scatter', s);
+  }
+
   function frame(now) {
     var dt = (now - last) / 1000;
     last = now;
@@ -269,6 +292,7 @@
     updateServices();
     updateStepNumbers();
     updateCurtain();
+    updateScatter();
 
     if (bfL) {
       var r = stage.getBoundingClientRect();

@@ -811,6 +811,87 @@ button {
   color: var(--color-main);
 }
 
+/* ---------- Боли клиента ---------- */
+
+.pains {
+  padding: 100px 40px;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+}
+
+.pains__content {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.pains__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  --k: 1;          /* множитель сдвига: на узких экранах гасим его здесь,
+                      инлайновые --dx у карточек медиазапросом не перебить */
+}
+
+/* Карточки тянутся на всю ширину контента, чтобы ряд совпадал
+   с заголовком по левому краю и не оставлял дыры справа. */
+.pain-card {
+  width: auto;
+  height: 265px;
+}
+
+/* Пока экран не наехал, карточки сложены стопкой в центре сетки:
+   у каждой свой сдвиг к середине и свой наклон. Прогресс --scatter
+   считает script.js, 0 — стопка, 1 — карточки на своих местах. */
+.pain-card {
+  --s: var(--scatter, 1);
+  transform:
+    translate(calc(var(--dx, 0px) * var(--k, 1) * (1 - var(--s))),
+              calc(var(--dy, 0px) * var(--k, 1) * (1 - var(--s))))
+    rotate(calc(var(--rot, 0deg) * (1 - var(--s))))
+    scale(calc(1 - 0.22 * (1 - var(--s))));
+  /* Карточки остаются плотными: полупрозрачные они просвечивали
+     друг через друга и стопка читалась как каша. Объём даёт тень,
+     которая гаснет, когда карточки встали по местам. */
+  box-shadow: 0 24px 60px rgba(0, 0, 0, calc(0.5 * (1 - var(--s))));
+  will-change: transform;
+}
+
+.pain-card__quote {
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+/* Пунктир обводки зашит под карточку 285×265. Эти шире, периметр
+   у них ≈1216, поэтому с прежним значением кусок штриха торчал всегда. */
+.pain-card .step-card__outline rect {
+  stroke-dasharray: 1240;
+  stroke-dashoffset: 1240;
+}
+
+@media (max-width: 1100px) {
+  .pains__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* Сдвиги посчитаны под три колонки; в две и одну они врут,
+       поэтому остаются только наклон и укрупнение. */
+    --k: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .pains { padding: 80px 20px; }
+  .pains__grid { grid-template-columns: minmax(0, 1fr); }
+  .pains__content { gap: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pain-card { transform: none; box-shadow: none; }
+}
+
 .step-card__text {
   font-weight: 300;
   font-size: 16px;
@@ -1611,6 +1692,7 @@ button {
   transform: translateY(calc(var(--curtain, 0) * -40px));
 }
 
+.curtain > .pains,
 .curtain > .about {
   position: relative;
   z-index: 1;
