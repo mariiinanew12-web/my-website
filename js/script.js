@@ -267,21 +267,41 @@
 
   var pains = document.querySelector('.pains');
   var painsGrid = document.querySelector('.pains__grid');
-  var lastScatter = -1;
+  var painsT0 = 0;          // момент старта
+  var painsDone = false;
 
-  function updateScatter() {
-    if (!pains || !painsGrid || reduced) return;
-    var h = window.innerHeight || 1;
-    /* Считаем по самой сетке, а не по секции: карточки лежат ниже её
-       верхнего края, и по секции разлёт успевал кончиться до того,
-       как стопку вообще видно. */
-    var top = painsGrid.getBoundingClientRect().top;
-    var s = clamp((h - top) / (h * 0.65), 0, 1);
-    s = s * s * (3 - 2 * s);              // плавный старт и мягкое оседание в конце
-    s = Math.round(s * 1000) / 1000;
-    if (s === lastScatter) return;
-    lastScatter = s;
-    pains.style.setProperty('--scatter', s);
+  /* Исходную колоду включаем из скрипта: без JS карточки должны
+     просто лежать по сетке и читаться, а не стоять ребром. */
+  if (pains && painsGrid && !reduced) pains.classList.add('is-armed');
+
+  /* Раньше фазы шли по положению скролла, и при движении вверх
+     анимация отматывалась назад — карточки снова складывались в
+     колоду, и прочитать их было невозможно. Теперь она проигрывается
+     один раз, когда сетка показалась, и дальше не трогается. */
+  function updateScatter(now) {
+    if (!pains || !painsGrid || reduced || painsDone) return;
+
+    if (!painsT0) {
+      var r = painsGrid.getBoundingClientRect();
+      var inView = r.top < (window.innerHeight || 1) * 0.82 && r.bottom > 0;
+      if (!inView) return;
+      painsT0 = now;
+    }
+
+    var t = clamp((now - painsT0) / 1300, 0, 1);
+    var st = pains.style;
+    st.setProperty('--deck', band(t, 0.00, 0.55, true));
+    st.setProperty('--spin', band(t, 0.18, 0.52));
+    st.setProperty('--open', band(t, 0.36, 1.00));
+    if (t === 1) painsDone = true;        // доиграла — больше не вмешиваемся
+  }
+
+  // плавный переход 0→1 на отрезке [a, b]; invert — наоборот, 1→0
+  function band(x, a, b, invert) {
+    var t = clamp((x - a) / (b - a), 0, 1);
+    t = t * t * (3 - 2 * t);
+    t = invert ? 1 - t : t;
+    return Math.round(t * 1000) / 1000;
   }
 
   function frame(now) {
@@ -292,7 +312,7 @@
     updateServices();
     updateStepNumbers();
     updateCurtain();
-    updateScatter();
+    updateScatter(now);
 
     if (bfL) {
       var r = stage.getBoundingClientRect();
