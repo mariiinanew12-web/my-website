@@ -72,6 +72,8 @@
     <div class="gp__actions">
       <button type="button" class="btn btn--pink gp__btn" id="gpPet">Погладить</button>
       <button type="button" class="btn btn--glass gp__btn" id="gpCoffee">Налить кофе</button>
+      <button type="button" class="btn btn--glass gp__btn" id="gpFeed"
+              aria-expanded="false" aria-controls="gpFood">Покормить</button>
       <button type="button" class="gp__theme" id="gpTheme" role="switch" aria-checked="false"
               aria-label="Светлый фон">
         <span class="gp__theme-knob"></span>
@@ -115,6 +117,66 @@
       <button type="button" class="gp__tune-reset" id="gpTuneReset">Вернуть как было</button>
       <span class="gp__tune-hint" id="gpTuneHint"></span>
     </div>
+  </div>
+
+
+  <!-- Кормление: карточки выбираются галочками, потом еда летит Гале в рот -->
+  <div class="gp__food" id="gpFood" hidden>
+    <p class="gp__food-title">Чем угостим?</p>
+
+    <div class="gp__food-grid">
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="yogurt">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/yogurt.webp" alt="" width="312" height="182" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Греческий йогурт</span>
+        </span>
+      </label>
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="hinkal">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/hinkal.webp" alt="" width="420" height="242" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Хинкал</span>
+        </span>
+      </label>
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="bueno">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/bueno.webp" alt="" width="420" height="420" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Киндер Буэно</span>
+        </span>
+      </label>
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="pasta">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/pasta.webp" alt="" width="420" height="293" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Паста с креветками</span>
+        </span>
+      </label>
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="borsch">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/borsch.webp" alt="" width="420" height="254" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Борщ</span>
+        </span>
+      </label>
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="buter">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/buter.webp" alt="" width="420" height="291" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Бутерброды</span>
+        </span>
+      </label>
+      <label class="gpf">
+        <input type="checkbox" class="gpf__box" value="banan">
+        <span class="gpf__card">
+          <span class="gpf__pic"><img src="assets/food/banan.webp" alt="" width="360" height="303" loading="lazy" decoding="async"></span>
+          <span class="gpf__name">Бананы</span>
+        </span>
+      </label>
+    </div>
+
+    <button type="button" class="btn btn--pink gp__food-go" id="gpFeedGo">Угостить</button>
   </div>
 
   <!-- Показывается, если сеть отвалилась или машина не тянет -->

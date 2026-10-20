@@ -100,6 +100,9 @@ const mskDate  = () => { const p = mskParts(); return p.year + '-' + p.month + '
 
 const isNight = () => { const h = mskHour(); return h >= 23 || h < 8; };
 
+// Кому движение мешает — тому без разлетающихся смайликов
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* Ночью Галя спит, но разбуженная честно отрабатывает обещанные пять минут:
    всё это время с ней можно играть, как днём. Потом снова засыпает. */
 const AWAKE_FOR = 5 * 60 * 1000;
@@ -606,7 +609,7 @@ function moveSpark() {
 }
 
 function showSpark() {
-  if (!sparkEl || upset || asleep() || document.hidden || !galya) { scheduleSpark(); return; }
+  if (!sparkEl || upset || feeding || asleep() || document.hidden || !galya) { scheduleSpark(); return; }
   sparkEl.hidden = false;
   moveSpark();
   sparkHop = setInterval(moveSpark, 700);
@@ -693,6 +696,7 @@ if (themeBtn) {
 if (tuneBtn && tunePane) {
   tuneBtn.addEventListener('click', function () {
     const open = tunePane.hidden;
+    if (open) closeFood();                 // справа помещается только одна панель
     tunePane.hidden = !open;
     tuneBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     tuneBtn.textContent = open ? 'Свернуть тюнинг' : 'Тюнинг Гали';
@@ -839,6 +843,188 @@ updateButtons();
 })();
 
 window.addEventListener('pagehide', () => { if (galya) galya.dispose(); });
+
+/* ---------- кормление ---------- */
+
+const foodBtn  = document.getElementById('gpFeed');
+const foodPane = document.getElementById('gpFood');
+const foodGo   = document.getElementById('gpFeedGo');
+
+// Что она говорит на одно блюдо
+const FOOD_LINES = {
+  yogurt: 'Белок. Теперь я дизайнер здорового человека.',
+  hinkal: 'Хинкал. Не хинкали. Я знаю разницу.',
+  bueno:  'Сахар — это тоже энергия для рендера.',
+  pasta:  'Креветки! Перехожу в премиум-сегмент.',
+  borsch: 'Борщ — как модульная сетка: на нём всё держится.',
+  buter:  'Быстро, без брифа и без правок. Уважаю.',
+  banan:  'Калий. Крылышки будут стабильные.'
+};
+
+/* Сценарии. Срабатывает первый подходящий, поэтому частные
+   комбинации держим выше общих — сюда же дописывать новые.
+   mood: 'love' — восторг, 'no' — есть такое не станет. */
+const FOOD_COMBOS = [
+  { need: ['yogurt', 'banan'], mood: 'love', line: 'Оооо, любимый десерт!' },
+  { need: ['hinkal', 'buter'], mood: 'no',   line: 'Хинкал с бутерами мы не едим.' }
+];
+
+const FOOD_MANY = [
+  'Это уже не перекус, это банкет.',
+  'Я бабочка, а не грузовой дрон.'
+];
+
+const EMO = ['🦋', '⭐', '🎀'];   // бабочка, звёздочка, бантик
+
+function foodPicked() {
+  if (!foodPane) return [];
+  return Array.prototype.slice.call(foodPane.querySelectorAll('.gpf__box:checked'))
+    .map(function (b) { return b.value; });
+}
+
+function foodClear() {
+  if (!foodPane) return;
+  foodPane.querySelectorAll('.gpf__box:checked').forEach(function (b) { b.checked = false; });
+}
+
+function closeFood() {
+  if (!foodPane || foodPane.hidden) return;
+  foodPane.hidden = true;
+  if (foodBtn) {
+    foodBtn.setAttribute('aria-expanded', 'false');
+    foodBtn.textContent = 'Покормить';
+  }
+}
+
+function closeTune() {
+  if (!tunePane || tunePane.hidden) return;
+  tunePane.hidden = true;
+  if (tuneBtn) {
+    tuneBtn.setAttribute('aria-expanded', 'false');
+    tuneBtn.textContent = 'Тюнинг Гали';
+  }
+  tuning = false;
+  if (galya) galya.setState(baseState());
+}
+
+// Еда летит из своей карточки Гале в рот и там исчезает
+function flyFood(id) {
+  if (!galya) return;
+  const box = foodPane.querySelector('.gpf__box[value="' + id + '"]');
+  const pic = box && box.nextElementSibling ? box.nextElementSibling.querySelector('.gpf__pic') : null;
+  const from = (pic || foodGo).getBoundingClientRect();
+  const to = galya.screenPoint('face');
+
+  const el = document.createElement('img');
+  el.className = 'gp__fly';
+  el.src = 'assets/food/' + id + '.webp';
+  el.alt = '';
+  el.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(el);
+
+  el.style.transition = 'none';
+  el.style.left = (from.left + from.width / 2) + 'px';
+  el.style.top  = (from.top + from.height / 2) + 'px';
+
+  requestAnimationFrame(function () {
+    el.style.transition = '';
+    el.style.left = to.x + 'px';
+    el.style.top  = to.y + 'px';
+    el.style.width = '26px';
+    el.style.opacity = '0';
+  });
+
+  setTimeout(function () { el.remove(); }, 1400);
+}
+
+// Смайлики удовольствия разлетаются от Гали вверх
+function emojiBurst(n) {
+  if (!galya || reduced) return;
+  const p = galya.screenPoint('face');
+  for (let i = 0; i < n; i++) {
+    const e = document.createElement('span');
+    e.className = 'gp__emo';
+    e.textContent = pick(EMO);
+    e.setAttribute('aria-hidden', 'true');
+    e.style.left = (p.x + (Math.random() - 0.5) * 110) + 'px';
+    e.style.top  = p.y + 'px';
+    e.style.opacity = '0';
+    document.body.appendChild(e);
+
+    const dx = (Math.random() - 0.5) * 150;
+    const dy = -(90 + Math.random() * 130);
+    const rot = (Math.random() - 0.5) * 70;
+
+    (function (el, dx, dy, rot, i) {
+      setTimeout(function () {
+        el.style.opacity = '1';
+        el.style.transform = 'translate(-50%, -50%) translate(' + dx + 'px, ' + dy + 'px) rotate(' + rot + 'deg)';
+      }, i * 90);
+      setTimeout(function () { el.style.opacity = '0'; }, i * 90 + 750);
+      setTimeout(function () { el.remove(); }, i * 90 + 1800);
+    })(e, dx, dy, rot, i);
+  }
+}
+
+let feeding = false;
+
+function feedHer() {
+  if (feeding || !foodPane) return;
+
+  const picked = foodPicked();
+  if (!picked.length) { say('Выбери хоть что-нибудь. Я не привередливая.'); return; }
+  if (asleep())       { say(pick(LINES.woken)); return; }
+
+  const combo = FOOD_COMBOS.find(function (c) {
+    return c.need.every(function (n) { return picked.indexOf(n) !== -1; });
+  });
+
+  idleKick();
+
+  // Есть такое она не станет — ничего не летит
+  if (combo && combo.mood === 'no') {
+    if (galya) galya.react('hungry', 1800);
+    say(combo.line, 3800);
+    foodClear();
+    return;
+  }
+
+  feeding = true;
+  sparkClear();            // пока она ест, искра не перебивает реплику своей
+  picked.forEach(function (id, i) { setTimeout(function () { flyFood(id); }, i * 420); });
+
+  const done = picked.length * 420 + 800;
+
+  setTimeout(function () {
+    if (galya) galya.react('eat', Math.max(1500, done - 400));
+    S.lastFed = Date.now();      // покормили — голодной ей быть незачем
+    save();
+  }, 520);
+
+  setTimeout(function () {
+    if (galya) galya.react('happy', 2000);
+    emojiBurst(combo && combo.mood === 'love' ? 9 : 5);
+    say(combo ? combo.line
+              : (picked.length >= 3 ? pick(FOOD_MANY) : FOOD_LINES[picked[0]]), 3800);
+    foodClear();
+    feeding = false;
+    applyState();
+    scheduleSpark();       // доела — искры снова возможны
+  }, done);
+}
+
+if (foodBtn && foodPane) {
+  foodBtn.addEventListener('click', function () {
+    const open = foodPane.hidden;
+    if (open) closeTune();                 // справа помещается только одна панель
+    foodPane.hidden = !open;
+    foodBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    foodBtn.textContent = open ? 'Свернуть' : 'Покормить';
+  });
+}
+
+if (foodGo) foodGo.addEventListener('click', feedHer);
+
 
 /* ------------------------------------------------------------------
    Отладочная ручка для проверок из чек-листа. В консоли браузера:
