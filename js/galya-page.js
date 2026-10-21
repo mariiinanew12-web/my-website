@@ -157,6 +157,13 @@ save();
 const stage    = document.getElementById('gpStage');
 const host     = document.getElementById('galya');
 const fallback = document.getElementById('gpFallback');
+
+// Картинку подставляем только когда она действительно понадобилась
+function showFallback() {
+  if (!fallback) return;
+  if (!fallback.src && fallback.dataset.src) fallback.src = fallback.dataset.src;
+  fallback.hidden = false;
+}
 const loader   = document.getElementById('gpLoader');
 const bubble   = document.getElementById('gpBubble');
 const statusEl = document.getElementById('gpStatus');
@@ -657,7 +664,7 @@ function rebuildGalya() {
     galya.setState(tuning ? 'idle' : was);
   } catch (e) {
     galya = null;
-    fallback.hidden = false;
+    showFallback();
   }
   if (tuneHint) tuneHint.textContent = '';
 }
@@ -809,7 +816,7 @@ updateButtons();
     mod = await import('../assets/galya/galya.js');
   } catch (e) {
     loader.hidden = true;
-    fallback.hidden = false;
+    showFallback();
     console.warn('Галя не доехала по сети:', e);
     callSos();
   }
@@ -828,7 +835,7 @@ updateButtons();
       galya = null;
       host.textContent = '';   // модуль успевает вставить пустой canvas — убираем
       loader.hidden = true;
-      fallback.hidden = false;
+      showFallback();
       console.warn('Галя не завелась, остаётся картинка:', e);
     }
   }
@@ -846,6 +853,7 @@ window.addEventListener('pagehide', () => { if (galya) galya.dispose(); });
 
 /* ---------- кормление ---------- */
 
+const gpRoot   = document.querySelector('.gp');
 const foodBtn  = document.getElementById('gpFeed');
 const foodPane = document.getElementById('gpFood');
 const foodGo   = document.getElementById('gpFeedGo');
@@ -890,6 +898,7 @@ function foodClear() {
 function closeFood() {
   if (!foodPane || foodPane.hidden) return;
   foodPane.hidden = true;
+  if (gpRoot) gpRoot.classList.remove('is-feeding');
   if (foodBtn) {
     foodBtn.setAttribute('aria-expanded', 'false');
     foodBtn.textContent = 'Покормить';
@@ -1018,8 +1027,17 @@ if (foodBtn && foodPane) {
     const open = foodPane.hidden;
     if (open) closeTune();                 // справа помещается только одна панель
     foodPane.hidden = !open;
+    if (gpRoot) gpRoot.classList.toggle('is-feeding', open);
     foodBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     foodBtn.textContent = open ? 'Свернуть' : 'Покормить';
+
+    /* На телефоне лента всё равно начинается за сгибом, поэтому
+       подвозим её в кадр — Галя при этом ужимается, см. css. */
+    if (open && matchMedia('(max-width: 760px), (pointer: coarse)').matches) {
+      setTimeout(function () {
+        foodPane.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }, 80);
+    }
   });
 }
 

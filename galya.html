@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/galya.css?v=20261020">
+<link rel="stylesheet" href="css/galya.css?v=20261021">
 
 <!-- Галя построена на three.js. Версию не поднимать: модуль проверен на r165. -->
 <script type="importmap">
@@ -19,6 +19,15 @@
   "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.0.1/+esm"
 } }
 </script>
+
+<!-- Без этого three.js начинал качаться только четвёртым шагом:
+     страница → скрипт страницы → модуль Гали → и лишь потом three.
+     Теперь всё стартует сразу, параллельно. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="js/galya-page.js?v=20261021">
+<link rel="modulepreload" href="assets/galya/galya.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/delaunator@5.0.1/+esm" crossorigin>
 </head>
 <body>
 
@@ -51,8 +60,9 @@
   <div class="gp__stage" id="gpStage">
     <!-- пока строится сетка крыльев -->
     <div class="gp__loader" id="gpLoader" role="status" aria-label="Галя собирается"></div>
-    <!-- запасной вариант, если WebGL недоступен -->
-    <img class="gp__fallback" id="gpFallback" src="assets/galya/galya-fallback.png"
+    <!-- Запасной вариант, если WebGL недоступен. Адрес лежит в data-src:
+         скрытая картинка всё равно скачивается, а нужна она единицам. -->
+    <img class="gp__fallback" id="gpFallback" data-src="assets/galya/galya-fallback.webp"
          alt="Галя, стеклянная бабочка" width="512" height="512" hidden>
     <div class="gp__canvas" id="galya" aria-label="Галя, стеклянная бабочка"></div>
 
@@ -207,7 +217,7 @@
 <!-- летящая чашка -->
 <div class="gp__cup" id="gpCup" aria-hidden="true" hidden>☕</div>
 
-<script type="module" src="js/galya-page.js?v=20261020"></script>
-<script src="js/analytics.js?v=20261020"></script>
+<script type="module" src="js/galya-page.js?v=20261021"></script>
+<script src="js/analytics.js?v=20261021"></script>
 </body>
 </html>

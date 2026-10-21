@@ -242,3 +242,22 @@ ul { list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   .work-btn, .work-footer__social { transition: none; }
 }
+
+/* Инстаграм в футере — <span>, а не ссылка. Базовые стили висят на классе,
+   поэтому без этого он продолжал бы подпрыгивать на наведении. */
+span.work-footer__social { cursor: default; }
+span.work-footer__social:hover,
+span.work-footer__social:active { transform: none; filter: none; }
+
+/* Телефон: пять иконок по 64px с отступами давали 400px —
+   шире экрана, из-за этого страница ездила вбок. */
+@media (max-width: 760px) {
+  .work-footer { padding-left: 20px; padding-right: 20px; }
+  .work-footer__socials { gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .work-footer__social { width: 48px; height: 48px; }
+}
+
+@media (max-width: 380px) {
+  .work-footer__socials { gap: 10px; }
+  .work-footer__social { width: 44px; height: 44px; }
+}

@@ -802,6 +802,41 @@ a.header__nav-link--soon:hover { opacity: 0.8; background: transparent; }
 .gp__tune-hint { font-size: 12px; color: var(--color-muted); }
 
 /* На телефоне тюнинга нет: ползунками там не покрутишь */
+/* Телефон: еда — горизонтальная лента. Вертикальной сеткой семь
+   карточек уезжали в самый низ страницы, и до игры не долистывали. */
+@media (max-width: 760px), (pointer: coarse) {
+  .gp__food {
+    width: 100%;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .gp__food-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    /* лента упирается в края панели, но первая и последняя карточка
+       остаются с отступом */
+    margin: 0 -16px;
+    padding: 3px 16px;
+  }
+
+  .gpf,
+  .gpf--add {
+    flex: 0 0 132px;
+    scroll-snap-align: center;
+  }
+
+  .gpf__name { font-size: 12px; }
+
+  /* Пока кормим, Галя ужимается — иначе лента и бабочка
+     не помещаются на экран вместе. */
+  .gp.is-feeding .gp__stage { height: min(30vh, 260px); }
+}
+
 @media (max-width: 760px), (pointer: coarse) {
   .gp__tune-btn, .gp__tune { display: none !important; }
 }
